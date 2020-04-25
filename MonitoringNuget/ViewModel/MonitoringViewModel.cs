@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq.Expressions;
 using System.Windows;
 using System.Windows.Input;
 using MonitoringNuget.MonitoringControl.View.Commands;
 
 namespace MonitoringNuget.MonitoringControl.ViewModel
 {
-    public class MonitoringViewModel : DependencyObject
+    public partial class MonitoringViewModel : DependencyObject
     {
         #region Dependency Properties
 
@@ -18,7 +17,8 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
                                                                                                     , typeof(MonitoringViewModel)
                                                                                                     , new UIPropertyMetadata(-1));
 
-        public static readonly DependencyProperty LogentriesProperty = DependencyProperty.Register("Logentries", typeof(DataTable), typeof(MonitoringViewModel));
+        public static readonly DependencyProperty LogentriesProperty =
+            DependencyProperty.Register("Logentries", typeof(DataTable), typeof(MonitoringViewModel));
 
         // Logmessage hinzufügen
         public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
@@ -104,7 +104,7 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
 
         public ICommand LoadCommand
         {
-            get { return _loadCommand ?? (_loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute)); }
+            get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) ); }
         }
 
         public bool LoadCanExecute => true;
@@ -113,7 +113,7 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
 
         public ICommand LogClearCommand
         {
-            get { return _logClearCommand ?? (_logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute)); }
+            get { return _logClearCommand ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) ); }
         }
 
         public bool LogCanExecute => SelectedIndex >= 0;
@@ -124,16 +124,18 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
             get
             {
                 return _addDataCommand
-                    ?? (_addDataCommand = new CommandHandler(() => { AddMessage();
-                                                                 SelectedIndexSeverity = -1;
-                                                                 SelectedindexDevices = -1;
-                                                                 Message = string.Empty;
-                                                             }
-                                                           , () => AddCanExecute));
+                    ?? ( _addDataCommand = new CommandHandler(() =>
+                                                              {
+                                                                  AddMessage();
+                                                                  SelectedIndexSeverity = -1;
+                                                                  SelectedindexDevices  = -1;
+                                                                  Message               = string.Empty;
+                                                              }
+                                                            , () => AddCanExecute) );
             }
         }
 
-        public bool AddCanExecute => SelectedindexDevices >= 0 && SelectedIndexSeverity >= 0 && !string.IsNullOrEmpty(Message); 
+        public bool AddCanExecute => SelectedindexDevices >= 0 && SelectedIndexSeverity >= 0 && !string.IsNullOrEmpty(Message);
 
         #endregion
 
@@ -145,30 +147,32 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
             var dt = new DataTable();
             try
             {
-                using (SqlConnection conn = GetDbConnection())
+                using (var conn = GetDbConnection())
                 {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand("Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries;", conn));
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
                     dataAdapter.Fill(dt);
                 }
 
                 return dt;
             }
-            catch { return dt; }
-            
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return dt;
+            }
         }
 
         private void LogClear()
         {
             var bOk = int.TryParse(Logentries.Rows[SelectedIndex]["Id"].ToString(), out var logId);
             if (bOk)
-            {
                 try
                 {
-                    using (SqlConnection conn = GetDbConnection())
+                    using (var conn = GetDbConnection())
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.CommandType                                = CommandType.StoredProcedure;
                             cmd.Parameters.Add("@Id", SqlDbType.Int).Value = logId;
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -177,9 +181,7 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
 
                     Logentries = Select();
                 }
-                catch { return; }
-            }
-            
+                catch (Exception e) { MessageBox.Show(e.Message); }
         }
 
         // Logmessage hinzufügen
@@ -190,15 +192,17 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
             {
                 using (var conn = GetDbConnection())
                 {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand("Select pod.Bezeichnung AS PodName, Device.hostname, Device.ip_adresse, Device.anzahlports FROM Device INNER JOIN Adresse ON Device.AdressId = Adresse.id INNER JOIN point_of_delivery AS pod ON pod.podadresse = Adresse.id;", conn));
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
                     dataAdapter.Fill(dt);
                 }
 
                 return dt;
             }
-            catch { return dt; }
-
-            
+            catch (Exception e)
+            {
+                MessageBox.Show(e.Message);
+                return dt;
+            }
         }
 
         private static DataTable SelectSeverity()
@@ -214,13 +218,11 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
 
                 return dt;
             }
-            catch
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message);
                 return dt;
             }
-            
-
-            
         }
 
         private void AddMessage()
@@ -234,24 +236,26 @@ namespace MonitoringNuget.MonitoringControl.ViewModel
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandType                                             = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@logmessage", SqlDbType.NVarChar).Value = Message;
-                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value = podName;
-                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value = severityId;
-                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value = hostname;
+                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value    = podName;
+                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value        = severityId;
+                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value   = hostname;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
                 }
             }
-            catch { return; }
-            
+            catch (Exception e) { MessageBox.Show(e.Message); }
         }
 
         private static SqlConnection GetDbConnection()
         {
-            var builder = new SqlConnectionStringBuilder {DataSource = @".\ZBW", InitialCatalog = "testat", UserID = "Sa", Password = "A120817787k"};
-            SqlConnection connection = new SqlConnection(builder.ConnectionString);
+            var builder = new SqlConnectionStringBuilder
+                          {
+                              DataSource = Datasource, InitialCatalog = InitialCatalog, UserID = UserId, Password = Password
+                          };
+            var connection = new SqlConnection(builder.ConnectionString);
 
             return connection;
         }

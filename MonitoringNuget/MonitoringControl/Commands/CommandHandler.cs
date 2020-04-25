@@ -10,7 +10,7 @@ namespace MonitoringNuget.MonitoringControl.View.Commands
 
         public CommandHandler(Action action, Func<bool> canExecute)
         {
-            _action = action;
+            _action     = action;
             _canExecute = canExecute;
         }
 
