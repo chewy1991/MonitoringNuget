@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Input;
 using MonitoringNuget.MonitoringControl.View.Commands;
 
-namespace MonitoringNuget.MonitoringControl.ViewModel
+namespace MonitoringNuget.ViewModel
 {
     public partial class MonitoringViewModel : DependencyObject
     {

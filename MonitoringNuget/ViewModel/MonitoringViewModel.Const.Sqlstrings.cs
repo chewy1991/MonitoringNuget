@@ -1,4 +1,4 @@
-﻿namespace MonitoringNuget.MonitoringControl.ViewModel
+﻿namespace MonitoringNuget.ViewModel
 {
     public partial class MonitoringViewModel
     {
