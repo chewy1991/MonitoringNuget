@@ -18,7 +18,6 @@ namespace MonitoringNuget.ViewModel
                                                                        , UserID         = LoggingUserId
                                                                        , Password       = LogginPassword
                                                                      };
-        private static readonly SqlConnection Connection = new SqlConnection(Builder.ConnectionString);
 
         #endregion
 
@@ -170,7 +169,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = Connection)
+                using (var conn = new SqlConnection(Builder.ConnectionString))
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
                     dataAdapter.Fill(dt);
@@ -194,7 +193,7 @@ namespace MonitoringNuget.ViewModel
             if (bOk)
                 try
                 {
-                    using (var conn = Connection)
+                    using (var conn = new SqlConnection(Builder.ConnectionString))
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
@@ -220,7 +219,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = Connection)
+                using (var conn = new SqlConnection(Builder.ConnectionString))
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
                     dataAdapter.Fill(dt);
@@ -244,7 +243,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = Connection)
+                using (var conn = new SqlConnection(Builder.ConnectionString))
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
                     dataAdapter.Fill(dt);
@@ -269,7 +268,7 @@ namespace MonitoringNuget.ViewModel
             var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
             try
             {
-                using (var conn = Connection)
+                using (var conn = new SqlConnection(Builder.ConnectionString))
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
