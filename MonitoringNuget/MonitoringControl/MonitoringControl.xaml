@@ -37,8 +37,7 @@
                FontSize = "12"
                Content = "Logmessage Monitor" />
 
-        <DataGrid x:Name = "txtBox"
-                  ItemsSource = "{Binding Source={StaticResource Monitoringvm},Path=Logentries}"
+        <DataGrid ItemsSource = "{Binding Source={StaticResource Monitoringvm},Path=Logentries}"
                   SelectedIndex = "{Binding Source={StaticResource Monitoringvm},Path=SelectedIndex}"
                   Grid.Column = "0"
                   Grid.Row = "1"
@@ -55,12 +54,10 @@
                     Grid.Column = "0"
                     Grid.Row = "4"
                     HorizontalAlignment = "Center">
-            <Button x:Name = "cmdLoad"
-                    Width = "180"
+            <Button Width = "180"
                     Content = "Load"
                     Command = "{Binding Source={StaticResource Monitoringvm},Path=LoadCommand}" />
-            <Button x:Name = "cmdConfirm"
-                    Width = "180"
+            <Button Width = "180"
                     Content = "Confirm"
                     Command = "{Binding Source={StaticResource Monitoringvm},Path=LogClearCommand}" />
 
@@ -130,8 +127,7 @@
                   IsReadOnly = "True" />
 
 
-        <Button x:Name = "cmdAdd"
-                Width = "180"
+        <Button Width = "180"
                 Content = "Add"
                 Grid.Column = "3"
                 Grid.Row = "4"

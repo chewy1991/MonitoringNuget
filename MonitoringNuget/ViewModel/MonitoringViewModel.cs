@@ -9,42 +9,61 @@ namespace MonitoringNuget.ViewModel
 {
     public partial class MonitoringViewModel : DependencyObject
     {
+        #region Database Connection
+
+        private static readonly SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+                                                                     {
+                                                                         DataSource     = Datasource
+                                                                       , InitialCatalog = DatabaseName
+                                                                       , UserID         = LoggingUserId
+                                                                       , Password       = LogginPassword
+                                                                     };
+        private static readonly SqlConnection connection = new SqlConnection(builder.ConnectionString);
+
+        #endregion
+
         #region Dependency Properties
 
         // Monitoring Part
-        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex"
-                                                                                                    , typeof(int)
-                                                                                                    , typeof(MonitoringViewModel)
-                                                                                                    , new UIPropertyMetadata(-1));
+        public static readonly DependencyProperty SelectedIndexProperty =
+            DependencyProperty.Register("SelectedIndex"
+                                      , typeof(int)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(-1));
 
         public static readonly DependencyProperty LogentriesProperty =
             DependencyProperty.Register("Logentries", typeof(DataTable), typeof(MonitoringViewModel));
 
         // Logmessage hinzufügen
-        public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
-                                                                                              , typeof(string)
-                                                                                              , typeof(MonitoringViewModel)
-                                                                                              , new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty MessageProperty =
+            DependencyProperty.Register("Message"
+                                      , typeof(string)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty SeverityProperty = DependencyProperty.Register("Severity"
-                                                                                               , typeof(DataTable)
-                                                                                               , typeof(MonitoringViewModel)
-                                                                                               , new UIPropertyMetadata(SelectSeverity()));
+        public static readonly DependencyProperty SeverityProperty =
+            DependencyProperty.Register("Severity"
+                                      , typeof(DataTable)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(SelectSeverity()));
 
-        public static readonly DependencyProperty SelectedIndexSeverityProperty = DependencyProperty.Register("SelectedIndexSeverity"
-                                                                                                            , typeof(int)
-                                                                                                            , typeof(MonitoringViewModel)
-                                                                                                            , new UIPropertyMetadata(-1));
+        public static readonly DependencyProperty SelectedIndexSeverityProperty =
+            DependencyProperty.Register("SelectedIndexSeverity"
+                                      , typeof(int)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(-1));
 
-        public static readonly DependencyProperty DevicesProperty = DependencyProperty.Register("Devices"
-                                                                                              , typeof(DataTable)
-                                                                                              , typeof(MonitoringViewModel)
-                                                                                              , new UIPropertyMetadata(SelectDevices()));
+        public static readonly DependencyProperty DevicesProperty =
+            DependencyProperty.Register("Devices"
+                                      , typeof(DataTable)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(SelectDevices()));
 
-        public static readonly DependencyProperty SelectedindexDevicesProperty = DependencyProperty.Register("SelectedindexDevices"
-                                                                                                           , typeof(int)
-                                                                                                           , typeof(MonitoringViewModel)
-                                                                                                           , new UIPropertyMetadata(-1));
+        public static readonly DependencyProperty SelectedindexDevicesProperty =
+            DependencyProperty.Register("SelectedindexDevices"
+                                      , typeof(int)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(-1));
 
         #endregion
 
@@ -142,12 +161,16 @@ namespace MonitoringNuget.ViewModel
         #region Methoden
 
         // Monitoring
+        /// <summary>
+        /// Selectiert alle Datensätze der View v_Logentries
+        /// </summary>
+        /// <returns></returns>
         private static DataTable Select()
         {
             var dt = new DataTable();
             try
             {
-                using (var conn = GetDbConnection())
+                using (var conn = connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
                     dataAdapter.Fill(dt);
@@ -162,13 +185,16 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
+        /// <summary>
+        /// Bestätigt den ausgewählten Datensatz im Datagrid Logmessages
+        /// </summary>
         private void LogClear()
         {
             var bOk = int.TryParse(Logentries.Rows[SelectedIndex]["Id"].ToString(), out var logId);
             if (bOk)
                 try
                 {
-                    using (var conn = GetDbConnection())
+                    using (var conn = connection)
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
@@ -185,12 +211,16 @@ namespace MonitoringNuget.ViewModel
         }
 
         // Logmessage hinzufügen
+        /// <summary>
+        /// Selectiert alle Geräte der Datenbank
+        /// </summary>
+        /// <returns>DataTable</returns>
         private static DataTable SelectDevices()
         {
             var dt = new DataTable();
             try
             {
-                using (var conn = GetDbConnection())
+                using (var conn = connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
                     dataAdapter.Fill(dt);
@@ -205,12 +235,16 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
+        /// <summary>
+        /// Selektiert alle Datensätze aus der Severity Tabelle
+        /// </summary>
+        /// <returns>DataTable</returns>
         private static DataTable SelectSeverity()
         {
             var dt = new DataTable();
             try
             {
-                using (var conn = GetDbConnection())
+                using (var conn = connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
                     dataAdapter.Fill(dt);
@@ -225,6 +259,9 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
+        /// <summary>
+        /// Fügt mithilfe der Stored Procedure einen neuen Log-Eintrag hinzu.
+        /// </summary>
         private void AddMessage()
         {
             var hostname = Devices.Rows[SelectedindexDevices]["hostname"].ToString();
@@ -232,7 +269,7 @@ namespace MonitoringNuget.ViewModel
             var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
             try
             {
-                using (var conn = GetDbConnection())
+                using (var conn = connection)
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
@@ -247,17 +284,6 @@ namespace MonitoringNuget.ViewModel
                 }
             }
             catch (Exception e) { MessageBox.Show(e.Message); }
-        }
-
-        private static SqlConnection GetDbConnection()
-        {
-            var builder = new SqlConnectionStringBuilder
-                          {
-                              DataSource = Datasource, InitialCatalog = InitialCatalog, UserID = UserId, Password = Password
-                          };
-            var connection = new SqlConnection(builder.ConnectionString);
-
-            return connection;
         }
 
         #endregion
