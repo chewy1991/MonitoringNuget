@@ -3,8 +3,8 @@
              xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl"
              xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
+             xmlns:uc = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
              d:DesignWidth = "800">
@@ -21,7 +21,7 @@
             <RowDefinition Height = "30" />
             <RowDefinition Height = "50" />
             <RowDefinition MaxHeight = "200" />
-            <RowDefinition MaxHeight = "200" />
+            <RowDefinition MaxHeight = "140" />
             <RowDefinition Height = "25" />
         </Grid.RowDefinitions>
         <Rectangle Fill = "Black"
@@ -37,7 +37,7 @@
                Content = "Logmessage Monitor" />
         <DockPanel LastChildFill = "True"
                    Grid.Row = "1"
-                   Grid.RowSpan = "3"
+                   Grid.RowSpan = "2"
                    Grid.Column = "0">
             <TextBlock Text = "Meldungen"
                        HorizontalAlignment = "Center"
@@ -53,7 +53,6 @@
                       IsReadOnly = "True" />
         </DockPanel>
 
-
         <StackPanel Orientation = "Horizontal"
                     Grid.Column = "0"
                     Grid.Row = "4"
@@ -64,12 +63,10 @@
             <Button Width = "180"
                     Content = "Confirm"
                     Command = "{Binding Source={StaticResource Monitoringvm},Path=LogClearCommand}" />
-
         </StackPanel>
 
         <!-- Logmessage hinzufügen -->
         <Label Grid.Column = "2"
-               Grid.ColumnSpan = "2"
                Grid.Row = "0"
                HorizontalAlignment = "Center"
                VerticalAlignment = "Top"
@@ -115,7 +112,7 @@
         </DockPanel>
 
         <DockPanel Grid.Row = "3"
-                   Grid.Column = "3"
+                   Grid.Column = "2"
                    LastChildFill = "True">
             <TextBlock Text = "Geräte:"
                        DockPanel.Dock = "Top"
@@ -132,12 +129,17 @@
                       HorizontalAlignment = "Center" />
         </DockPanel>
 
-
         <Button Width = "180"
                 Content = "Add"
-                Grid.Column = "3"
+                Grid.Column = "2"
                 Grid.Row = "4"
                 HorizontalAlignment = "Center"
                 Command = "{Binding Source={StaticResource Monitoringvm},Path=AddDataCommand}" />
+
+        <uc:ConnectionControl Grid.Column = "0"
+                              Grid.Row = "3"
+                              Margin = "5"
+                              DataContext = "{Binding Source={StaticResource Monitoringvm}}" />
+
     </Grid>
 </UserControl>

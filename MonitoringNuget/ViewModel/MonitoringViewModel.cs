@@ -9,19 +9,31 @@ namespace MonitoringNuget.ViewModel
 {
     public partial class MonitoringViewModel : DependencyObject
     {
-        #region Database Connection
-
-        private static readonly SqlConnectionStringBuilder Builder = new SqlConnectionStringBuilder
-                                                                     {
-                                                                         DataSource     = Datasource
-                                                                       , InitialCatalog = DatabaseName
-                                                                       , UserID         = LoggingUserId
-                                                                       , Password       = LogginPassword
-                                                                     };
-
-        #endregion
-
         #region Dependency Properties
+
+        public static readonly DependencyProperty DatasourceProperty =
+            DependencyProperty.Register("Datasource"
+                                      , typeof(string)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(@".\ZBW"));
+
+        public static readonly DependencyProperty DatabaseNameProperty =
+            DependencyProperty.Register("DatabaseName"
+                                      , typeof(string)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata("testat"));
+
+        public static readonly DependencyProperty LoggingUserIdProperty =
+            DependencyProperty.Register("LoggingUserId"
+                                      , typeof(string)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata("MonitoringWPF"));
+
+        public static readonly DependencyProperty LoggingPasswordProperty =
+            DependencyProperty.Register("LoggingPassword"
+                                      , typeof(string)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata("monitoring123"));
 
         // Monitoring Part
         public static readonly DependencyProperty SelectedIndexProperty =
@@ -44,7 +56,7 @@ namespace MonitoringNuget.ViewModel
             DependencyProperty.Register("Severity"
                                       , typeof(DataTable)
                                       , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(SelectSeverity()));
+                                      , new UIPropertyMetadata(new MonitoringViewModel().SelectSeverity()));
 
         public static readonly DependencyProperty SelectedIndexSeverityProperty =
             DependencyProperty.Register("SelectedIndexSeverity"
@@ -56,7 +68,7 @@ namespace MonitoringNuget.ViewModel
             DependencyProperty.Register("Devices"
                                       , typeof(DataTable)
                                       , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(SelectDevices()));
+                                      , new UIPropertyMetadata(new MonitoringViewModel().SelectDevices()));
 
         public static readonly DependencyProperty SelectedindexDevicesProperty =
             DependencyProperty.Register("SelectedindexDevices"
@@ -68,8 +80,37 @@ namespace MonitoringNuget.ViewModel
 
         #region Binding Properties
 
-        // Monitoring 
+        #region Database Connection
 
+        private static string connectionstring;
+
+        public string Datasource
+        {
+            get => (string) GetValue(DatasourceProperty);
+            set => SetValue(DatasourceProperty, value);
+        }
+
+        public string DatabaseName
+        {
+            get => (string) GetValue(DatabaseNameProperty);
+            set => SetValue(DatabaseNameProperty, value);
+        }
+
+        public string LoggingUserId
+        {
+            get => (string) GetValue(LoggingUserIdProperty);
+            set => SetValue(LoggingUserIdProperty, value);
+        }
+
+        public string LoggingPassword
+        {
+            get => (string) GetValue(LoggingPasswordProperty);
+            set => SetValue(LoggingPasswordProperty, value);
+        }
+
+        #endregion
+
+        // Monitoring 
         public int SelectedIndex
         {
             get => (int) GetValue(SelectedIndexProperty);
@@ -122,7 +163,11 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand LoadCommand
         {
-            get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) ); }
+            get
+            {
+                return _loadCommand
+                    ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) );
+            }
         }
 
         public bool LoadCanExecute => true;
@@ -131,7 +176,11 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand LogClearCommand
         {
-            get { return _logClearCommand ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) ); }
+            get
+            {
+                return _logClearCommand
+                    ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) );
+            }
         }
 
         public bool LogCanExecute => SelectedIndex >= 0;
@@ -153,7 +202,25 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
-        public bool AddCanExecute => SelectedindexDevices >= 0 && SelectedIndexSeverity >= 0 && !string.IsNullOrEmpty(Message);
+        public bool AddCanExecute
+            => SelectedindexDevices >= 0 && SelectedIndexSeverity >= 0 && !string.IsNullOrEmpty(Message);
+
+        private ICommand _addConnectionstringCommand;
+        public ICommand AddConnectionstringCommand
+        {
+            get
+            {
+                return _addConnectionstringCommand
+                    ?? ( _addConnectionstringCommand = new CommandHandler(() => { SetConnectionString(); }
+                                                                        , () => AddconnectionstringCanExecute) );
+            }
+        }
+
+        public bool AddconnectionstringCanExecute
+            => !string.IsNullOrEmpty(Datasource)
+            && !string.IsNullOrEmpty(DatabaseName)
+            && !string.IsNullOrEmpty(LoggingUserId)
+            && !string.IsNullOrEmpty(LoggingPassword);
 
         #endregion
 
@@ -164,24 +231,25 @@ namespace MonitoringNuget.ViewModel
         ///     Selectiert alle Datensätze der View v_Logentries
         /// </summary>
         /// <returns></returns>
-        private static DataTable Select()
+        private DataTable Select()
         {
             var dt = new DataTable();
-            try
-            {
-                using (var conn = new SqlConnection(Builder.ConnectionString))
+            if (!string.IsNullOrEmpty(connectionstring))
+                try
                 {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
-                    dataAdapter.Fill(dt);
+                    using (var conn = new SqlConnection(connectionstring))
+                    {
+                        var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
+                        dataAdapter.Fill(dt);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    return dt;
                 }
 
-                return dt;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return dt;
-            }
+            return dt;
         }
 
         /// <summary>
@@ -193,7 +261,7 @@ namespace MonitoringNuget.ViewModel
             if (bOk)
                 try
                 {
-                    using (var conn = new SqlConnection(Builder.ConnectionString))
+                    using (var conn = new SqlConnection(connectionstring))
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
@@ -214,48 +282,53 @@ namespace MonitoringNuget.ViewModel
         ///     Selectiert alle Geräte der Datenbank
         /// </summary>
         /// <returns>DataTable</returns>
-        private static DataTable SelectDevices()
+        private DataTable SelectDevices()
         {
             var dt = new DataTable();
-            try
-            {
-                using (var conn = new SqlConnection(Builder.ConnectionString))
+
+            if (!string.IsNullOrEmpty(connectionstring))
+                try
                 {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
-                    dataAdapter.Fill(dt);
+                    using (var conn = new SqlConnection(connectionstring))
+                    {
+                        var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
+                        dataAdapter.Fill(dt);
+                    }
+
+                    return dt;
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    return dt;
                 }
 
-                return dt;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return dt;
-            }
+            return dt;
         }
 
         /// <summary>
         ///     Selektiert alle Datensätze aus der Severity Tabelle
         /// </summary>
         /// <returns>DataTable</returns>
-        private static DataTable SelectSeverity()
+        private DataTable SelectSeverity()
         {
             var dt = new DataTable();
-            try
-            {
-                using (var conn = new SqlConnection(Builder.ConnectionString))
+            if (!string.IsNullOrEmpty(connectionstring))
+                try
                 {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
-                    dataAdapter.Fill(dt);
+                    using (var conn = new SqlConnection(connectionstring))
+                    {
+                        var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
+                        dataAdapter.Fill(dt);
+                    }
+                }
+                catch (Exception e)
+                {
+                    MessageBox.Show(e.Message);
+                    return dt;
                 }
 
-                return dt;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return dt;
-            }
+            return dt;
         }
 
         /// <summary>
@@ -268,7 +341,7 @@ namespace MonitoringNuget.ViewModel
             var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
             try
             {
-                using (var conn = new SqlConnection(Builder.ConnectionString))
+                using (var conn = new SqlConnection(connectionstring))
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
@@ -283,6 +356,18 @@ namespace MonitoringNuget.ViewModel
                 }
             }
             catch (Exception e) { MessageBox.Show(e.Message); }
+        }
+
+        /// <summary>
+        ///     Bildet den Connectionstring und aktualisiert das Severity und Geräte Datagrid
+        /// </summary>
+        private void SetConnectionString()
+        {
+            connectionstring =
+                $"Server={Datasource};Database={DatabaseName};User Id={LoggingUserId};Password={LoggingPassword};";
+
+            Severity = SelectSeverity();
+            Devices  = SelectDevices();
         }
 
         #endregion
