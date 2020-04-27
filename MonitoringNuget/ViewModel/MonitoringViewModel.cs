@@ -1,14 +1,26 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using MonitoringNuget.Annotations;
 using MonitoringNuget.MonitoringControl.View.Commands;
 
 namespace MonitoringNuget.ViewModel
 {
-    public partial class MonitoringViewModel : DependencyObject
+    public partial class MonitoringViewModel : DependencyObject, INotifyPropertyChanged
     {
+        private SqlConnectionStringBuilder _builder = new SqlConnectionStringBuilder();
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         #region Dependency Properties
 
         public static readonly DependencyProperty DatasourceProperty =
@@ -53,10 +65,7 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty =
-            DependencyProperty.Register("Severity"
-                                      , typeof(DataTable)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(new MonitoringViewModel().SelectSeverity()));
+            DependencyProperty.Register("Severity", typeof(DataTable), typeof(MonitoringViewModel));
 
         public static readonly DependencyProperty SelectedIndexSeverityProperty =
             DependencyProperty.Register("SelectedIndexSeverity"
@@ -65,10 +74,7 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(-1));
 
         public static readonly DependencyProperty DevicesProperty =
-            DependencyProperty.Register("Devices"
-                                      , typeof(DataTable)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(new MonitoringViewModel().SelectDevices()));
+            DependencyProperty.Register("Devices", typeof(DataTable), typeof(MonitoringViewModel));
 
         public static readonly DependencyProperty SelectedindexDevicesProperty =
             DependencyProperty.Register("SelectedindexDevices"
@@ -76,13 +82,26 @@ namespace MonitoringNuget.ViewModel
                                       , typeof(MonitoringViewModel)
                                       , new UIPropertyMetadata(-1));
 
+        public static readonly DependencyProperty ConnectionstringProperty =
+            DependencyProperty.Register("Connectionstring", typeof(string), typeof(MonitoringViewModel));
+
+        public static readonly DependencyProperty LogmessageGridRowSpanProperty =
+            DependencyProperty.Register("LogmessageGridRowSpan"
+                                      , typeof(int)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(2));
+
         #endregion
 
         #region Binding Properties
 
         #region Database Connection
 
-        private static string connectionstring;
+        public int LogmessageGridRowSpan
+        {
+            get => (int) GetValue(LogmessageGridRowSpanProperty);
+            set => SetValue(LogmessageGridRowSpanProperty, value);
+        }
 
         public string Datasource
         {
@@ -106,6 +125,21 @@ namespace MonitoringNuget.ViewModel
         {
             get => (string) GetValue(LoggingPasswordProperty);
             set => SetValue(LoggingPasswordProperty, value);
+        }
+
+        #endregion
+
+        #region UserControl Property
+
+        private Visibility _UsercontrolVisibility = Visibility.Visible;
+        public Visibility UsercontrolVisibility
+        {
+            get => _UsercontrolVisibility;
+            set
+            {
+                _UsercontrolVisibility = value;
+                OnPropertyChanged(nameof(UsercontrolVisibility));
+            }
         }
 
         #endregion
@@ -211,7 +245,12 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _addConnectionstringCommand
-                    ?? ( _addConnectionstringCommand = new CommandHandler(() => { SetConnectionString(); }
+                    ?? ( _addConnectionstringCommand = new CommandHandler(() =>
+                                                                          {
+                                                                              SetConnectionString();
+                                                                              UsercontrolVisibility = Visibility.Hidden;
+                                                                              LogmessageGridRowSpan = 3;
+                                                                          }
                                                                         , () => AddconnectionstringCanExecute) );
             }
         }
@@ -234,20 +273,20 @@ namespace MonitoringNuget.ViewModel
         private DataTable Select()
         {
             var dt = new DataTable();
-            if (!string.IsNullOrEmpty(connectionstring))
-                try
+            try
+            {
+                using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
-                    using (var conn = new SqlConnection(connectionstring))
-                    {
-                        var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
-                        dataAdapter.Fill(dt);
-                    }
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
+                    dataAdapter.Fill(dt);
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return dt;
-                }
+            }
+            catch (Exception e)
+            {
+                LogmessageGridRowSpan = 2;
+                UsercontrolVisibility = Visibility.Visible;
+                return dt;
+            }
 
             return dt;
         }
@@ -261,7 +300,7 @@ namespace MonitoringNuget.ViewModel
             if (bOk)
                 try
                 {
-                    using (var conn = new SqlConnection(connectionstring))
+                    using (var conn = new SqlConnection(_builder.ConnectionString))
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
@@ -274,7 +313,11 @@ namespace MonitoringNuget.ViewModel
 
                     Logentries = Select();
                 }
-                catch (Exception e) { MessageBox.Show(e.Message); }
+                catch (Exception e)
+                {
+                    LogmessageGridRowSpan = 2;
+                    UsercontrolVisibility = Visibility.Visible;
+                }
         }
 
         // Logmessage hinzufügen
@@ -282,53 +325,49 @@ namespace MonitoringNuget.ViewModel
         ///     Selectiert alle Geräte der Datenbank
         /// </summary>
         /// <returns>DataTable</returns>
-        private DataTable SelectDevices()
+        public DataTable SelectDevices()
         {
             var dt = new DataTable();
 
-            if (!string.IsNullOrEmpty(connectionstring))
-                try
+            try
+            {
+                using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
-                    using (var conn = new SqlConnection(connectionstring))
-                    {
-                        var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
-                        dataAdapter.Fill(dt);
-                    }
-
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
+                    dataAdapter.Fill(dt);
                     return dt;
                 }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    return dt;
-                }
-
-            return dt;
+            }
+            catch (Exception e)
+            {
+                LogmessageGridRowSpan = 2;
+                UsercontrolVisibility = Visibility.Visible;
+                return dt;
+            }
         }
 
         /// <summary>
         ///     Selektiert alle Datensätze aus der Severity Tabelle
         /// </summary>
         /// <returns>DataTable</returns>
-        private DataTable SelectSeverity()
+        public DataTable SelectSeverity()
         {
             var dt = new DataTable();
-            if (!string.IsNullOrEmpty(connectionstring))
-                try
+            try
+            {
+                using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
-                    using (var conn = new SqlConnection(connectionstring))
-                    {
-                        var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
-                        dataAdapter.Fill(dt);
-                    }
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
+                    dataAdapter.Fill(dt);
                     return dt;
                 }
-
-            return dt;
+            }
+            catch (Exception e)
+            {
+                LogmessageGridRowSpan = 2;
+                UsercontrolVisibility = Visibility.Visible;
+                return dt;
+            }
         }
 
         /// <summary>
@@ -341,7 +380,7 @@ namespace MonitoringNuget.ViewModel
             var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
             try
             {
-                using (var conn = new SqlConnection(connectionstring))
+                using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
@@ -355,7 +394,11 @@ namespace MonitoringNuget.ViewModel
                     }
                 }
             }
-            catch (Exception e) { MessageBox.Show(e.Message); }
+            catch (Exception e)
+            {
+                LogmessageGridRowSpan = 2;
+                UsercontrolVisibility = Visibility.Visible;
+            }
         }
 
         /// <summary>
@@ -363,8 +406,15 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void SetConnectionString()
         {
-            connectionstring =
-                $"Server={Datasource};Database={DatabaseName};User Id={LoggingUserId};Password={LoggingPassword};";
+            var Builder = new SqlConnectionStringBuilder
+                          {
+                              DataSource     = Datasource
+                            , InitialCatalog = DatabaseName
+                            , UserID         = LoggingUserId
+                            , Password       = LoggingPassword
+                          };
+
+            _builder = Builder;
 
             Severity = SelectSeverity();
             Devices  = SelectDevices();
