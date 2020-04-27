@@ -11,14 +11,14 @@ namespace MonitoringNuget.ViewModel
     {
         #region Database Connection
 
-        private static readonly SqlConnectionStringBuilder builder = new SqlConnectionStringBuilder
+        private static readonly SqlConnectionStringBuilder Builder = new SqlConnectionStringBuilder
                                                                      {
                                                                          DataSource     = Datasource
                                                                        , InitialCatalog = DatabaseName
                                                                        , UserID         = LoggingUserId
                                                                        , Password       = LogginPassword
                                                                      };
-        private static readonly SqlConnection connection = new SqlConnection(builder.ConnectionString);
+        private static readonly SqlConnection Connection = new SqlConnection(Builder.ConnectionString);
 
         #endregion
 
@@ -162,7 +162,7 @@ namespace MonitoringNuget.ViewModel
 
         // Monitoring
         /// <summary>
-        /// Selectiert alle Datensätze der View v_Logentries
+        ///     Selectiert alle Datensätze der View v_Logentries
         /// </summary>
         /// <returns></returns>
         private static DataTable Select()
@@ -170,7 +170,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = connection)
+                using (var conn = Connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(v_Logentries, conn));
                     dataAdapter.Fill(dt);
@@ -186,7 +186,7 @@ namespace MonitoringNuget.ViewModel
         }
 
         /// <summary>
-        /// Bestätigt den ausgewählten Datensatz im Datagrid Logmessages
+        ///     Bestätigt den ausgewählten Datensatz im Datagrid Logmessages
         /// </summary>
         private void LogClear()
         {
@@ -194,7 +194,7 @@ namespace MonitoringNuget.ViewModel
             if (bOk)
                 try
                 {
-                    using (var conn = connection)
+                    using (var conn = Connection)
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
@@ -212,7 +212,7 @@ namespace MonitoringNuget.ViewModel
 
         // Logmessage hinzufügen
         /// <summary>
-        /// Selectiert alle Geräte der Datenbank
+        ///     Selectiert alle Geräte der Datenbank
         /// </summary>
         /// <returns>DataTable</returns>
         private static DataTable SelectDevices()
@@ -220,7 +220,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = connection)
+                using (var conn = Connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
                     dataAdapter.Fill(dt);
@@ -236,7 +236,7 @@ namespace MonitoringNuget.ViewModel
         }
 
         /// <summary>
-        /// Selektiert alle Datensätze aus der Severity Tabelle
+        ///     Selektiert alle Datensätze aus der Severity Tabelle
         /// </summary>
         /// <returns>DataTable</returns>
         private static DataTable SelectSeverity()
@@ -244,7 +244,7 @@ namespace MonitoringNuget.ViewModel
             var dt = new DataTable();
             try
             {
-                using (var conn = connection)
+                using (var conn = Connection)
                 {
                     var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
                     dataAdapter.Fill(dt);
@@ -260,7 +260,7 @@ namespace MonitoringNuget.ViewModel
         }
 
         /// <summary>
-        /// Fügt mithilfe der Stored Procedure einen neuen Log-Eintrag hinzu.
+        ///     Fügt mithilfe der Stored Procedure einen neuen Log-Eintrag hinzu.
         /// </summary>
         private void AddMessage()
         {
@@ -269,7 +269,7 @@ namespace MonitoringNuget.ViewModel
             var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
             try
             {
-                using (var conn = connection)
+                using (var conn = Connection)
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
