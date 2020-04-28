@@ -54,12 +54,12 @@
     <Compile Include="MonitoringControl\SubControls\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitoringControl\SubControls\LoggingMessageAddControl.xaml.cs">
+        <DependentUpon>LoggingMessageAddControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\MonitoringViewModel.cs" />
-    <Compile Include="ViewModel\MonitoringViewModel.Const.Sqlstrings.cs">
-      <DependentUpon>MonitoringViewModel.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Include="MonitoringControl\MonitoringControl.xaml">
@@ -69,6 +69,10 @@
     <Page Include="MonitoringControl\SubControls\ConnectionControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitoringControl\SubControls\LoggingMessageAddControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup />
