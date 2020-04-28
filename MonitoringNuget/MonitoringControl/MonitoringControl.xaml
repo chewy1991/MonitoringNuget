@@ -67,8 +67,6 @@
         </StackPanel>
 
         <!-- Logmessage hinzufügen -->
-
-
         <uc:LoggingMessageAddControl Grid.Column = "2"
                                      Grid.Row = "0"
                                      Grid.RowSpan = "2"
@@ -80,11 +78,11 @@
                               DataContext = "{Binding Source={StaticResource Monitoringvm}}"
                               Visibility = "{Binding Source={StaticResource Monitoringvm},Path=UsercontrolVisibility}" />
 
-        <uc:DuplicatesControl Grid.Column = "0"
+        <uc:DuplicatesControl Grid.Column = "2"
+                              Grid.RowSpan = "2"
                               Grid.Row = "3"
                               Margin = "5"
-                              DataContext = "{Binding Source={StaticResource Monitoringvm}}"
-                              Visibility = "{Binding Source={StaticResource Monitoringvm},Path=DuplicatesFindVisibility}" />
+                              DataContext = "{Binding Source={StaticResource Monitoringvm}}" />
 
     </Grid>
 </UserControl>

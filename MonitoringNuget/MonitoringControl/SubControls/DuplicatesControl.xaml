@@ -5,24 +5,29 @@
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
-             d:DesignHeight = "130"
+             d:DesignHeight = "165"
              d:DesignWidth = "398">
     <Grid>
         <DockPanel LastChildFill = "True">
-            <Button DockPanel.Dock = "Left"
+            <TextBlock DockPanel.Dock = "Top"
+                       Text = "Duplikate"
+                       TextAlignment = "Center"
+                       Background = "Green" />
+
+            <Button DockPanel.Dock = "Bottom"
                     Content = "Find Duplicates"
                     Command = "{Binding FindDuplicates}" />
-            <DataGrid DockPanel.Dock = "Right"
-                      MinWidth = "150"
-                      ItemsSource="{Binding DuplicateList}"
-                      CanUserAddRows="False"
-                      CanUserSortColumns="False"
-                      CanUserDeleteRows="False"
-                      CanUserReorderColumns="False"
-                      CanUserResizeColumns="False"
-                      CanUserResizeRows="False"
-                      IsReadOnly="True"/>
 
+            <DataGrid DockPanel.Dock = "Top"
+                      MinWidth = "150"
+                      ItemsSource = "{Binding DuplicateList}"
+                      CanUserAddRows = "False"
+                      CanUserSortColumns = "False"
+                      CanUserDeleteRows = "False"
+                      CanUserReorderColumns = "False"
+                      CanUserResizeColumns = "False"
+                      CanUserResizeRows = "False"
+                      IsReadOnly = "True" />
         </DockPanel>
 
     </Grid>

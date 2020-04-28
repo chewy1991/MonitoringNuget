@@ -25,17 +25,17 @@
             <TextBlock Text = "Log-Nachricht"
                        TextAlignment = "Center"
                        Background = "Green" />
-            <TextBox Height = "29"
+            <TextBox Height = "30"
                      Text = "{Binding Message}" />
             <TextBlock Text = "Point of Delivery Name"
                        TextAlignment = "Center"
                        Background = "Green" />
-            <TextBox Height = "28"
+            <TextBox Height = "30"
                      Text = "{Binding PodName}" />
             <TextBlock Text = "Hostname"
                        TextAlignment = "Center"
                        Background = "Green" />
-            <TextBox Height = "28"
+            <TextBox Height = "30"
                      Text = "{Binding HostName}" />
         </StackPanel>
         <StackPanel Grid.Row = "1"

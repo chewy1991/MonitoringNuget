@@ -1,6 +1,4 @@
-﻿using System.Windows;
-using System.Windows.Controls;
-using MonitoringNuget.ViewModel;
+﻿using System.Windows.Controls;
 
 namespace MonitoringNuget.MonitoringControl
 {
