@@ -45,6 +45,7 @@
                        DockPanel.Dock = "Top" />
             <DataGrid ItemsSource = "{Binding Source={StaticResource Monitoringvm},Path=Logentries}"
                       SelectedIndex = "{Binding Source={StaticResource Monitoringvm},Path=SelectedIndex}"
+                      Margin = "5"
                       CanUserAddRows = "False"
                       CanUserDeleteRows = "False"
                       CanUserSortColumns = "False"
@@ -78,6 +79,12 @@
                               Margin = "5"
                               DataContext = "{Binding Source={StaticResource Monitoringvm}}"
                               Visibility = "{Binding Source={StaticResource Monitoringvm},Path=UsercontrolVisibility}" />
+
+        <uc:DuplicatesControl Grid.Column = "0"
+                              Grid.Row = "3"
+                              Margin = "5"
+                              DataContext = "{Binding Source={StaticResource Monitoringvm}}"
+                              Visibility = "{Binding Source={StaticResource Monitoringvm},Path=DuplicatesFindVisibility}" />
 
     </Grid>
 </UserControl>

@@ -7,7 +7,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
+using DuplicateCheckerLib;
 using MonitoringNuget.Annotations;
+using MonitoringNuget.EntityClasses;
 using MonitoringNuget.MonitoringControl.View.Commands;
 
 namespace MonitoringNuget.ViewModel
@@ -96,7 +98,8 @@ namespace MonitoringNuget.ViewModel
                                       , typeof(MonitoringViewModel)
                                       , new UIPropertyMetadata(string.Empty));
 
-
+        public static readonly DependencyProperty DuplicateListProperty =
+            DependencyProperty.Register("DuplicateList", typeof(List<LogentriesEntity>), typeof(MonitoringViewModel));
 
         #endregion
 
@@ -149,6 +152,17 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
+        private Visibility _duplicatesFindVisibility = Visibility.Hidden;
+        public Visibility DuplicatesFindVisibility
+        {
+            get => _duplicatesFindVisibility;
+            set
+            {
+                _duplicatesFindVisibility = value;
+                OnPropertyChanged(nameof(DuplicatesFindVisibility));
+            }
+        }
+
         #endregion
 
         // Monitoring 
@@ -193,6 +207,12 @@ namespace MonitoringNuget.ViewModel
         {
             get => (int)GetValue(SelectedIndexSeverityProperty);
             set => SetValue(SelectedIndexSeverityProperty, value);
+        }
+
+        public List<LogentriesEntity> DuplicateList
+        {
+            get => (List<LogentriesEntity>) GetValue(DuplicateListProperty);
+            set => SetValue(DuplicateListProperty, value);
         }
 
         #endregion
@@ -253,13 +273,15 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _addConnectionstringCommand
-                    ?? (_addConnectionstringCommand = new CommandHandler(() =>
-                    {
-                        SetConnectionString();
-                        UsercontrolVisibility = Visibility.Hidden;
-                        LogmessageGridRowSpan = 3;
-                    }
-                                                                        , () => AddconnectionstringCanExecute));
+                    ?? ( _addConnectionstringCommand = new CommandHandler(() =>
+                                                                          {
+                                                                              SetConnectionString();
+                                                                              UsercontrolVisibility =
+                                                                                  Visibility.Hidden;
+                                                                              DuplicatesFindVisibility =
+                                                                                  Visibility.Visible;
+                                                                          }
+                                                                        , () => AddconnectionstringCanExecute) );
             }
         }
 
@@ -268,6 +290,20 @@ namespace MonitoringNuget.ViewModel
             && !string.IsNullOrEmpty(DatabaseName)
             && !string.IsNullOrEmpty(LoggingUserId)
             && !string.IsNullOrEmpty(LoggingPassword);
+
+        private ICommand _findDuplicates;
+
+        public ICommand FindDuplicates
+        {
+            get
+            {
+                return _findDuplicates
+                    ?? ( _findDuplicates =
+                           new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) );
+            }
+        }
+
+        public bool FindDuplicatesCanExecute => true;
 
         #endregion
 
@@ -289,7 +325,7 @@ namespace MonitoringNuget.ViewModel
                     dataAdapter.Fill(dt);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show(e.Message);
                 LogmessageGridRowSpan = 2;
@@ -322,12 +358,61 @@ namespace MonitoringNuget.ViewModel
 
                     Logentries = Select();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    MessageBox.Show(e.Message);
-                    LogmessageGridRowSpan = 2;
-                    UsercontrolVisibility = Visibility.Visible;
+                    DuplicatesFindVisibility = Visibility.Hidden;
+                    UsercontrolVisibility    = Visibility.Visible;
                 }
+        }
+
+        // Logmessage hinzufügen
+        /// <summary>
+        ///     Selectiert alle Geräte der Datenbank
+        /// </summary>
+        /// <returns>DataTable</returns>
+        public DataTable SelectDevices()
+        {
+            var dt = new DataTable();
+
+            try
+            {
+                using (var conn = new SqlConnection(_builder.ConnectionString))
+                {
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand(selectDevices, conn));
+                    dataAdapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception)
+            {
+                DuplicatesFindVisibility = Visibility.Hidden;
+                UsercontrolVisibility    = Visibility.Visible;
+                return dt;
+            }
+        }
+
+        /// <summary>
+        ///     Selektiert alle Datensätze aus der Severity Tabelle
+        /// </summary>
+        /// <returns>DataTable</returns>
+        public DataTable SelectSeverity()
+        {
+            var dt = new DataTable();
+            try
+            {
+                using (var conn = new SqlConnection(_builder.ConnectionString))
+                {
+                    var dataAdapter = new SqlDataAdapter(new SqlCommand("SELECT * FROM Severity", conn));
+                    dataAdapter.Fill(dt);
+                    return dt;
+                }
+            }
+            catch (Exception)
+            {
+                DuplicatesFindVisibility = Visibility.Hidden;
+                UsercontrolVisibility    = Visibility.Visible;
+                return dt;
+            }
         }
 
         /// <summary>
@@ -353,7 +438,7 @@ namespace MonitoringNuget.ViewModel
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 MessageBox.Show(e.Message);
                 LogmessageGridRowSpan = 2;
@@ -378,17 +463,46 @@ namespace MonitoringNuget.ViewModel
         private void SetConnectionString()
         {
             var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = Datasource
-                            ,
-                InitialCatalog = DatabaseName
-                            ,
-                UserID = LoggingUserId
-                            ,
-                Password = LoggingPassword
-            };
+                          {
+                              DataSource     = Datasource
+                            , InitialCatalog = DatabaseName
+                            , UserID         = LoggingUserId
+                            , Password       = LoggingPassword
+                          };
 
             _builder = builder;
+        }
+
+        /// <summary>
+        /// Findet alle Duplikate.
+        /// </summary>
+        private void GetDuplicates()
+        {
+            var dupliTable = Select();
+            var dupliChecker = new DuplicateChecker();
+            var logentryList = new List<LogentriesEntity>();
+
+            for (var i = 0; i < dupliTable.Rows.Count; i++)
+            {
+                var entity = new LogentriesEntity
+                             {
+                                 Id         = Convert.ToInt32(dupliTable.Rows[i]["Id"].ToString())
+                               , Severity   = Convert.ToInt32(dupliTable.Rows[i]["severity"].ToString())
+                               , Logmessage = dupliTable.Rows[i]["message"].ToString()
+                             };
+
+                logentryList.Add(entity);
+            }
+
+            var duplilist = dupliChecker.FindDuplicates(logentryList);
+            var helplist = new List<LogentriesEntity>();
+            foreach (var entity in duplilist)
+            {
+                var log = (LogentriesEntity) entity;
+                helplist.Add(log);
+            }
+
+            DuplicateList = helplist;
         }
 
         #endregion
