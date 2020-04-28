@@ -31,6 +31,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DuplicateCheckerLib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\OneDrive\Dokumente\zbw\Semester 6\Programming Advanced\Projektarbeit\DuplicateCheckerLib\DuplicateCheckerLib\bin\Debug\netstandard2.0\DuplicateCheckerLib.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -47,12 +51,16 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityClasses\LogentriesEntity.cs" />
     <Compile Include="MonitoringControl\Commands\CommandHandler.cs" />
     <Compile Include="MonitoringControl\MonitoringControl.xaml.cs">
       <DependentUpon>MonitoringControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MonitoringControl\SubControls\ConnectionControl.xaml.cs">
       <DependentUpon>ConnectionControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MonitoringControl\SubControls\DuplicatesControl.xaml.cs">
+      <DependentUpon>DuplicatesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,6 +75,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="MonitoringControl\SubControls\ConnectionControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitoringControl\SubControls\DuplicatesControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
