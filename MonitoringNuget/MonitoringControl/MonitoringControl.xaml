@@ -19,7 +19,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height = "30" />
-            <RowDefinition Height = "140" />
+            <RowDefinition Height = "190" />
             <RowDefinition MaxHeight = "200" />
             <RowDefinition Height = "140" />
             <RowDefinition Height = "25" />

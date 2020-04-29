@@ -70,7 +70,7 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty =
-            DependencyProperty.Register("Severity", typeof(Dictionary<int, string>), typeof(MonitoringViewModel), new UIPropertyMetadata(FillSeverity()));
+            DependencyProperty.Register("Severity", typeof(DataTable), typeof(MonitoringViewModel), new UIPropertyMetadata(FillSeverity()));
 
         public static readonly DependencyProperty SelectedIndexSeverityProperty =
             DependencyProperty.Register("SelectedIndexSeverity"
@@ -183,9 +183,9 @@ namespace MonitoringNuget.ViewModel
             set => SetValue(HostNameProperty, value);
         }
 
-        public Dictionary<int, string> Severity
+        public DataTable Severity
         {
-            get => (Dictionary<int, string>)GetValue(SeverityProperty);
+            get => (DataTable)GetValue(SeverityProperty);
             set => SetValue(SeverityProperty, value);
         }
 
@@ -337,8 +337,7 @@ namespace MonitoringNuget.ViewModel
         {
             try
             {
-                var severitykeylist = Severity.Keys.ToList();
-                var severityId = severitykeylist[SelectedIndexSeverity];
+                var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
                 using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
@@ -361,7 +360,7 @@ namespace MonitoringNuget.ViewModel
             }
         }
 
-        private static Dictionary<int, string> FillSeverity()
+        private static DataTable FillSeverity()
         {
             var severityDict = new Dictionary<int, string>();
             severityDict.Add(10, "INFO");
@@ -369,7 +368,19 @@ namespace MonitoringNuget.ViewModel
             severityDict.Add(30, "WARNING");
             severityDict.Add(40, "ERROR");
             severityDict.Add(50, "TRACE");
-            return severityDict;
+            var severityTable = new DataTable();
+            severityTable.Columns.Add("Id");
+            severityTable.Columns.Add("Severity");
+
+            foreach (var key in severityDict.Keys)
+            {
+                DataRow row = severityTable.NewRow();
+                row["Id"] = (int)key;
+                row["Severity"] = severityDict[key];
+                severityTable.Rows.Add(row);
+            }
+
+            return severityTable;
         }
 
         /// <summary>

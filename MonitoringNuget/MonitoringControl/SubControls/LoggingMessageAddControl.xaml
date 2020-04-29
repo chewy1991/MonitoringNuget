@@ -5,12 +5,13 @@
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
-             d:DesignHeight = "170"
+             d:DesignHeight = "190"
              d:DesignWidth = "398">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height = "30" />
             <RowDefinition Height = "140" />
+            <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -46,13 +47,17 @@
                        TextAlignment = "Center"
                        Background = "Green" />
             <DataGrid ItemsSource = "{Binding Severity}"
-                      SelectedIndex = "{Binding SelectedIndexSeverity}">
+                      SelectedIndex = "{Binding SelectedIndexSeverity}"
+                      IsReadOnly="False"
+                      CanUserAddRows="True">
                 <DataGrid.HeadersVisibility>None</DataGrid.HeadersVisibility>
             </DataGrid>
-            <Button Content = "Add"
-                    Command = "{Binding AddDataCommand}"
-                    Height = "24" />
         </StackPanel>
+        <Button Content = "Add"
+                Command = "{Binding AddDataCommand}"
+                Height = "24"
+                Grid.Row="2"
+                Grid.ColumnSpan="2"/>
 
     </Grid>
 </UserControl>
