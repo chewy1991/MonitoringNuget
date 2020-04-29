@@ -9,7 +9,7 @@ using System.Windows.Input;
 using DuplicateCheckerLib;
 using MonitoringNuget.Annotations;
 using MonitoringNuget.EntityClasses;
-using MonitoringNuget.MonitoringControl.View.Commands;
+using MonitoringNuget.MonitoringControl.Commands;
 
 namespace MonitoringNuget.ViewModel
 {

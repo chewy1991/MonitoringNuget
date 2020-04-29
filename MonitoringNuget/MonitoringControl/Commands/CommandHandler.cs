@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 
-namespace MonitoringNuget.MonitoringControl.View.Commands
+namespace MonitoringNuget.MonitoringControl.Commands
 {
     public class CommandHandler : ICommand
     {
