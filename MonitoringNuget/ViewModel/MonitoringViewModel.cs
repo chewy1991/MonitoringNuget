@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
@@ -72,7 +71,10 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty =
-            DependencyProperty.Register("Severity", typeof(DataTable), typeof(MonitoringViewModel), new UIPropertyMetadata(FillSeverity()));
+            DependencyProperty.Register("Severity"
+                                      , typeof(DataTable)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(FillSeverity()));
 
         public static readonly DependencyProperty SelectedIndexSeverityProperty =
             DependencyProperty.Register("SelectedIndexSeverity"
@@ -188,7 +190,7 @@ namespace MonitoringNuget.ViewModel
 
         public DataTable Severity
         {
-            get => (DataTable)GetValue(SeverityProperty);
+            get => (DataTable) GetValue(SeverityProperty);
             set => SetValue(SeverityProperty, value);
         }
 
@@ -400,8 +402,8 @@ namespace MonitoringNuget.ViewModel
 
             foreach (var key in severityDict.Keys)
             {
-                DataRow row = severityTable.NewRow();
-                row["Id"] = (int)key;
+                var row = severityTable.NewRow();
+                row["Id"]       = key;
                 row["Severity"] = severityDict[key];
                 severityTable.Rows.Add(row);
             }
