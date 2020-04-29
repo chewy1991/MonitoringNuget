@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using MonitoringNuget.Annotations;
-using MonitoringNuget.MonitoringControl.View.Commands;
+using MonitoringNuget.MonitoringControl.Commands;
 
 namespace MonitoringNuget.ViewModel
 {
@@ -70,7 +69,10 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty =
-            DependencyProperty.Register("Severity", typeof(DataTable), typeof(MonitoringViewModel), new UIPropertyMetadata(FillSeverity()));
+            DependencyProperty.Register("Severity"
+                                      , typeof(DataTable)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(FillSeverity()));
 
         public static readonly DependencyProperty SelectedIndexSeverityProperty =
             DependencyProperty.Register("SelectedIndexSeverity"
@@ -96,8 +98,6 @@ namespace MonitoringNuget.ViewModel
                                       , typeof(MonitoringViewModel)
                                       , new UIPropertyMetadata(string.Empty));
 
-
-
         #endregion
 
         #region Binding Properties
@@ -106,31 +106,31 @@ namespace MonitoringNuget.ViewModel
 
         public int LogmessageGridRowSpan
         {
-            get => (int)GetValue(LogmessageGridRowSpanProperty);
+            get => (int) GetValue(LogmessageGridRowSpanProperty);
             set => SetValue(LogmessageGridRowSpanProperty, value);
         }
 
         public string Datasource
         {
-            get => (string)GetValue(DatasourceProperty);
+            get => (string) GetValue(DatasourceProperty);
             set => SetValue(DatasourceProperty, value);
         }
 
         public string DatabaseName
         {
-            get => (string)GetValue(DatabaseNameProperty);
+            get => (string) GetValue(DatabaseNameProperty);
             set => SetValue(DatabaseNameProperty, value);
         }
 
         public string LoggingUserId
         {
-            get => (string)GetValue(LoggingUserIdProperty);
+            get => (string) GetValue(LoggingUserIdProperty);
             set => SetValue(LoggingUserIdProperty, value);
         }
 
         public string LoggingPassword
         {
-            get => (string)GetValue(LoggingPasswordProperty);
+            get => (string) GetValue(LoggingPasswordProperty);
             set => SetValue(LoggingPasswordProperty, value);
         }
 
@@ -154,44 +154,44 @@ namespace MonitoringNuget.ViewModel
         // Monitoring 
         public int SelectedIndex
         {
-            get => (int)GetValue(SelectedIndexProperty);
+            get => (int) GetValue(SelectedIndexProperty);
             set => SetValue(SelectedIndexProperty, value);
         }
 
         public DataTable Logentries
         {
-            get => (DataTable)GetValue(LogentriesProperty);
+            get => (DataTable) GetValue(LogentriesProperty);
             set => SetValue(LogentriesProperty, value);
         }
 
         // Logmessage hinzufügen
         public string Message
         {
-            get => (string)GetValue(MessageProperty);
+            get => (string) GetValue(MessageProperty);
             set => SetValue(MessageProperty, value);
         }
 
         public string PodName
         {
-            get => (string)GetValue(PodNameProperty);
+            get => (string) GetValue(PodNameProperty);
             set => SetValue(PodNameProperty, value);
         }
 
         public string HostName
         {
-            get => (string)GetValue(HostNameProperty);
+            get => (string) GetValue(HostNameProperty);
             set => SetValue(HostNameProperty, value);
         }
 
         public DataTable Severity
         {
-            get => (DataTable)GetValue(SeverityProperty);
+            get => (DataTable) GetValue(SeverityProperty);
             set => SetValue(SeverityProperty, value);
         }
 
         public int SelectedIndexSeverity
         {
-            get => (int)GetValue(SelectedIndexSeverityProperty);
+            get => (int) GetValue(SelectedIndexSeverityProperty);
             set => SetValue(SelectedIndexSeverityProperty, value);
         }
 
@@ -207,7 +207,7 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _loadCommand
-                    ?? (_loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute));
+                    ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) );
             }
         }
 
@@ -220,7 +220,7 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _logClearCommand
-                    ?? (_logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute));
+                    ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) );
             }
         }
 
@@ -232,20 +232,23 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _addDataCommand
-                    ?? (_addDataCommand = new CommandHandler(() =>
-                    {
-                        AddMessage();
-                        Message = string.Empty;
-                        PodName = string.Empty;
-                        HostName = string.Empty;
-                        SelectedIndexSeverity = -1;
-                    }
-                                                            , () => AddCanExecute));
+                    ?? ( _addDataCommand = new CommandHandler(() =>
+                                                              {
+                                                                  AddMessage();
+                                                                  Message               = string.Empty;
+                                                                  PodName               = string.Empty;
+                                                                  HostName              = string.Empty;
+                                                                  SelectedIndexSeverity = -1;
+                                                              }
+                                                            , () => AddCanExecute) );
             }
         }
 
         public bool AddCanExecute
-            => !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(PodName) && !string.IsNullOrEmpty(HostName) && SelectedIndexSeverity >= 0;
+            => !string.IsNullOrEmpty(Message)
+            && !string.IsNullOrEmpty(PodName)
+            && !string.IsNullOrEmpty(HostName)
+            && SelectedIndexSeverity >= 0;
 
         private ICommand _addConnectionstringCommand;
         public ICommand AddConnectionstringCommand
@@ -253,13 +256,13 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _addConnectionstringCommand
-                    ?? (_addConnectionstringCommand = new CommandHandler(() =>
-                    {
-                        SetConnectionString();
-                        UsercontrolVisibility = Visibility.Hidden;
-                        LogmessageGridRowSpan = 3;
-                    }
-                                                                        , () => AddconnectionstringCanExecute));
+                    ?? ( _addConnectionstringCommand = new CommandHandler(() =>
+                                                                          {
+                                                                              SetConnectionString();
+                                                                              UsercontrolVisibility = Visibility.Hidden;
+                                                                              LogmessageGridRowSpan = 3;
+                                                                          }
+                                                                        , () => AddconnectionstringCanExecute) );
             }
         }
 
@@ -313,7 +316,7 @@ namespace MonitoringNuget.ViewModel
                     {
                         using (var cmd = new SqlCommand("LogClear", conn))
                         {
-                            cmd.CommandType = CommandType.StoredProcedure;
+                            cmd.CommandType                                = CommandType.StoredProcedure;
                             cmd.Parameters.Add("@Id", SqlDbType.Int).Value = logId;
                             conn.Open();
                             cmd.ExecuteNonQuery();
@@ -342,11 +345,11 @@ namespace MonitoringNuget.ViewModel
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
                     {
-                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.CommandType                                             = CommandType.StoredProcedure;
                         cmd.Parameters.Add("@logmessage", SqlDbType.NVarChar).Value = Message;
-                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value = PodName;
-                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value = severityId;
-                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value = HostName;
+                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value    = PodName;
+                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value        = severityId;
+                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value   = HostName;
                         conn.Open();
                         cmd.ExecuteNonQuery();
                     }
@@ -374,8 +377,8 @@ namespace MonitoringNuget.ViewModel
 
             foreach (var key in severityDict.Keys)
             {
-                DataRow row = severityTable.NewRow();
-                row["Id"] = (int)key;
+                var row = severityTable.NewRow();
+                row["Id"]       = key;
                 row["Severity"] = severityDict[key];
                 severityTable.Rows.Add(row);
             }
@@ -389,15 +392,12 @@ namespace MonitoringNuget.ViewModel
         private void SetConnectionString()
         {
             var builder = new SqlConnectionStringBuilder
-            {
-                DataSource = Datasource
-                            ,
-                InitialCatalog = DatabaseName
-                            ,
-                UserID = LoggingUserId
-                            ,
-                Password = LoggingPassword
-            };
+                          {
+                              DataSource     = Datasource
+                            , InitialCatalog = DatabaseName
+                            , UserID         = LoggingUserId
+                            , Password       = LoggingPassword
+                          };
 
             _builder = builder;
         }
