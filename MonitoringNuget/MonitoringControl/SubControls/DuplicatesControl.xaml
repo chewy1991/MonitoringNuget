@@ -1,0 +1,34 @@
+﻿<UserControl x:Class = "MonitoringNuget.MonitoringControl.SubControls.DuplicatesControl"
+             xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
+             mc:Ignorable = "d"
+             d:DesignHeight = "165"
+             d:DesignWidth = "398">
+    <Grid>
+        <DockPanel LastChildFill = "True">
+            <TextBlock DockPanel.Dock = "Top"
+                       Text = "Duplikate"
+                       TextAlignment = "Center"
+                       Background = "Green" />
+
+            <Button DockPanel.Dock = "Bottom"
+                    Content = "Find Duplicates"
+                    Command = "{Binding FindDuplicates}" />
+
+            <DataGrid DockPanel.Dock = "Top"
+                      MinWidth = "150"
+                      ItemsSource = "{Binding DuplicateList}"
+                      CanUserAddRows = "False"
+                      CanUserSortColumns = "False"
+                      CanUserDeleteRows = "False"
+                      CanUserReorderColumns = "False"
+                      CanUserResizeColumns = "False"
+                      CanUserResizeRows = "False"
+                      IsReadOnly = "True" />
+        </DockPanel>
+
+    </Grid>
+</UserControl>

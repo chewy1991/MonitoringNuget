@@ -3,11 +3,11 @@
 namespace MonitoringNuget.MonitoringControl.SubControls
 {
     /// <summary>
-    ///     Interaction logic for LoggingMessageAddControl.xaml
+    ///     Interaction logic for DuplicatesControl.xaml
     /// </summary>
-    public partial class LoggingMessageAddControl : UserControl
+    public partial class DuplicatesControl : UserControl
     {
-        public LoggingMessageAddControl()
+        public DuplicatesControl()
         {
             InitializeComponent();
         }
