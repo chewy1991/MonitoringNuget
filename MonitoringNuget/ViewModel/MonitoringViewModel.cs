@@ -340,7 +340,7 @@ namespace MonitoringNuget.ViewModel
         {
             try
             {
-                var severityId = Convert.ToInt32(Severity.Rows[SelectedIndexSeverity]["Id"].ToString());
+                var severityId = Severity.Rows[SelectedIndexSeverity]["Id"];
                 using (var conn = new SqlConnection(_builder.ConnectionString))
                 {
                     using (var cmd = new SqlCommand("LogMessageAdd", conn))
@@ -372,8 +372,8 @@ namespace MonitoringNuget.ViewModel
             severityDict.Add(40, "ERROR");
             severityDict.Add(50, "TRACE");
             var severityTable = new DataTable();
-            severityTable.Columns.Add("Id");
-            severityTable.Columns.Add("Severity");
+            severityTable.Columns.Add("Id",typeof(int));
+            severityTable.Columns.Add("Severity",typeof(string));
 
             foreach (var key in severityDict.Keys)
             {
