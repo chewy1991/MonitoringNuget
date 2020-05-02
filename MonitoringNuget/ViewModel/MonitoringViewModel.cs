@@ -1,31 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.SqlClient;
-using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Input;
 using DuplicateCheckerLib;
-using MonitoringNuget.Annotations;
 using MonitoringNuget.EntityClasses;
 using MonitoringNuget.MonitoringControl.Commands;
 
 namespace MonitoringNuget.ViewModel
 {
-    public class MonitoringViewModel : DependencyObject, INotifyPropertyChanged
+    public class MonitoringViewModel : DependencyObject
     {
-        private const string VLogentries =
-            "Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries;";
+        private const string VLogentries = "Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries;";
 
         private SqlConnectionStringBuilder _builder = new SqlConnectionStringBuilder();
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        [NotifyPropertyChangedInvocator]
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
         #region Dependency Properties
 
@@ -64,11 +53,10 @@ namespace MonitoringNuget.ViewModel
             DependencyProperty.Register("Logentries", typeof(DataTable), typeof(MonitoringViewModel));
 
         // Logmessage hinzufügen
-        public static readonly DependencyProperty MessageProperty =
-            DependencyProperty.Register("Message"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
+                                                                                              , typeof(string)
+                                                                                              , typeof(MonitoringViewModel)
+                                                                                              , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty SeverityProperty =
             DependencyProperty.Register("Severity"
@@ -88,11 +76,10 @@ namespace MonitoringNuget.ViewModel
                                       , typeof(MonitoringViewModel)
                                       , new UIPropertyMetadata(2));
 
-        public static readonly DependencyProperty PodNameProperty =
-            DependencyProperty.Register("PodName"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty PodNameProperty = DependencyProperty.Register("PodName"
+                                                                                              , typeof(string)
+                                                                                              , typeof(MonitoringViewModel)
+                                                                                              , new UIPropertyMetadata(string.Empty));
 
         public static readonly DependencyProperty HostNameProperty =
             DependencyProperty.Register("HostName"
@@ -102,6 +89,12 @@ namespace MonitoringNuget.ViewModel
 
         public static readonly DependencyProperty DuplicateListProperty =
             DependencyProperty.Register("DuplicateList", typeof(List<LogentriesEntity>), typeof(MonitoringViewModel));
+
+        public static readonly DependencyProperty UsercontrolVisibilityProperty =
+            DependencyProperty.Register("UsercontrolVisibility"
+                                      , typeof(Visibility)
+                                      , typeof(MonitoringViewModel)
+                                      , new UIPropertyMetadata(Visibility.Visible));
 
         #endregion
 
@@ -143,15 +136,11 @@ namespace MonitoringNuget.ViewModel
 
         #region UserControl Property
 
-        private Visibility _usercontrolVisibility = Visibility.Visible;
+        //private Visibility _usercontrolVisibility = Visibility.Visible;
         public Visibility UsercontrolVisibility
         {
-            get => _usercontrolVisibility;
-            set
-            {
-                _usercontrolVisibility = value;
-                OnPropertyChanged(nameof(UsercontrolVisibility));
-            }
+            get => (Visibility) GetValue(UsercontrolVisibilityProperty);
+            set => SetValue(UsercontrolVisibilityProperty, value);
         }
 
         #endregion
@@ -215,11 +204,7 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand LoadCommand
         {
-            get
-            {
-                return _loadCommand
-                    ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) );
-            }
+            get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) ); }
         }
 
         public bool LoadCanExecute => true;
@@ -228,11 +213,7 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand LogClearCommand
         {
-            get
-            {
-                return _logClearCommand
-                    ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) );
-            }
+            get { return _logClearCommand ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) ); }
         }
 
         public bool LogCanExecute => SelectedIndex >= 0;
@@ -256,10 +237,7 @@ namespace MonitoringNuget.ViewModel
         }
 
         public bool AddCanExecute
-            => !string.IsNullOrEmpty(Message)
-            && !string.IsNullOrEmpty(PodName)
-            && !string.IsNullOrEmpty(HostName)
-            && SelectedIndexSeverity >= 0;
+            => !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(PodName) && !string.IsNullOrEmpty(HostName) && SelectedIndexSeverity >= 0;
 
         private ICommand _addConnectionstringCommand;
         public ICommand AddConnectionstringCommand
@@ -287,12 +265,7 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand FindDuplicates
         {
-            get
-            {
-                return _findDuplicates
-                    ?? ( _findDuplicates =
-                           new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) );
-            }
+            get { return _findDuplicates ?? ( _findDuplicates = new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) ); }
         }
 
         public bool FindDuplicatesCanExecute => true;
@@ -397,8 +370,8 @@ namespace MonitoringNuget.ViewModel
             severityDict.Add(40, "ERROR");
             severityDict.Add(50, "TRACE");
             var severityTable = new DataTable();
-            severityTable.Columns.Add("Id",typeof(int));
-            severityTable.Columns.Add("Severity",typeof(string));
+            severityTable.Columns.Add("Id", typeof(int));
+            severityTable.Columns.Add("Severity", typeof(string));
 
             foreach (var key in severityDict.Keys)
             {
@@ -418,10 +391,7 @@ namespace MonitoringNuget.ViewModel
         {
             var builder = new SqlConnectionStringBuilder
                           {
-                              DataSource     = Datasource
-                            , InitialCatalog = DatabaseName
-                            , UserID         = LoggingUserId
-                            , Password       = LoggingPassword
+                              DataSource = Datasource, InitialCatalog = DatabaseName, UserID = LoggingUserId, Password = LoggingPassword
                           };
 
             _builder = builder;
