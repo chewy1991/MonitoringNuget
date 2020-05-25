@@ -51,7 +51,14 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AbstractClass\RepositoryBase.cs" />
+    <Compile Include="DataAccess\Interface\IRepositoryBase.cs" />
+    <Compile Include="DataAccess\RepositoryClasses\LocationRepository.cs" />
+    <Compile Include="DataAccess\RepositoryClasses\LoggingRepository.cs" />
     <Compile Include="EntityClasses\LogentriesEntity.cs" />
+    <Compile Include="Models\Location.cs" />
+    <Compile Include="Models\Logging.cs" />
+    <Compile Include="Models\ModelInterface\IModel.cs" />
     <Compile Include="MonitoringControl\Commands\CommandHandler.cs" />
     <Compile Include="MonitoringControl\MonitoringControl.xaml.cs">
       <DependentUpon>MonitoringControl.xaml</DependentUpon>
@@ -63,7 +70,7 @@
       <DependentUpon>DuplicatesControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="MonitoringControl\SubControls\LoggingMessageAddControl.xaml.cs">
-        <DependentUpon>LoggingMessageAddControl.xaml</DependentUpon>
+      <DependentUpon>LoggingMessageAddControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

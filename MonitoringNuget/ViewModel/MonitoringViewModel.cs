@@ -5,16 +5,18 @@ using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Input;
 using DuplicateCheckerLib;
+using MonitoringNuget.DataAccess.RepositoryClasses;
 using MonitoringNuget.EntityClasses;
+using MonitoringNuget.Models;
 using MonitoringNuget.MonitoringControl.Commands;
 
 namespace MonitoringNuget.ViewModel
 {
     public class MonitoringViewModel : DependencyObject
     {
-        private const string VLogentries = "Select id AS Id,pod,location,hostname,severity,timestamp,message  FROM v_logentries;";
+        private readonly LoggingRepository loggingrepo = new LoggingRepository();
 
-        private SqlConnectionStringBuilder _builder = new SqlConnectionStringBuilder();
+        private bool ConnstringSet = false;
 
         #region Dependency Properties
 
@@ -50,7 +52,7 @@ namespace MonitoringNuget.ViewModel
                                       , new UIPropertyMetadata(-1));
 
         public static readonly DependencyProperty LogentriesProperty =
-            DependencyProperty.Register("Logentries", typeof(DataTable), typeof(MonitoringViewModel));
+            DependencyProperty.Register("Logentries", typeof(List<Logging>), typeof(MonitoringViewModel));
 
         // Logmessage hinzufügen
         public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
@@ -152,9 +154,9 @@ namespace MonitoringNuget.ViewModel
             set => SetValue(SelectedIndexProperty, value);
         }
 
-        public DataTable Logentries
+        public List<Logging> Logentries
         {
-            get => (DataTable) GetValue(LogentriesProperty);
+            get => (List<Logging>) GetValue(LogentriesProperty);
             set => SetValue(LogentriesProperty, value);
         }
 
@@ -204,10 +206,10 @@ namespace MonitoringNuget.ViewModel
 
         public ICommand LoadCommand
         {
-            get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => Logentries = Select(), () => LoadCanExecute) ); }
+            get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => GetLogentries(), () => LoadCanExecute) ); }
         }
 
-        public bool LoadCanExecute => true;
+        public bool LoadCanExecute => ConnstringSet;
 
         private ICommand _logClearCommand;
 
@@ -216,7 +218,7 @@ namespace MonitoringNuget.ViewModel
             get { return _logClearCommand ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) ); }
         }
 
-        public bool LogCanExecute => SelectedIndex >= 0;
+        public bool LogCanExecute => SelectedIndex >= 0 && ConnstringSet;
         private ICommand _addDataCommand;
 
         public ICommand AddDataCommand
@@ -227,17 +229,20 @@ namespace MonitoringNuget.ViewModel
                     ?? ( _addDataCommand = new CommandHandler(() =>
                                                               {
                                                                   AddMessage();
-                                                                  Message               = string.Empty;
-                                                                  PodName               = string.Empty;
-                                                                  HostName              = string.Empty;
+                                                                  Message = string.Empty;
+                                                                  PodName = string.Empty;
+                                                                  HostName = string.Empty;
                                                                   SelectedIndexSeverity = -1;
                                                               }
                                                             , () => AddCanExecute) );
             }
         }
 
-        public bool AddCanExecute
-            => !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(PodName) && !string.IsNullOrEmpty(HostName) && SelectedIndexSeverity >= 0;
+        public bool AddCanExecute => !string.IsNullOrEmpty(Message) 
+                                  && !string.IsNullOrEmpty(PodName) 
+                                  && !string.IsNullOrEmpty(HostName) 
+                                  && SelectedIndexSeverity >= 0 
+                                  && ConnstringSet;
 
         private ICommand _addConnectionstringCommand;
         public ICommand AddConnectionstringCommand
@@ -245,13 +250,7 @@ namespace MonitoringNuget.ViewModel
             get
             {
                 return _addConnectionstringCommand
-                    ?? ( _addConnectionstringCommand = new CommandHandler(() =>
-                                                                          {
-                                                                              SetConnectionString();
-                                                                              UsercontrolVisibility = Visibility.Hidden;
-                                                                              LogmessageGridRowSpan = 3;
-                                                                          }
-                                                                        , () => AddconnectionstringCanExecute) );
+                    ?? ( _addConnectionstringCommand = new CommandHandler(() => { SetConnectionString();}, () => AddconnectionstringCanExecute));
             }
         }
 
@@ -268,37 +267,19 @@ namespace MonitoringNuget.ViewModel
             get { return _findDuplicates ?? ( _findDuplicates = new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) ); }
         }
 
-        public bool FindDuplicatesCanExecute => true;
+        public bool FindDuplicatesCanExecute => ConnstringSet;
 
         #endregion
 
         #region Methoden
 
-        // Monitoring
-        /// <summary>
-        ///     Selectiert alle Datensätze der View v_Logentries
-        /// </summary>
-        /// <returns></returns>
-        private DataTable Select()
+        private void GetLogentries()
         {
-            var dt = new DataTable();
-            try
-            {
-                using (var conn = new SqlConnection(_builder.ConnectionString))
-                {
-                    var dataAdapter = new SqlDataAdapter(new SqlCommand(VLogentries, conn));
-                    dataAdapter.Fill(dt);
-                }
-            }
+            try { Logentries = loggingrepo.GetAll(); }
             catch (Exception e)
             {
                 MessageBox.Show(e.Message);
-                LogmessageGridRowSpan = 2;
-                UsercontrolVisibility = Visibility.Visible;
-                return dt;
             }
-
-            return dt;
         }
 
         /// <summary>
@@ -306,29 +287,13 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void LogClear()
         {
-            var bOk = int.TryParse(Logentries.Rows[SelectedIndex]["Id"].ToString(), out var logId);
-            if (bOk)
-                try
-                {
-                    using (var conn = new SqlConnection(_builder.ConnectionString))
-                    {
-                        using (var cmd = new SqlCommand("LogClear", conn))
-                        {
-                            cmd.CommandType                                = CommandType.StoredProcedure;
-                            cmd.Parameters.Add("@Id", SqlDbType.Int).Value = logId;
-                            conn.Open();
-                            cmd.ExecuteNonQuery();
-                        }
-                    }
-
-                    Logentries = Select();
-                }
-                catch (Exception e)
-                {
-                    MessageBox.Show(e.Message);
-                    LogmessageGridRowSpan = 2;
-                    UsercontrolVisibility = Visibility.Visible;
-                }
+            var bOk = loggingrepo.LogClear(Logentries[SelectedIndex].Id);
+            if (bOk) { Logentries = loggingrepo.GetAll(); }
+            else
+            {
+                LogmessageGridRowSpan = 2;
+                UsercontrolVisibility = Visibility.Visible;
+            }
         }
 
         /// <summary>
@@ -336,26 +301,13 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void AddMessage()
         {
-            try
+            var severityId = (int) Severity.Rows[SelectedIndexSeverity]["Id"];
+            var bOK = loggingrepo.AddMessage(Message
+                                           , PodName
+                                           , severityId
+                                           , HostName);
+            if (!bOK)
             {
-                var severityId = Severity.Rows[SelectedIndexSeverity]["Id"];
-                using (var conn = new SqlConnection(_builder.ConnectionString))
-                {
-                    using (var cmd = new SqlCommand("LogMessageAdd", conn))
-                    {
-                        cmd.CommandType                                             = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@logmessage", SqlDbType.NVarChar).Value = Message;
-                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value    = PodName;
-                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value        = severityId;
-                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value   = HostName;
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
                 LogmessageGridRowSpan = 2;
                 UsercontrolVisibility = Visibility.Visible;
             }
@@ -376,7 +328,7 @@ namespace MonitoringNuget.ViewModel
             foreach (var key in severityDict.Keys)
             {
                 var row = severityTable.NewRow();
-                row["Id"]       = key;
+                row["Id"] = key;
                 row["Severity"] = severityDict[key];
                 severityTable.Rows.Add(row);
             }
@@ -389,12 +341,14 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void SetConnectionString()
         {
-            var builder = new SqlConnectionStringBuilder
-                          {
-                              DataSource = Datasource, InitialCatalog = DatabaseName, UserID = LoggingUserId, Password = LoggingPassword
-                          };
+            var bOK = loggingrepo.SetConnectionstring(Datasource,DatabaseName,LoggingUserId,LoggingPassword);
 
-            _builder = builder;
+            if (bOK)
+            {
+                UsercontrolVisibility = Visibility.Hidden;
+                LogmessageGridRowSpan = 3;
+                ConnstringSet = true;
+            }
         }
 
         /// <summary>
@@ -402,18 +356,13 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void GetDuplicates()
         {
-            var dupliTable = Select();
+            var loglist = loggingrepo.GetAll();
             var dupliChecker = new DuplicateChecker();
             var logentryList = new List<LogentriesEntity>();
 
-            for (var i = 0; i < dupliTable.Rows.Count; i++)
+            foreach (var log in loglist)
             {
-                var entity = new LogentriesEntity
-                             {
-                                 Id         = Convert.ToInt32(dupliTable.Rows[i]["Id"].ToString())
-                               , Severity   = Convert.ToInt32(dupliTable.Rows[i]["severity"].ToString())
-                               , Logmessage = dupliTable.Rows[i]["message"].ToString()
-                             };
+                var entity = new LogentriesEntity {Id = log.Id, Severity = log.severity, Logmessage = log.message};
 
                 logentryList.Add(entity);
             }
