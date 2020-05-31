@@ -16,33 +16,7 @@ namespace MonitoringNuget.ViewModel
     {
         private readonly LoggingRepository loggingrepo = new LoggingRepository();
 
-        private bool ConnstringSet = false;
-
         #region Dependency Properties
-
-        public static readonly DependencyProperty DatasourceProperty =
-            DependencyProperty.Register("Datasource"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(@".\ZBW"));
-
-        public static readonly DependencyProperty DatabaseNameProperty =
-            DependencyProperty.Register("DatabaseName"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata("testat"));
-
-        public static readonly DependencyProperty LoggingUserIdProperty =
-            DependencyProperty.Register("LoggingUserId"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata("MonitoringWPF"));
-
-        public static readonly DependencyProperty LoggingPasswordProperty =
-            DependencyProperty.Register("LoggingPassword"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata("monitoring123"));
 
         // Monitoring Part
         public static readonly DependencyProperty SelectedIndexProperty =
@@ -72,12 +46,6 @@ namespace MonitoringNuget.ViewModel
                                       , typeof(MonitoringViewModel)
                                       , new UIPropertyMetadata(-1));
 
-        public static readonly DependencyProperty LogmessageGridRowSpanProperty =
-            DependencyProperty.Register("LogmessageGridRowSpan"
-                                      , typeof(int)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(2));
-
         public static readonly DependencyProperty PodNameProperty = DependencyProperty.Register("PodName"
                                                                                               , typeof(string)
                                                                                               , typeof(MonitoringViewModel)
@@ -92,60 +60,10 @@ namespace MonitoringNuget.ViewModel
         public static readonly DependencyProperty DuplicateListProperty =
             DependencyProperty.Register("DuplicateList", typeof(List<LogentriesEntity>), typeof(MonitoringViewModel));
 
-        public static readonly DependencyProperty UsercontrolVisibilityProperty =
-            DependencyProperty.Register("UsercontrolVisibility"
-                                      , typeof(Visibility)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(Visibility.Visible));
 
         #endregion
 
         #region Binding Properties
-
-        #region Database Connection
-
-        public int LogmessageGridRowSpan
-        {
-            get => (int) GetValue(LogmessageGridRowSpanProperty);
-            set => SetValue(LogmessageGridRowSpanProperty, value);
-        }
-
-        public string Datasource
-        {
-            get => (string) GetValue(DatasourceProperty);
-            set => SetValue(DatasourceProperty, value);
-        }
-
-        public string DatabaseName
-        {
-            get => (string) GetValue(DatabaseNameProperty);
-            set => SetValue(DatabaseNameProperty, value);
-        }
-
-        public string LoggingUserId
-        {
-            get => (string) GetValue(LoggingUserIdProperty);
-            set => SetValue(LoggingUserIdProperty, value);
-        }
-
-        public string LoggingPassword
-        {
-            get => (string) GetValue(LoggingPasswordProperty);
-            set => SetValue(LoggingPasswordProperty, value);
-        }
-
-        #endregion
-
-        #region UserControl Property
-
-        //private Visibility _usercontrolVisibility = Visibility.Visible;
-        public Visibility UsercontrolVisibility
-        {
-            get => (Visibility) GetValue(UsercontrolVisibilityProperty);
-            set => SetValue(UsercontrolVisibilityProperty, value);
-        }
-
-        #endregion
 
         // Monitoring 
         public int SelectedIndex
@@ -209,7 +127,7 @@ namespace MonitoringNuget.ViewModel
             get { return _loadCommand ?? ( _loadCommand = new CommandHandler(() => GetLogentries(), () => LoadCanExecute) ); }
         }
 
-        public bool LoadCanExecute => ConnstringSet;
+        public bool LoadCanExecute => true;
 
         private ICommand _logClearCommand;
 
@@ -218,7 +136,7 @@ namespace MonitoringNuget.ViewModel
             get { return _logClearCommand ?? ( _logClearCommand = new CommandHandler(() => LogClear(), () => LogCanExecute) ); }
         }
 
-        public bool LogCanExecute => SelectedIndex >= 0 && ConnstringSet;
+        public bool LogCanExecute => SelectedIndex >= 0;
         private ICommand _addDataCommand;
 
         public ICommand AddDataCommand
@@ -241,24 +159,7 @@ namespace MonitoringNuget.ViewModel
         public bool AddCanExecute => !string.IsNullOrEmpty(Message) 
                                   && !string.IsNullOrEmpty(PodName) 
                                   && !string.IsNullOrEmpty(HostName) 
-                                  && SelectedIndexSeverity >= 0 
-                                  && ConnstringSet;
-
-        private ICommand _addConnectionstringCommand;
-        public ICommand AddConnectionstringCommand
-        {
-            get
-            {
-                return _addConnectionstringCommand
-                    ?? ( _addConnectionstringCommand = new CommandHandler(() => { SetConnectionString();}, () => AddconnectionstringCanExecute));
-            }
-        }
-
-        public bool AddconnectionstringCanExecute
-            => !string.IsNullOrEmpty(Datasource)
-            && !string.IsNullOrEmpty(DatabaseName)
-            && !string.IsNullOrEmpty(LoggingUserId)
-            && !string.IsNullOrEmpty(LoggingPassword);
+                                  && SelectedIndexSeverity >= 0;
 
         private ICommand _findDuplicates;
 
@@ -267,7 +168,7 @@ namespace MonitoringNuget.ViewModel
             get { return _findDuplicates ?? ( _findDuplicates = new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) ); }
         }
 
-        public bool FindDuplicatesCanExecute => ConnstringSet;
+        public bool FindDuplicatesCanExecute => true;
 
         #endregion
 
@@ -287,13 +188,8 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void LogClear()
         {
-            var bOk = loggingrepo.LogClear(Logentries[SelectedIndex].Id);
-            if (bOk) { Logentries = loggingrepo.GetAll(); }
-            else
-            {
-                LogmessageGridRowSpan = 2;
-                UsercontrolVisibility = Visibility.Visible;
-            }
+            loggingrepo.LogClear(Logentries[SelectedIndex].Id);
+            Logentries = loggingrepo.GetAll();
         }
 
         /// <summary>
@@ -302,15 +198,10 @@ namespace MonitoringNuget.ViewModel
         private void AddMessage()
         {
             var severityId = (int) Severity.Rows[SelectedIndexSeverity]["Id"];
-            var bOK = loggingrepo.AddMessage(Message
-                                           , PodName
-                                           , severityId
-                                           , HostName);
-            if (!bOK)
-            {
-                LogmessageGridRowSpan = 2;
-                UsercontrolVisibility = Visibility.Visible;
-            }
+            loggingrepo.AddMessage(Message
+                                 , PodName
+                                 , severityId
+                                 , HostName);
         }
 
         private static DataTable FillSeverity()
@@ -334,21 +225,6 @@ namespace MonitoringNuget.ViewModel
             }
 
             return severityTable;
-        }
-
-        /// <summary>
-        ///     Bildet den Connectionstring und aktualisiert das Severity und Geräte Datagrid
-        /// </summary>
-        private void SetConnectionString()
-        {
-            var bOK = loggingrepo.SetConnectionstring(Datasource,DatabaseName,LoggingUserId,LoggingPassword);
-
-            if (bOK)
-            {
-                UsercontrolVisibility = Visibility.Hidden;
-                LogmessageGridRowSpan = 3;
-                ConnstringSet = true;
-            }
         }
 
         /// <summary>

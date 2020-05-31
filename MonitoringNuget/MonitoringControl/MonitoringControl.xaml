@@ -37,7 +37,7 @@
                Content = "Logmessage Monitor" />
         <DockPanel LastChildFill = "True"
                    Grid.Row = "1"
-                   Grid.RowSpan = "{Binding Source={StaticResource Monitoringvm},Path=LogmessageGridRowSpan}"
+                   Grid.RowSpan = "3"
                    Grid.Column = "0">
             <TextBlock Text = "Meldungen"
                        Background = "Green"
@@ -71,12 +71,6 @@
                                      Grid.Row = "0"
                                      Grid.RowSpan = "2"
                                      DataContext = "{Binding Source={StaticResource Monitoringvm}}" />
-
-        <uc:ConnectionControl Grid.Column = "0"
-                              Grid.Row = "3"
-                              Margin = "5"
-                              DataContext = "{Binding Source={StaticResource Monitoringvm}}"
-                              Visibility = "{Binding Source={StaticResource Monitoringvm},Path=UsercontrolVisibility}" />
 
         <uc:DuplicatesControl Grid.Column = "2"
                               Grid.RowSpan = "2"

@@ -38,6 +38,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
@@ -63,9 +64,6 @@
     <Compile Include="MonitoringControl\MonitoringControl.xaml.cs">
       <DependentUpon>MonitoringControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MonitoringControl\SubControls\ConnectionControl.xaml.cs">
-      <DependentUpon>ConnectionControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="MonitoringControl\SubControls\DuplicatesControl.xaml.cs">
       <DependentUpon>DuplicatesControl.xaml</DependentUpon>
     </Compile>
@@ -81,10 +79,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MonitoringControl\SubControls\ConnectionControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="MonitoringControl\SubControls\LoggingMessageAddControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -94,6 +88,8 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

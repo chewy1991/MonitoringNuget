@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Configuration;
 using System.Windows;
 using GenericRepository;
 using MonitoringNuget.Models.ModelInterface;
@@ -10,7 +11,7 @@ namespace MonitoringNuget.DataAccess.AbstractClass
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T:IModel
     {
-        protected string ConnectionString { get; set; }
+        protected string ConnectionString = ConfigurationManager.ConnectionStrings["DBConn"].ConnectionString;
 
         public abstract string TableName { get; }
 
@@ -54,34 +55,6 @@ namespace MonitoringNuget.DataAccess.AbstractClass
         public abstract T GetSingle<P>(P pkValue);
 
         public abstract void Update(T entity);
-
-        public bool SetConnectionstring(string datasource
-                                      , string databaseName
-                                      , string userid
-                                      , string password)
-        {
-            var connection = new SqlConnection();
-            try
-            {
-                var builder = new SqlConnectionStringBuilder
-                              {
-                                  DataSource = datasource
-                                , InitialCatalog = databaseName
-                                , UserID = userid
-                                , Password = password
-                              };
-                ConnectionString = builder.ConnectionString;
-                connection       = new SqlConnection(ConnectionString);
-                connection.Open();
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-            finally { connection.Close(); }
-        }
     }
 }
 
