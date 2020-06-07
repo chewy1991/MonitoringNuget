@@ -16,14 +16,17 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
         /// <param name="entity">zu aktualisierendes Model-Object</param>
         public override void Update(Location entity)
         {
-            using (var conn = new SqlConnection(ConnectionString))
+            if (this.GetSingle(entity.Id) != null)
             {
-                using (var cmd = conn.CreateCommand())
+                using (var conn = new SqlConnection(ConnectionString))
                 {
-                    conn.Open();
-                    cmd.CommandText =
-                        $"UPDATE {TableName} SET Id = {entity.Id}, LocationName = {entity.LocationName}, Locationparent = {entity.Locationparent};";
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        conn.Open();
+                        cmd.CommandText =
+                            $"UPDATE {TableName} SET Id = {entity.Id}, LocationName = {entity.LocationName}, Locationparent = {entity.Locationparent};";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }
@@ -61,7 +64,7 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
                     var dt = new DataTable();
                     var dataAdapter = new SqlDataAdapter(cmd.CommandText, conn);
                     dataAdapter.Fill(dt);
-
+                    
                     foreach (DataRow row in dt.Rows)
                     {
                         var loc = new Location
@@ -119,7 +122,7 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
         /// <returns>gefundenes Model-Objekt, ansonsten null</returns>
         public override Location GetSingle<P>(P pkValue)
         {
-            var location = new Location();
+            Location location = null;
             using (var conn = new SqlConnection(ConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
@@ -131,12 +134,15 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
                     var dataAdapter = new SqlDataAdapter(cmd.CommandText, conn);
                     dataAdapter.Fill(dt);
 
-                    location = new Location
-                               {
-                                   Id = (int) dt.Rows[0]["Id"]
-                                 , LocationName = (string) dt.Rows[0]["LocationName"]
-                                 , Locationparent = (int?) dt.Rows[0]["Locationparent"]
-                               };
+                    if (dt.Rows.Count == 1)
+                    {
+                        location = new Location
+                                   {
+                                       Id = (int) dt.Rows[0]["Id"]
+                                     , LocationName = (string) dt.Rows[0]["LocationName"]
+                                     , Locationparent = (int?) dt.Rows[0]["Locationparent"]
+                                   };
+                    }
                 }
             }
 
@@ -147,14 +153,17 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
         /// <param name="entity">zu speicherndes Model-Object</param>
         public override void Add(Location entity)
         {
-            using (var conn = new SqlConnection(ConnectionString))
+            if (this.GetSingle(entity.Locationparent) != null)
             {
-                using (var cmd = conn.CreateCommand())
+                using (var conn = new SqlConnection(ConnectionString))
                 {
-                    conn.Open();
-                    cmd.CommandText =
-                        $"INSERT INTO {TableName} (Id,LocationName,Locationparent) VALUES ({entity.Id},{entity.LocationName},{entity.Locationparent});";
-                    cmd.ExecuteNonQuery();
+                    using (var cmd = conn.CreateCommand())
+                    {
+                        conn.Open();
+                        cmd.CommandText =
+                            $"INSERT INTO {TableName} (Id,LocationName,Locationparent) VALUES ({entity.Id},{entity.LocationName},{entity.Locationparent});";
+                        cmd.ExecuteNonQuery();
+                    }
                 }
             }
         }
