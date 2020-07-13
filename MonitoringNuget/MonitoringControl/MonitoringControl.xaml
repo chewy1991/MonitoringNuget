@@ -7,7 +7,7 @@
              xmlns:uc = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
-             d:DesignWidth = "800">
+             d:DesignWidth = "1600">
     <UserControl.Resources>
         <viewModel:MonitoringViewModel x:Key = "Monitoringvm" />
     </UserControl.Resources>
@@ -16,6 +16,8 @@
             <ColumnDefinition Width = "398" />
             <ColumnDefinition Width = "4" />
             <ColumnDefinition MaxWidth = "398" />
+            <ColumnDefinition Width = "4" />
+            <ColumnDefinition Width="800"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height = "30" />
@@ -64,6 +66,7 @@
             <Button Width = "180"
                     Content = "Confirm"
                     Command = "{Binding Source={StaticResource Monitoringvm},Path=LogClearCommand}" />
+            
         </StackPanel>
 
         <!-- Logmessage hinzufügen -->
@@ -77,6 +80,11 @@
                               Grid.Row = "3"
                               Margin = "5"
                               DataContext = "{Binding Source={StaticResource Monitoringvm}}" />
+        <Rectangle Fill = "Black"
+                   Grid.Column = "3"
+                   Grid.RowSpan = "6" />
+
+        <uc:Kundenverwaltung Grid.Column="4" Grid.RowSpan="5" Margin="5"></uc:Kundenverwaltung>
 
     </Grid>
 </UserControl>

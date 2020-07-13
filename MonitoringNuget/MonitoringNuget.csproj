@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -12,6 +13,8 @@
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -35,12 +38,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\OneDrive\Dokumente\zbw\Semester 6\Programming Advanced\Projektarbeit\DuplicateCheckerLib\DuplicateCheckerLib\bin\Debug\netstandard2.0\DuplicateCheckerLib.dll</HintPath>
     </Reference>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -53,10 +65,80 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AbstractClass\RepositoryBase.cs" />
+    <Compile Include="DataAccess\EFAccess\AbstractClassEF\RepositoryBaseEF.cs" />
+    <Compile Include="DataAccess\EFAccess\KundenRepository.cs" />
     <Compile Include="DataAccess\Interface\IRepositoryBase.cs" />
     <Compile Include="DataAccess\RepositoryClasses\LocationRepository.cs" />
     <Compile Include="DataAccess\RepositoryClasses\LoggingRepository.cs" />
+    <Compile Include="DataAccess\StoredProcedures\AdoProcedures.cs" />
+    <Compile Include="DataAccess\StoredProcedures\Interface\IStoredProcedures.cs" />
     <Compile Include="EntityClasses\LogentriesEntity.cs" />
+    <Compile Include="EntityFramework\Abrechnung.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Abrechnungsposition.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Adresse.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Device.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\DeviceCategory.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Kontaktperson.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Kunde.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Locations.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Logmessage.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Networkinterface.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Point_Of_Delivery.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Ports.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Referenzen.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Severity.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TestatDBEF.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestatDBEF.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TestatDBEF.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\TestatDBEF.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_logentries.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_UsagePerLocation.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\v_UsagePerPod.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\ModelInterface\IModel.cs" />
@@ -67,15 +149,24 @@
     <Compile Include="MonitoringControl\SubControls\DuplicatesControl.xaml.cs">
       <DependentUpon>DuplicatesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitoringControl\SubControls\Kundenverwaltung.xaml.cs">
+      <DependentUpon>Kundenverwaltung.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MonitoringControl\SubControls\LoggingMessageAddControl.xaml.cs">
       <DependentUpon>LoggingMessageAddControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Strategy\ContextStrategy.cs" />
+    <Compile Include="ViewModel\KundenverwaltungViewModel.cs" />
     <Compile Include="ViewModel\MonitoringViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MonitoringControl\MonitoringControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitoringControl\SubControls\Kundenverwaltung.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -89,7 +180,39 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config" />
+    <EntityDeploy Include="EntityFramework\TestatDBEF.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>TestatDBEF.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <None Include="App.Config" />
+    <None Include="EntityFramework\TestatDBEF.edmx.diagram">
+      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="EntityFramework\TestatDBEF.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+      <LastGenOutput>TestatDBEF.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="EntityFramework\TestatDBEF.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+      <LastGenOutput>TestatDBEF.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+  </Target>
+  <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

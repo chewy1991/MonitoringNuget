@@ -2,19 +2,22 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Runtime.Remoting.Contexts;
 using System.Windows;
 using System.Windows.Input;
 using DuplicateCheckerLib;
 using MonitoringNuget.DataAccess.RepositoryClasses;
+using MonitoringNuget.DataAccess.StoredProcedures;
 using MonitoringNuget.EntityClasses;
 using MonitoringNuget.Models;
 using MonitoringNuget.MonitoringControl.Commands;
+using MonitoringNuget.Strategy;
 
 namespace MonitoringNuget.ViewModel
 {
     public class MonitoringViewModel : DependencyObject
     {
-        private readonly LoggingRepository loggingrepo = new LoggingRepository();
+        private readonly ContextStrategy<Logging> loggingrepo = new ContextStrategy<Logging>(new LoggingRepository(),new AdoProcedures());
 
         #region Dependency Properties
 
@@ -167,7 +170,7 @@ namespace MonitoringNuget.ViewModel
         {
             get { return _findDuplicates ?? ( _findDuplicates = new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) ); }
         }
-
+        
         public bool FindDuplicatesCanExecute => true;
 
         #endregion

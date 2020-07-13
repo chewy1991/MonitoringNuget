@@ -123,55 +123,5 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
         {
             throw new NotImplementedException();
         }
-
-        public bool LogClear(int logId)
-        {
-            try
-            {
-                using (var conn = new SqlConnection(ConnectionString))
-                {
-                    using (var cmd = new SqlCommand("LogClear", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@Id", SqlDbType.Int).Value = logId;
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-        }
-
-        public bool AddMessage(string message, string podname,int severity,string hostname)
-        {
-            try
-            {
-                using (var conn = new SqlConnection(ConnectionString))
-                {
-                    using (var cmd = new SqlCommand("LogMessageAdd", conn))
-                    {
-                        cmd.CommandType = CommandType.StoredProcedure;
-                        cmd.Parameters.Add("@logmessage", SqlDbType.NVarChar).Value = message;
-                        cmd.Parameters.Add("@PodName", SqlDbType.NVarChar).Value    = podname;
-                        cmd.Parameters.Add("@Severity", SqlDbType.Int).Value        = severity;
-                        cmd.Parameters.Add("@hostname", SqlDbType.NVarChar).Value   = hostname;
-                        conn.Open();
-                        cmd.ExecuteNonQuery();
-                    }
-                }
-
-                return true;
-            }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-                return false;
-            }
-        }
     }
 }

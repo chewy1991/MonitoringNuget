@@ -11,7 +11,7 @@ namespace MonitoringNuget.DataAccess.AbstractClass
 {
     public abstract class RepositoryBase<T> : IRepositoryBase<T> where T:IModel
     {
-        protected string ConnectionString = ConfigurationManager.ConnectionStrings["DBConn"].ConnectionString;
+        public string ConnectionString = ConfigurationManager.ConnectionStrings["DBConn"].ConnectionString;
 
         public abstract string TableName { get; }
 

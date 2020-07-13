@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="87de7d6b64f941b3995ac633acc57047" Name="Diagram1">
+        <EntityTypeShape EntityType="TestatModel.Abrechnung" Width="1.5" PointX="8.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Abrechnungsposition" Width="1.5" PointX="10.5" PointY="9" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Adresse" Width="1.5" PointX="0.75" PointY="9.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Device" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.DeviceCategory" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Kontaktperson" Width="1.5" PointX="8.25" PointY="11.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Kunde" Width="1.5" PointX="3.75" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Locations" Width="1.5" PointX="9" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Logmessage" Width="1.5" PointX="5.25" PointY="5.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Networkinterface" Width="1.5" PointX="11.25" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Point_Of_Delivery" Width="1.5" PointX="6" PointY="9.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Ports" Width="1.5" PointX="8.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Referenzen" Width="1.5" PointX="5.25" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Severity" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.v_logentries" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.v_UsagePerLocation" Width="1.5" PointX="5.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.v_UsagePerPod" Width="1.5" PointX="7.75" PointY="0.75" IsExpanded="true" />
+        <AssociationConnector Association="TestatModel.FK__Abrechnun__Abrec__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Abrechnun__PodAb__60A75C0F" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Abrechnun__PodId__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Device__AdressId__4D94879B" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Point_Of___podAd__3E52440B" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Device__Deviceca__4F7CD00D" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Device__Networki__4E88ABD4" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Logmessag__Devic__339FAB6E" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Ports__DeviceId__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Referenze__Devic__5BE2A6F2" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Kontaktpe__PodId__47DBAE45" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Point_Of___podKu__3D5E1FD2" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Locations__Locat__3B40CD36" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Networkin__Locat__440B1D61" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Logmessag__Sever__3493CFA7" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Networkin__PodId__4316F928" ManuallyRouted="false" />
+        <AssociationConnector Association="TestatModel.FK__Ports__PortNetwo__534D60F1" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

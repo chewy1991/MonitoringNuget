@@ -1,0 +1,1300 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="TestatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Abrechnung">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PodAbrechnungId" Type="int" Nullable="false" />
+          <Property Name="Bruttopreis" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="UsedGuthaben" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Nettopreis" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CreationTime" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Abrechnungsposition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Produktbeschreibung" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Stueckpreis" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Menge" Type="int" Nullable="false" />
+          <Property Name="PodId" Type="int" Nullable="false" />
+          <Property Name="isFakturiert" Type="bit" />
+          <Property Name="Buchungsdatum" Type="datetime" Nullable="false" />
+          <Property Name="AbrechnungId" Type="int" />
+        </EntityType>
+        <EntityType Name="Adresse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Land" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Ort" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Plz" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="Strasse" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Hausnr" Type="nvarchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Devicecategory" Type="int" Nullable="false" />
+          <Property Name="Hostname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Ip_Adresse" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="AnzahlPorts" Type="int" Nullable="false" />
+          <Property Name="AdressId" Type="int" Nullable="false" />
+          <Property Name="NetworkinterfaceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="DeviceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Categoryname" Type="nvarchar" MaxLength="100" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kontaktperson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vorname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Nachname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Prioritaet" Type="int" Nullable="false" />
+          <Property Name="PodId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Kunde">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Kontonr" Type="nvarchar" MaxLength="12" Nullable="false" />
+          <Property Name="Bezeichnung" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Guthaben" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Betragslimit" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Telefonnummer" Type="nvarchar" MaxLength="14" />
+          <Property Name="EMail" Type="nchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="Locations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LocationName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Locationparent" Type="int" />
+        </EntityType>
+        <EntityType Name="Logmessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Zeitstempel" Type="datetime" Nullable="false" />
+          <Property Name="Severity" Type="int" Nullable="false" />
+          <Property Name="LogMessage" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="DeviceId" Type="int" Nullable="false" />
+          <Property Name="isChecked" Type="bit" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Networkinterface">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DuplexType" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="NetworkSpeed" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="PodId" Type="int" Nullable="false" />
+          <Property Name="LocationID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Point_Of_Delivery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Bezeichnung" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="podKunde" Type="int" Nullable="false" />
+          <Property Name="podAdresse" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ports">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DeviceId" Type="int" Nullable="false" />
+          <Property Name="PortNr" Type="int" Nullable="false" />
+          <Property Name="isUsed" Type="bit" Nullable="false" />
+          <Property Name="PortNetworkinterfaceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Referenzen">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Benutzername" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="Passwort" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="SnmpCommunity" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="DeviceId" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Severity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Severity" Type="nvarchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Testat.dbo.v_logentries' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_logentries">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="pod" />
+            <PropertyRef Name="location" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="severity" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="message" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="pod" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="location" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="hostname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="severity" Type="int" Nullable="false" />
+          <Property Name="timestamp" Type="datetime" Nullable="false" />
+          <Property Name="message" Type="nvarchar" MaxLength="45" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Testat.dbo.v_UsagePerLocation' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_UsagePerLocation">
+          <Key>
+            <PropertyRef Name="LocationName" />
+            <PropertyRef Name="CategoryName" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="ip_adresse" />
+            <PropertyRef Name="MaxPorts" />
+          </Key>
+          <Property Name="LocationName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="hostname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="ip_adresse" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="MaxPorts" Type="int" Nullable="false" />
+          <Property Name="UsedPorts" Type="int" />
+          <Property Name="Auslastung" Type="int" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="v_UsagePerPod">
+          <Key>
+            <PropertyRef Name="bezeichnung" />
+            <PropertyRef Name="CategoryName" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="ip_adresse" />
+            <PropertyRef Name="MaxPorts" />
+          </Key>
+          <Property Name="bezeichnung" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="hostname" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="ip_adresse" Type="nvarchar" MaxLength="45" Nullable="false" />
+          <Property Name="MaxPorts" Type="int" Nullable="false" />
+          <Property Name="UsedPorts" Type="int" />
+          <Property Name="Auslastung" Type="int" />
+        </EntityType>
+        <Association Name="FK__Abrechnun__Abrec__6FE99F9F">
+          <End Role="Abrechnung" Type="Self.Abrechnung" Multiplicity="0..1" />
+          <End Role="Abrechnungsposition" Type="Self.Abrechnungsposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Abrechnung">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Abrechnungsposition">
+              <PropertyRef Name="AbrechnungId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Abrechnun__PodAb__60A75C0F">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Abrechnung" Type="Self.Abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Abrechnung">
+              <PropertyRef Name="PodAbrechnungId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Abrechnun__PodId__66603565">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Abrechnungsposition" Type="Self.Abrechnungsposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Abrechnungsposition">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__AdressId__4D94879B">
+          <End Role="Adresse" Type="Self.Adresse" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adresse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__Deviceca__4F7CD00D">
+          <End Role="DeviceCategory" Type="Self.DeviceCategory" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeviceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="Devicecategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__Networki__4E88ABD4">
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Networkinterface">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="NetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kontaktpe__PodId__47DBAE45">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Kontaktperson" Type="Self.Kontaktperson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kontaktperson">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Locations__Locat__3B40CD36">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="0..1" />
+          <End Role="Locations1" Type="Self.Locations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Locations1">
+              <PropertyRef Name="Locationparent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Logmessag__Devic__339FAB6E">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Logmessage" Type="Self.Logmessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Logmessage">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Logmessag__Sever__3493CFA7">
+          <End Role="Severity" Type="Self.Severity" Multiplicity="1" />
+          <End Role="Logmessage" Type="Self.Logmessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Severity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Logmessage">
+              <PropertyRef Name="Severity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Networkin__Locat__440B1D61">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="1" />
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Networkinterface">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Networkin__PodId__4316F928">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Networkinterface">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Point_Of___podAd__3E52440B">
+          <End Role="Adresse" Type="Self.Adresse" Multiplicity="1" />
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adresse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Point_Of_Delivery">
+              <PropertyRef Name="podAdresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Point_Of___podKu__3D5E1FD2">
+          <End Role="Kunde" Type="Self.Kunde" Multiplicity="1" />
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kunde">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Point_Of_Delivery">
+              <PropertyRef Name="podKunde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ports__DeviceId__5441852A">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Ports" Type="Self.Ports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ports">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ports__PortNetwo__534D60F1">
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="1" />
+          <End Role="Ports" Type="Self.Ports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Networkinterface">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ports">
+              <PropertyRef Name="PortNetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Referenze__Devic__5BE2A6F2">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Referenzen" Type="Self.Referenzen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Referenzen">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="LogClear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="Id" Type="int" Mode="In" />
+        </Function>
+        <Function Name="LogMessageAdd" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="logmessage" Type="nvarchar" Mode="In" />
+          <Parameter Name="PodName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Severity" Type="int" Mode="In" />
+          <Parameter Name="hostname" Type="nvarchar" Mode="In" />
+        </Function>
+        <Function Name="PodBill" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="PodId" Type="int" Mode="In" />
+        </Function>
+        <Function Name="PodBillEvent" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <EntityContainer Name="TestatModelStoreContainer">
+          <EntitySet Name="Abrechnung" EntityType="Self.Abrechnung" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Abrechnungsposition" EntityType="Self.Abrechnungsposition" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Adresse" EntityType="Self.Adresse" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Device" EntityType="Self.Device" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DeviceCategory" EntityType="Self.DeviceCategory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kontaktperson" EntityType="Self.Kontaktperson" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Kunde" EntityType="Self.Kunde" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Locations" EntityType="Self.Locations" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Logmessage" EntityType="Self.Logmessage" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Networkinterface" EntityType="Self.Networkinterface" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Point_Of_Delivery" EntityType="Self.Point_Of_Delivery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Ports" EntityType="Self.Ports" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Referenzen" EntityType="Self.Referenzen" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Severity" EntityType="Self.Severity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="v_logentries" EntityType="Self.v_logentries" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_logentries].[Id] AS [Id], 
+    [v_logentries].[pod] AS [pod], 
+    [v_logentries].[location] AS [location], 
+    [v_logentries].[hostname] AS [hostname], 
+    [v_logentries].[severity] AS [severity], 
+    [v_logentries].[timestamp] AS [timestamp], 
+    [v_logentries].[message] AS [message]
+    FROM [dbo].[v_logentries] AS [v_logentries]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_UsagePerLocation" EntityType="Self.v_UsagePerLocation" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_UsagePerLocation].[LocationName] AS [LocationName], 
+    [v_UsagePerLocation].[CategoryName] AS [CategoryName], 
+    [v_UsagePerLocation].[hostname] AS [hostname], 
+    [v_UsagePerLocation].[ip_adresse] AS [ip_adresse], 
+    [v_UsagePerLocation].[MaxPorts] AS [MaxPorts], 
+    [v_UsagePerLocation].[UsedPorts] AS [UsedPorts], 
+    [v_UsagePerLocation].[Auslastung] AS [Auslastung]
+    FROM [dbo].[v_UsagePerLocation] AS [v_UsagePerLocation]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="v_UsagePerPod" EntityType="Self.v_UsagePerPod" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [v_UsagePerPod].[bezeichnung] AS [bezeichnung], 
+    [v_UsagePerPod].[CategoryName] AS [CategoryName], 
+    [v_UsagePerPod].[hostname] AS [hostname], 
+    [v_UsagePerPod].[ip_adresse] AS [ip_adresse], 
+    [v_UsagePerPod].[MaxPorts] AS [MaxPorts], 
+    [v_UsagePerPod].[UsedPorts] AS [UsedPorts], 
+    [v_UsagePerPod].[Auslastung] AS [Auslastung]
+    FROM [dbo].[v_UsagePerPod] AS [v_UsagePerPod]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK__Abrechnun__Abrec__6FE99F9F" Association="Self.FK__Abrechnun__Abrec__6FE99F9F">
+            <End Role="Abrechnung" EntitySet="Abrechnung" />
+            <End Role="Abrechnungsposition" EntitySet="Abrechnungsposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Abrechnun__PodAb__60A75C0F" Association="Self.FK__Abrechnun__PodAb__60A75C0F">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Abrechnung" EntitySet="Abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Abrechnun__PodId__66603565" Association="Self.FK__Abrechnun__PodId__66603565">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Abrechnungsposition" EntitySet="Abrechnungsposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__AdressId__4D94879B" Association="Self.FK__Device__AdressId__4D94879B">
+            <End Role="Adresse" EntitySet="Adresse" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__Deviceca__4F7CD00D" Association="Self.FK__Device__Deviceca__4F7CD00D">
+            <End Role="DeviceCategory" EntitySet="DeviceCategory" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__Networki__4E88ABD4" Association="Self.FK__Device__Networki__4E88ABD4">
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kontaktpe__PodId__47DBAE45" Association="Self.FK__Kontaktpe__PodId__47DBAE45">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Kontaktperson" EntitySet="Kontaktperson" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Locations__Locat__3B40CD36" Association="Self.FK__Locations__Locat__3B40CD36">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="Locations1" EntitySet="Locations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Logmessag__Devic__339FAB6E" Association="Self.FK__Logmessag__Devic__339FAB6E">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Logmessage" EntitySet="Logmessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Logmessag__Sever__3493CFA7" Association="Self.FK__Logmessag__Sever__3493CFA7">
+            <End Role="Severity" EntitySet="Severity" />
+            <End Role="Logmessage" EntitySet="Logmessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Networkin__Locat__440B1D61" Association="Self.FK__Networkin__Locat__440B1D61">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Networkin__PodId__4316F928" Association="Self.FK__Networkin__PodId__4316F928">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Point_Of___podAd__3E52440B" Association="Self.FK__Point_Of___podAd__3E52440B">
+            <End Role="Adresse" EntitySet="Adresse" />
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Point_Of___podKu__3D5E1FD2" Association="Self.FK__Point_Of___podKu__3D5E1FD2">
+            <End Role="Kunde" EntitySet="Kunde" />
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ports__DeviceId__5441852A" Association="Self.FK__Ports__DeviceId__5441852A">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Ports" EntitySet="Ports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ports__PortNetwo__534D60F1" Association="Self.FK__Ports__PortNetwo__534D60F1">
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Ports" EntitySet="Ports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Referenze__Devic__5BE2A6F2" Association="Self.FK__Referenze__Devic__5BE2A6F2">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Referenzen" EntitySet="Referenzen" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="TestatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Abrechnung">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="PodAbrechnungId" Type="Int32" Nullable="false" />
+          <Property Name="Bruttopreis" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="UsedGuthaben" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Nettopreis" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="CreationTime" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="Abrechnungsposition" Relationship="Self.FK__Abrechnun__Abrec__6FE99F9F" FromRole="Abrechnung" ToRole="Abrechnungsposition" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Abrechnun__PodAb__60A75C0F" FromRole="Abrechnung" ToRole="Point_Of_Delivery" />
+        </EntityType>
+        <EntityType Name="Abrechnungsposition">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Produktbeschreibung" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Stueckpreis" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Menge" Type="Int32" Nullable="false" />
+          <Property Name="PodId" Type="Int32" Nullable="false" />
+          <Property Name="isFakturiert" Type="Boolean" />
+          <Property Name="Buchungsdatum" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="AbrechnungId" Type="Int32" />
+          <NavigationProperty Name="Abrechnung" Relationship="Self.FK__Abrechnun__Abrec__6FE99F9F" FromRole="Abrechnungsposition" ToRole="Abrechnung" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Abrechnun__PodId__66603565" FromRole="Abrechnungsposition" ToRole="Point_Of_Delivery" />
+        </EntityType>
+        <EntityType Name="Adresse">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Land" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ort" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Plz" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Strasse" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Hausnr" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Device__AdressId__4D94879B" FromRole="Adresse" ToRole="Device" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Point_Of___podAd__3E52440B" FromRole="Adresse" ToRole="Point_Of_Delivery" />
+        </EntityType>
+        <EntityType Name="Device">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Devicecategory" Type="Int32" Nullable="false" />
+          <Property Name="Hostname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Ip_Adresse" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="AnzahlPorts" Type="Int32" Nullable="false" />
+          <Property Name="AdressId" Type="Int32" Nullable="false" />
+          <Property Name="NetworkinterfaceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Adresse" Relationship="Self.FK__Device__AdressId__4D94879B" FromRole="Device" ToRole="Adresse" />
+          <NavigationProperty Name="DeviceCategory1" Relationship="Self.FK__Device__Deviceca__4F7CD00D" FromRole="Device" ToRole="DeviceCategory" />
+          <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Device__Networki__4E88ABD4" FromRole="Device" ToRole="Networkinterface" />
+          <NavigationProperty Name="Logmessage" Relationship="Self.FK__Logmessag__Devic__339FAB6E" FromRole="Device" ToRole="Logmessage" />
+          <NavigationProperty Name="Ports" Relationship="Self.FK__Ports__DeviceId__5441852A" FromRole="Device" ToRole="Ports" />
+          <NavigationProperty Name="Referenzen" Relationship="Self.FK__Referenze__Devic__5BE2A6F2" FromRole="Device" ToRole="Referenzen" />
+        </EntityType>
+        <EntityType Name="DeviceCategory">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Categoryname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Device__Deviceca__4F7CD00D" FromRole="DeviceCategory" ToRole="Device" />
+        </EntityType>
+        <EntityType Name="Kontaktperson">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vorname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Nachname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Prioritaet" Type="Int32" Nullable="false" />
+          <Property Name="PodId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Kontaktpe__PodId__47DBAE45" FromRole="Kontaktperson" ToRole="Point_Of_Delivery" />
+        </EntityType>
+        <EntityType Name="Kunde">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Kontonr" Type="String" MaxLength="12" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Bezeichnung" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Guthaben" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Betragslimit" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="Telefonnummer" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Point_Of___podKu__3D5E1FD2" FromRole="Kunde" ToRole="Point_Of_Delivery" />
+        </EntityType>
+        <EntityType Name="Locations">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LocationName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Locationparent" Type="Int32" />
+          <NavigationProperty Name="Locations1" Relationship="Self.FK__Locations__Locat__3B40CD36" FromRole="Locations" ToRole="Locations1" />
+          <NavigationProperty Name="Locations2" Relationship="Self.FK__Locations__Locat__3B40CD36" FromRole="Locations1" ToRole="Locations" />
+          <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Networkin__Locat__440B1D61" FromRole="Locations" ToRole="Networkinterface" />
+        </EntityType>
+        <EntityType Name="Logmessage">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Zeitstempel" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Severity" Type="Int32" Nullable="false" />
+          <Property Name="LogMessage1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeviceId" Type="Int32" Nullable="false" />
+          <Property Name="isChecked" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Logmessag__Devic__339FAB6E" FromRole="Logmessage" ToRole="Device" />
+          <NavigationProperty Name="Severity1" Relationship="Self.FK__Logmessag__Sever__3493CFA7" FromRole="Logmessage" ToRole="Severity" />
+        </EntityType>
+        <EntityType Name="Networkinterface">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DuplexType" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NetworkSpeed" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PodId" Type="Int32" Nullable="false" />
+          <Property Name="LocationID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Device__Networki__4E88ABD4" FromRole="Networkinterface" ToRole="Device" />
+          <NavigationProperty Name="Locations" Relationship="Self.FK__Networkin__Locat__440B1D61" FromRole="Networkinterface" ToRole="Locations" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Networkin__PodId__4316F928" FromRole="Networkinterface" ToRole="Point_Of_Delivery" />
+          <NavigationProperty Name="Ports" Relationship="Self.FK__Ports__PortNetwo__534D60F1" FromRole="Networkinterface" ToRole="Ports" />
+        </EntityType>
+        <EntityType Name="Point_Of_Delivery">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Bezeichnung" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="podKunde" Type="Int32" Nullable="false" />
+          <Property Name="podAdresse" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Abrechnung" Relationship="Self.FK__Abrechnun__PodAb__60A75C0F" FromRole="Point_Of_Delivery" ToRole="Abrechnung" />
+          <NavigationProperty Name="Abrechnungsposition" Relationship="Self.FK__Abrechnun__PodId__66603565" FromRole="Point_Of_Delivery" ToRole="Abrechnungsposition" />
+          <NavigationProperty Name="Adresse" Relationship="Self.FK__Point_Of___podAd__3E52440B" FromRole="Point_Of_Delivery" ToRole="Adresse" />
+          <NavigationProperty Name="Kontaktperson" Relationship="Self.FK__Kontaktpe__PodId__47DBAE45" FromRole="Point_Of_Delivery" ToRole="Kontaktperson" />
+          <NavigationProperty Name="Kunde" Relationship="Self.FK__Point_Of___podKu__3D5E1FD2" FromRole="Point_Of_Delivery" ToRole="Kunde" />
+          <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Networkin__PodId__4316F928" FromRole="Point_Of_Delivery" ToRole="Networkinterface" />
+        </EntityType>
+        <EntityType Name="Ports">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DeviceId" Type="Int32" Nullable="false" />
+          <Property Name="PortNr" Type="Int32" Nullable="false" />
+          <Property Name="isUsed" Type="Boolean" Nullable="false" />
+          <Property Name="PortNetworkinterfaceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Ports__DeviceId__5441852A" FromRole="Ports" ToRole="Device" />
+          <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Ports__PortNetwo__534D60F1" FromRole="Ports" ToRole="Networkinterface" />
+        </EntityType>
+        <EntityType Name="Referenzen">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Benutzername" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Passwort" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="SnmpCommunity" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="DeviceId" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Referenze__Devic__5BE2A6F2" FromRole="Referenzen" ToRole="Device" />
+        </EntityType>
+        <EntityType Name="Severity">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Severity1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Logmessage" Relationship="Self.FK__Logmessag__Sever__3493CFA7" FromRole="Severity" ToRole="Logmessage" />
+        </EntityType>
+        <EntityType Name="v_logentries">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="pod" />
+            <PropertyRef Name="location" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="severity" />
+            <PropertyRef Name="timestamp" />
+            <PropertyRef Name="message" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="pod" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="location" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="hostname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="severity" Type="Int32" Nullable="false" />
+          <Property Name="timestamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="message" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="v_UsagePerLocation">
+          <Key>
+            <PropertyRef Name="LocationName" />
+            <PropertyRef Name="CategoryName" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="ip_adresse" />
+            <PropertyRef Name="MaxPorts" />
+          </Key>
+          <Property Name="LocationName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="hostname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ip_adresse" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaxPorts" Type="Int32" Nullable="false" />
+          <Property Name="UsedPorts" Type="Int32" />
+          <Property Name="Auslastung" Type="Int32" />
+        </EntityType>
+        <EntityType Name="v_UsagePerPod">
+          <Key>
+            <PropertyRef Name="bezeichnung" />
+            <PropertyRef Name="CategoryName" />
+            <PropertyRef Name="hostname" />
+            <PropertyRef Name="ip_adresse" />
+            <PropertyRef Name="MaxPorts" />
+          </Key>
+          <Property Name="bezeichnung" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="hostname" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ip_adresse" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MaxPorts" Type="Int32" Nullable="false" />
+          <Property Name="UsedPorts" Type="Int32" />
+          <Property Name="Auslastung" Type="Int32" />
+        </EntityType>
+        <Association Name="FK__Abrechnun__Abrec__6FE99F9F">
+          <End Role="Abrechnung" Type="Self.Abrechnung" Multiplicity="0..1" />
+          <End Role="Abrechnungsposition" Type="Self.Abrechnungsposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Abrechnung">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Abrechnungsposition">
+              <PropertyRef Name="AbrechnungId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Abrechnun__PodAb__60A75C0F">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Abrechnung" Type="Self.Abrechnung" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Abrechnung">
+              <PropertyRef Name="PodAbrechnungId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Abrechnun__PodId__66603565">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Abrechnungsposition" Type="Self.Abrechnungsposition" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Abrechnungsposition">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__AdressId__4D94879B">
+          <End Role="Adresse" Type="Self.Adresse" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adresse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="AdressId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Point_Of___podAd__3E52440B">
+          <End Role="Adresse" Type="Self.Adresse" Multiplicity="1" />
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Adresse">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Point_Of_Delivery">
+              <PropertyRef Name="podAdresse" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__Deviceca__4F7CD00D">
+          <End Role="DeviceCategory" Type="Self.DeviceCategory" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="DeviceCategory">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="Devicecategory" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__Networki__4E88ABD4">
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Networkinterface">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="NetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Logmessag__Devic__339FAB6E">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Logmessage" Type="Self.Logmessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Logmessage">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ports__DeviceId__5441852A">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Ports" Type="Self.Ports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ports">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Referenze__Devic__5BE2A6F2">
+          <End Role="Device" Type="Self.Device" Multiplicity="1" />
+          <End Role="Referenzen" Type="Self.Referenzen" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Device">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Referenzen">
+              <PropertyRef Name="DeviceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Kontaktpe__PodId__47DBAE45">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Kontaktperson" Type="Self.Kontaktperson" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Kontaktperson">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Point_Of___podKu__3D5E1FD2">
+          <End Role="Kunde" Type="Self.Kunde" Multiplicity="1" />
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Kunde">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Point_Of_Delivery">
+              <PropertyRef Name="podKunde" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Locations__Locat__3B40CD36">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="0..1" />
+          <End Role="Locations1" Type="Self.Locations" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Locations1">
+              <PropertyRef Name="Locationparent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Networkin__Locat__440B1D61">
+          <End Role="Locations" Type="Self.Locations" Multiplicity="1" />
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Locations">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Networkinterface">
+              <PropertyRef Name="LocationID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Logmessag__Sever__3493CFA7">
+          <End Role="Severity" Type="Self.Severity" Multiplicity="1" />
+          <End Role="Logmessage" Type="Self.Logmessage" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Severity">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Logmessage">
+              <PropertyRef Name="Severity" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Networkin__PodId__4316F928">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="1" />
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Networkinterface">
+              <PropertyRef Name="PodId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Ports__PortNetwo__534D60F1">
+          <End Role="Networkinterface" Type="Self.Networkinterface" Multiplicity="1" />
+          <End Role="Ports" Type="Self.Ports" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Networkinterface">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="Ports">
+              <PropertyRef Name="PortNetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="TestatEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Abrechnung" EntityType="Self.Abrechnung" />
+          <EntitySet Name="Abrechnungsposition" EntityType="Self.Abrechnungsposition" />
+          <EntitySet Name="Adresse" EntityType="Self.Adresse" />
+          <EntitySet Name="Device" EntityType="Self.Device" />
+          <EntitySet Name="DeviceCategory" EntityType="Self.DeviceCategory" />
+          <EntitySet Name="Kontaktperson" EntityType="Self.Kontaktperson" />
+          <EntitySet Name="Kunde" EntityType="Self.Kunde" />
+          <EntitySet Name="Locations" EntityType="Self.Locations" />
+          <EntitySet Name="Logmessage" EntityType="Self.Logmessage" />
+          <EntitySet Name="Networkinterface" EntityType="Self.Networkinterface" />
+          <EntitySet Name="Point_Of_Delivery" EntityType="Self.Point_Of_Delivery" />
+          <EntitySet Name="Ports" EntityType="Self.Ports" />
+          <EntitySet Name="Referenzen" EntityType="Self.Referenzen" />
+          <EntitySet Name="Severity" EntityType="Self.Severity" />
+          <EntitySet Name="v_logentries" EntityType="Self.v_logentries" />
+          <EntitySet Name="v_UsagePerLocation" EntityType="Self.v_UsagePerLocation" />
+          <EntitySet Name="v_UsagePerPod" EntityType="Self.v_UsagePerPod" />
+          <AssociationSet Name="FK__Abrechnun__Abrec__6FE99F9F" Association="Self.FK__Abrechnun__Abrec__6FE99F9F">
+            <End Role="Abrechnung" EntitySet="Abrechnung" />
+            <End Role="Abrechnungsposition" EntitySet="Abrechnungsposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Abrechnun__PodAb__60A75C0F" Association="Self.FK__Abrechnun__PodAb__60A75C0F">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Abrechnung" EntitySet="Abrechnung" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Abrechnun__PodId__66603565" Association="Self.FK__Abrechnun__PodId__66603565">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Abrechnungsposition" EntitySet="Abrechnungsposition" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__AdressId__4D94879B" Association="Self.FK__Device__AdressId__4D94879B">
+            <End Role="Adresse" EntitySet="Adresse" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Point_Of___podAd__3E52440B" Association="Self.FK__Point_Of___podAd__3E52440B">
+            <End Role="Adresse" EntitySet="Adresse" />
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__Deviceca__4F7CD00D" Association="Self.FK__Device__Deviceca__4F7CD00D">
+            <End Role="DeviceCategory" EntitySet="DeviceCategory" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__Networki__4E88ABD4" Association="Self.FK__Device__Networki__4E88ABD4">
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Logmessag__Devic__339FAB6E" Association="Self.FK__Logmessag__Devic__339FAB6E">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Logmessage" EntitySet="Logmessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ports__DeviceId__5441852A" Association="Self.FK__Ports__DeviceId__5441852A">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Ports" EntitySet="Ports" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Referenze__Devic__5BE2A6F2" Association="Self.FK__Referenze__Devic__5BE2A6F2">
+            <End Role="Device" EntitySet="Device" />
+            <End Role="Referenzen" EntitySet="Referenzen" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Kontaktpe__PodId__47DBAE45" Association="Self.FK__Kontaktpe__PodId__47DBAE45">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Kontaktperson" EntitySet="Kontaktperson" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Point_Of___podKu__3D5E1FD2" Association="Self.FK__Point_Of___podKu__3D5E1FD2">
+            <End Role="Kunde" EntitySet="Kunde" />
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Locations__Locat__3B40CD36" Association="Self.FK__Locations__Locat__3B40CD36">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="Locations1" EntitySet="Locations" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Networkin__Locat__440B1D61" Association="Self.FK__Networkin__Locat__440B1D61">
+            <End Role="Locations" EntitySet="Locations" />
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Logmessag__Sever__3493CFA7" Association="Self.FK__Logmessag__Sever__3493CFA7">
+            <End Role="Severity" EntitySet="Severity" />
+            <End Role="Logmessage" EntitySet="Logmessage" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Networkin__PodId__4316F928" Association="Self.FK__Networkin__PodId__4316F928">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Ports__PortNetwo__534D60F1" Association="Self.FK__Ports__PortNetwo__534D60F1">
+            <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Ports" EntitySet="Ports" />
+          </AssociationSet>
+          <FunctionImport Name="LogClear">
+            <Parameter Name="Id" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="LogMessageAdd">
+            <Parameter Name="logmessage" Mode="In" Type="String" />
+            <Parameter Name="PodName" Mode="In" Type="String" />
+            <Parameter Name="Severity" Mode="In" Type="Int32" />
+            <Parameter Name="hostname" Mode="In" Type="String" />
+          </FunctionImport>
+          <FunctionImport Name="PodBill">
+            <Parameter Name="PodId" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="PodBillEvent" />
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="TestatModelStoreContainer" CdmEntityContainer="TestatEntities">
+          <EntitySetMapping Name="Abrechnung">
+            <EntityTypeMapping TypeName="TestatModel.Abrechnung">
+              <MappingFragment StoreEntitySet="Abrechnung">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="PodAbrechnungId" ColumnName="PodAbrechnungId" />
+                <ScalarProperty Name="Bruttopreis" ColumnName="Bruttopreis" />
+                <ScalarProperty Name="UsedGuthaben" ColumnName="UsedGuthaben" />
+                <ScalarProperty Name="Nettopreis" ColumnName="Nettopreis" />
+                <ScalarProperty Name="CreationTime" ColumnName="CreationTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Abrechnungsposition">
+            <EntityTypeMapping TypeName="TestatModel.Abrechnungsposition">
+              <MappingFragment StoreEntitySet="Abrechnungsposition">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Produktbeschreibung" ColumnName="Produktbeschreibung" />
+                <ScalarProperty Name="Stueckpreis" ColumnName="Stueckpreis" />
+                <ScalarProperty Name="Menge" ColumnName="Menge" />
+                <ScalarProperty Name="PodId" ColumnName="PodId" />
+                <ScalarProperty Name="isFakturiert" ColumnName="isFakturiert" />
+                <ScalarProperty Name="Buchungsdatum" ColumnName="Buchungsdatum" />
+                <ScalarProperty Name="AbrechnungId" ColumnName="AbrechnungId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Adresse">
+            <EntityTypeMapping TypeName="TestatModel.Adresse">
+              <MappingFragment StoreEntitySet="Adresse">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Land" ColumnName="Land" />
+                <ScalarProperty Name="Ort" ColumnName="Ort" />
+                <ScalarProperty Name="Plz" ColumnName="Plz" />
+                <ScalarProperty Name="Strasse" ColumnName="Strasse" />
+                <ScalarProperty Name="Hausnr" ColumnName="Hausnr" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Device">
+            <EntityTypeMapping TypeName="TestatModel.Device">
+              <MappingFragment StoreEntitySet="Device">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Devicecategory" ColumnName="Devicecategory" />
+                <ScalarProperty Name="Hostname" ColumnName="Hostname" />
+                <ScalarProperty Name="Ip_Adresse" ColumnName="Ip_Adresse" />
+                <ScalarProperty Name="AnzahlPorts" ColumnName="AnzahlPorts" />
+                <ScalarProperty Name="AdressId" ColumnName="AdressId" />
+                <ScalarProperty Name="NetworkinterfaceId" ColumnName="NetworkinterfaceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DeviceCategory">
+            <EntityTypeMapping TypeName="TestatModel.DeviceCategory">
+              <MappingFragment StoreEntitySet="DeviceCategory">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Categoryname" ColumnName="Categoryname" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kontaktperson">
+            <EntityTypeMapping TypeName="TestatModel.Kontaktperson">
+              <MappingFragment StoreEntitySet="Kontaktperson">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Vorname" ColumnName="Vorname" />
+                <ScalarProperty Name="Nachname" ColumnName="Nachname" />
+                <ScalarProperty Name="Prioritaet" ColumnName="Prioritaet" />
+                <ScalarProperty Name="PodId" ColumnName="PodId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Kunde">
+            <EntityTypeMapping TypeName="TestatModel.Kunde">
+              <MappingFragment StoreEntitySet="Kunde">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Kontonr" ColumnName="Kontonr" />
+                <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+                <ScalarProperty Name="Guthaben" ColumnName="Guthaben" />
+                <ScalarProperty Name="Betragslimit" ColumnName="Betragslimit" />
+                <ScalarProperty Name="Telefonnummer" ColumnName="Telefonnummer" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Locations">
+            <EntityTypeMapping TypeName="TestatModel.Locations">
+              <MappingFragment StoreEntitySet="Locations">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="Locationparent" ColumnName="Locationparent" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Logmessage">
+            <EntityTypeMapping TypeName="TestatModel.Logmessage">
+              <MappingFragment StoreEntitySet="Logmessage">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Zeitstempel" ColumnName="Zeitstempel" />
+                <ScalarProperty Name="Severity" ColumnName="Severity" />
+                <ScalarProperty Name="LogMessage1" ColumnName="LogMessage" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="isChecked" ColumnName="isChecked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Networkinterface">
+            <EntityTypeMapping TypeName="TestatModel.Networkinterface">
+              <MappingFragment StoreEntitySet="Networkinterface">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DuplexType" ColumnName="DuplexType" />
+                <ScalarProperty Name="NetworkSpeed" ColumnName="NetworkSpeed" />
+                <ScalarProperty Name="PodId" ColumnName="PodId" />
+                <ScalarProperty Name="LocationID" ColumnName="LocationID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Point_Of_Delivery">
+            <EntityTypeMapping TypeName="TestatModel.Point_Of_Delivery">
+              <MappingFragment StoreEntitySet="Point_Of_Delivery">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+                <ScalarProperty Name="podKunde" ColumnName="podKunde" />
+                <ScalarProperty Name="podAdresse" ColumnName="podAdresse" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ports">
+            <EntityTypeMapping TypeName="TestatModel.Ports">
+              <MappingFragment StoreEntitySet="Ports">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+                <ScalarProperty Name="PortNr" ColumnName="PortNr" />
+                <ScalarProperty Name="isUsed" ColumnName="isUsed" />
+                <ScalarProperty Name="PortNetworkinterfaceId" ColumnName="PortNetworkinterfaceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Referenzen">
+            <EntityTypeMapping TypeName="TestatModel.Referenzen">
+              <MappingFragment StoreEntitySet="Referenzen">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Benutzername" ColumnName="Benutzername" />
+                <ScalarProperty Name="Passwort" ColumnName="Passwort" />
+                <ScalarProperty Name="SnmpCommunity" ColumnName="SnmpCommunity" />
+                <ScalarProperty Name="DeviceId" ColumnName="DeviceId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Severity">
+            <EntityTypeMapping TypeName="TestatModel.Severity">
+              <MappingFragment StoreEntitySet="Severity">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Severity1" ColumnName="Severity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_logentries">
+            <EntityTypeMapping TypeName="TestatModel.v_logentries">
+              <MappingFragment StoreEntitySet="v_logentries">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="pod" ColumnName="pod" />
+                <ScalarProperty Name="location" ColumnName="location" />
+                <ScalarProperty Name="hostname" ColumnName="hostname" />
+                <ScalarProperty Name="severity" ColumnName="severity" />
+                <ScalarProperty Name="timestamp" ColumnName="timestamp" />
+                <ScalarProperty Name="message" ColumnName="message" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_UsagePerLocation">
+            <EntityTypeMapping TypeName="TestatModel.v_UsagePerLocation">
+              <MappingFragment StoreEntitySet="v_UsagePerLocation">
+                <ScalarProperty Name="LocationName" ColumnName="LocationName" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="hostname" ColumnName="hostname" />
+                <ScalarProperty Name="ip_adresse" ColumnName="ip_adresse" />
+                <ScalarProperty Name="MaxPorts" ColumnName="MaxPorts" />
+                <ScalarProperty Name="UsedPorts" ColumnName="UsedPorts" />
+                <ScalarProperty Name="Auslastung" ColumnName="Auslastung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="v_UsagePerPod">
+            <EntityTypeMapping TypeName="TestatModel.v_UsagePerPod">
+              <MappingFragment StoreEntitySet="v_UsagePerPod">
+                <ScalarProperty Name="bezeichnung" ColumnName="bezeichnung" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="hostname" ColumnName="hostname" />
+                <ScalarProperty Name="ip_adresse" ColumnName="ip_adresse" />
+                <ScalarProperty Name="MaxPorts" ColumnName="MaxPorts" />
+                <ScalarProperty Name="UsedPorts" ColumnName="UsedPorts" />
+                <ScalarProperty Name="Auslastung" ColumnName="Auslastung" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="LogClear" FunctionName="TestatModel.Store.LogClear" />
+          <FunctionImportMapping FunctionImportName="LogMessageAdd" FunctionName="TestatModel.Store.LogMessageAdd" />
+          <FunctionImportMapping FunctionImportName="PodBill" FunctionName="TestatModel.Store.PodBill" />
+          <FunctionImportMapping FunctionImportName="PodBillEvent" FunctionName="TestatModel.Store.PodBillEvent" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
