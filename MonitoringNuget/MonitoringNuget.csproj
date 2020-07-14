@@ -50,6 +50,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -139,6 +140,9 @@
     <Compile Include="EntityFramework\v_UsagePerPod.cs">
       <DependentUpon>TestatDBEF.tt</DependentUpon>
     </Compile>
+    <Compile Include="LinqDTO\Abrechnung.cs" />
+    <Compile Include="LinqDTO\Abrechnungsposition.cs" />
+    <Compile Include="LinqDTO\Adresse.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\Logging.cs" />
     <Compile Include="Models\ModelInterface\IModel.cs" />
