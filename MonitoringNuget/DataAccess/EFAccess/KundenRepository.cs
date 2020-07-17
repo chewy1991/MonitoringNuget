@@ -88,7 +88,7 @@ namespace MonitoringNuget.DataAccess.EFAccess
         /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
-        public override List<Kunde> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
+        public override IQueryable<Kunde> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
         {
             List<Kunde> filteredKundenliste = null;
             if (parameterValues.ContainsKey("Bezeichnung"))
@@ -102,14 +102,14 @@ namespace MonitoringNuget.DataAccess.EFAccess
                     filteredKundenliste = query.ToList();
                 }
             }
-            return filteredKundenliste;
+            return filteredKundenliste.AsQueryable();
         }
 
         /// <summary>
         /// Gibt eine Liste aller in der DB vorhandenen Model-Objekte vom Typ M zurück
         /// </summary>
         /// <returns></returns>
-        public override List<Kunde> GetAll()
+        public override IQueryable<Kunde> GetAll()
         {
             List<Kunde> kundenliste = null;
 
@@ -119,7 +119,7 @@ namespace MonitoringNuget.DataAccess.EFAccess
                 kundenliste = query.ToList();
             }
 
-            return kundenliste;
+            return kundenliste.AsQueryable();
         }
 
         /// <summary>

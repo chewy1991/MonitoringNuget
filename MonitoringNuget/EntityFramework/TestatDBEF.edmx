@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="TestatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="TestatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Abrechnung">
           <Key>
             <PropertyRef Name="Id" />
@@ -79,7 +79,7 @@
           <Property Name="Guthaben" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Betragslimit" Type="decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Telefonnummer" Type="nvarchar" MaxLength="14" />
-          <Property Name="EMail" Type="nchar" MaxLength="255" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="255" />
         </EntityType>
         <EntityType Name="Locations">
           <Key>
@@ -536,8 +536,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <End Role="Referenzen" EntitySet="Referenzen" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TestatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -629,7 +628,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Name="Guthaben" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Betragslimit" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
           <Property Name="Telefonnummer" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
-          <Property Name="EMail" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
+          <Property Name="EMail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Point_Of___podKu__3D5E1FD2" FromRole="Kunde" ToRole="Point_Of_Delivery" />
         </EntityType>
         <EntityType Name="Locations">
@@ -1057,7 +1056,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <End Role="Ports" EntitySet="Ports" />
           </AssociationSet>
           <FunctionImport Name="LogClear">
-            <Parameter Name="Id" Mode="In" Type="Int32" />
+          <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LogMessageAdd">
             <Parameter Name="logmessage" Mode="In" Type="String" />
@@ -1066,7 +1065,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <Parameter Name="hostname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PodBill">
-            <Parameter Name="PodId" Mode="In" Type="Int32" />
+          <Parameter Name="PodId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PodBillEvent" />
         </EntityContainer>

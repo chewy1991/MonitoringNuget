@@ -2,24 +2,26 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using MonitoringNuget.DataAccess.AbstractClass;
+using MonitoringNuget.LinqDTO;
 using MonitoringNuget.Models;
 
 namespace MonitoringNuget.DataAccess.RepositoryClasses
 {
-    public class LoggingRepository : RepositoryBase<Logging>
+    public class LoggingRepository : RepositoryBase<VLogentriesDTO>
     {
         public override string TableName => "v_logentries";
 
-        public override void Add(Logging entity)
+        public override void Add(VLogentriesDTO entity)
         {
             throw new NotImplementedException();
         }
 
-        public override List<Logging> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
+        public override IQueryable<VLogentriesDTO> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
         {
-            var logginglist = new List<Logging>();
+            var logginglist = new List<VLogentriesDTO>();
             using (var conn = new SqlConnection(ConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
@@ -36,27 +38,27 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
 
                     foreach (DataRow row in dt.Rows)
                     {
-                        var log = new Logging
+                        var log = new VLogentriesDTO
                                   {
                                       Id = (int) row["Id"]
-                                    , pod = (string) row["pod"]
-                                    , hostname = (string) row["hostname"]
-                                    , severity = (int) row["severity"]
-                                    , location = (string) row["location"]
-                                    , message = (string) row["message"]
-                                    , timestamp = (DateTime) row["timestamp"]
+                                    , Pod = (string) row["pod"]
+                                    , Hostname = (string) row["hostname"]
+                                    , Severity = (int) row["severity"]
+                                    , Location = (string) row["location"]
+                                    , Message = (string) row["message"]
+                                    , Timestamp = (DateTime) row["timestamp"]
                                   };
                         logginglist.Add(log);
                     }
                 }
             }
 
-            return logginglist;
+            return logginglist.AsQueryable();
         }
 
-        public override List<Logging> GetAll()
+        public override IQueryable<VLogentriesDTO> GetAll()
         {
-            var logginglist = new List<Logging>();
+            var logginglist = new List<VLogentriesDTO>();
 
             using (var conn = new SqlConnection(ConnectionString))
             {
@@ -71,27 +73,26 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
 
                     foreach (DataRow row in dt.Rows)
                     {
-                        var log = new Logging
-                                  {
-                                      Id = (int) row["Id"]
-                                    , pod = (string) row["pod"]
-                                    , hostname = (string) row["hostname"]
-                                    , severity = (int) row["severity"]
-                                    , location = (string) row["location"]
-                                    , message = (string) row["message"]
-                                    , timestamp = (DateTime) row["timestamp"]
-                                  };
+                        var log = new VLogentriesDTO
+                                  {    Id = (int) row["Id"]
+                                     , Pod = (string) row["pod"]
+                                     , Hostname = (string) row["hostname"]
+                                     , Severity = (int) row["severity"]
+                                     , Location = (string) row["location"]
+                                     , Message = (string) row["message"]
+                                     , Timestamp = (DateTime) row["timestamp"]
+                                   };
                         logginglist.Add(log);
                     }
                 }
             }
 
-            return logginglist;
+            return logginglist.AsQueryable();
         }
 
-        public override Logging GetSingle<P>(P pkValue)
+        public override VLogentriesDTO GetSingle<P>(P pkValue)
         {
-            var log = new Logging();
+            var log = new VLogentriesDTO();
             using (var conn = new SqlConnection(ConnectionString))
             {
                 using (var cmd = conn.CreateCommand())
@@ -103,15 +104,15 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
                     var dataAdapter = new SqlDataAdapter(cmd.CommandText, conn);
                     dataAdapter.Fill(dt);
 
-                    log = new Logging
+                    log = new VLogentriesDTO
                           {
                               Id = (int) dt.Rows[0]["Id"]
-                            , pod = (string) dt.Rows[0]["pod"]
-                            , hostname = (string) dt.Rows[0]["hostname"]
-                            , severity = (int) dt.Rows[0]["severity"]
-                            , location = (string) dt.Rows[0]["location"]
-                            , message = (string) dt.Rows[0]["message"]
-                            , timestamp = (DateTime) dt.Rows[0]["timestamp"]
+                            , Pod = (string) dt.Rows[0]["pod"]
+                            , Hostname = (string) dt.Rows[0]["hostname"]
+                            , Severity = (int) dt.Rows[0]["severity"]
+                            , Location = (string) dt.Rows[0]["location"]
+                            , Message = (string) dt.Rows[0]["message"]
+                            , Timestamp = (DateTime) dt.Rows[0]["timestamp"]
                           };
                 }
             }
@@ -119,7 +120,7 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
             return log;
         }
 
-        public override void Update(Logging entity)
+        public override void Update(VLogentriesDTO entity)
         {
             throw new NotImplementedException();
         }

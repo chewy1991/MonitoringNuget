@@ -9,13 +9,14 @@ using System.Windows.Forms;
 using MonitoringNuget.DataAccess.AbstractClass;
 using MonitoringNuget.DataAccess.RepositoryClasses;
 using MonitoringNuget.DataAccess.StoredProcedures.Interface;
+using MonitoringNuget.LinqDTO;
 using MonitoringNuget.Models;
 
 namespace MonitoringNuget.DataAccess.StoredProcedures
 {
     public class AdoProcedures : IStoredProcedures
     {
-        private RepositoryBase<Logging> dbconn = new LoggingRepository();
+        private RepositoryBase<VLogentriesDTO> dbconn = new LoggingRepository();
         public bool LogClear(int logId)
         {
             try

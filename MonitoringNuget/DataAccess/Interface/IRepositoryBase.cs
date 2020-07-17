@@ -45,13 +45,25 @@ namespace GenericRepository{
         /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
-        List<M> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
+        IQueryable<M> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
+
+        /// <summary>
+        /// Gibt eine Liste von Model-Objekten vom Typ M zurück,
+        /// die gemäss der WhereBedingung geladen wurden. Die Werte der
+        /// Where-Bedingung können als separat übergeben werden,
+        /// damit diese für PreparedStatements verwendet werden können.
+        /// (Verhinderung von SQL-Injection)        /// </summary>
+        /// <param name="whereCondition"></param>
+        /// <param name="parameterValues"></param>
+        /// <returns></returns>
+        IQueryable<M> GetAll(Func<M, bool> whereCondition, Dictionary<string, object> parameterValues);
+
 
         /// <summary>
         /// Gibt eine Liste aller in der DB vorhandenen Model-Objekte vom Typ M zurück
         /// </summary>
         /// <returns></returns>
-        List<M> GetAll();
+        IQueryable<M> GetAll();
 
         /// <summary>
         /// Zählt in der Datenbank die Anzahl Model-Objekte vom Typ M, die der
@@ -63,6 +75,15 @@ namespace GenericRepository{
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
         long Count(string whereCondition, Dictionary<string, object> parameterValues);
+
+        /// <summary>
+        /// Zählt in der Datenbank die Anzahl Model-Objekte vom Typ M, die der
+        /// Where-Bedingung entsprechen
+        /// </summary>
+        /// <param name="whereCondition"></param>
+        /// <param name="parameterValues"></param>
+        /// <returns></returns>
+        long Count(Func<M, bool> whereCondition, Dictionary<string, object> parameterValues);
 
         /// <summary>
         /// Zählt alle Model-Objekte vom Typ M

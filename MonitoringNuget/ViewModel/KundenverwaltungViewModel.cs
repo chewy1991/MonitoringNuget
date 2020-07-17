@@ -21,7 +21,7 @@ namespace MonitoringNuget.ViewModel
         public static readonly DependencyProperty KundenlistProperty = DependencyProperty.Register("Kundenlist"
                                                                                                     , typeof(List<Kunde>)
                                                                                                     , typeof(KundenverwaltungViewModel)
-                                                                                                   , new UIPropertyMetadata(kundenRepo.GetAll()));
+                                                                                                   , new UIPropertyMetadata(kundenRepo.GetAll().ToList()));
 
 
         public static readonly DependencyProperty SelectedClientProperty = DependencyProperty.Register("SelectedClient"
@@ -62,7 +62,7 @@ namespace MonitoringNuget.ViewModel
                 {
                     kundenRepo.Update(client);
                 }
-                Kundenlist = kundenRepo.GetAll();
+                Kundenlist = kundenRepo.GetAll().ToList();
             }, () => AddClientCanExecute) ); }
         }
 
@@ -80,7 +80,7 @@ namespace MonitoringNuget.ViewModel
                                                                     var client = Kundenlist[SelectedClient];
                                                                     kundenRepo.Delete(client);
                                                                     SelectedClient = -1;
-                                                                    Kundenlist = kundenRepo.GetAll();
+                                                                    Kundenlist = kundenRepo.GetAll().ToList();
                                                                 }
                                                               , () => DelClientCanExecute) );
             }
@@ -97,7 +97,7 @@ namespace MonitoringNuget.ViewModel
             {
                 return _showallclientcommand ?? (_showallclientcommand = new CommandHandler(() =>
                 {
-                    Kundenlist = kundenRepo.GetAll();
+                    Kundenlist = kundenRepo.GetAll().ToList<Kunde>();
                     SelectedClient = -1;
                 }, () => ShowAllCLientCanExecute ));
             }
@@ -116,7 +116,7 @@ namespace MonitoringNuget.ViewModel
                                                                       {
                                                                           var searchdict = new Dictionary<string,object>();
                                                                           searchdict.Add("Bezeichnung",SearchText);
-                                                                          Kundenlist     = kundenRepo.GetAll("",searchdict);
+                                                                          Kundenlist     = kundenRepo.GetAll("",searchdict).ToList();
                                                                           SelectedClient = -1;
                                                                       }
                                                                     , () => SearchCLientCanExecute) );

@@ -70,7 +70,24 @@ namespace MonitoringNuget.Strategy
         /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
-        public List<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
+        public IQueryable<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
+        {
+            return this.strategy.GetAll(whereCondition, parameterValues);
+        }
+
+        /// <summary>
+        /// Gibt eine Liste von Model-Objekten vom Typ M zurück,
+        /// die gemäss der WhereBedingung geladen wurden. Die Werte der
+        /// Where-Bedingung können als separat übergeben werden,
+        /// damit diese für PreparedStatements verwendet werden können.
+        /// (Verhinderung von SQL-Injection)
+        /// </summary>
+        /// <param name="whereCondition">WhereBedingung als string
+        /// z.B. "NetPrice > @netPrice and Active = @active and Description like @desc</param>
+        /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
+        /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
+        /// <returns></returns>
+        public IQueryable<T> GetAll(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
         {
             return this.strategy.GetAll(whereCondition, parameterValues);
         }
@@ -79,7 +96,7 @@ namespace MonitoringNuget.Strategy
         /// Gibt eine Liste aller in der DB vorhandenen Model-Objekte vom Typ M zurück
         /// </summary>
         /// <returns></returns>
-        public List<T> GetAll()
+        public IQueryable<T> GetAll()
         {
             return this.strategy.GetAll();
         }
@@ -94,6 +111,20 @@ namespace MonitoringNuget.Strategy
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
         public long Count(string whereCondition, Dictionary<string, object> parameterValues)
+        {
+            return this.Count(whereCondition, parameterValues);
+        }
+
+        /// <summary>
+        /// Zählt in der Datenbank die Anzahl Model-Objekte vom Typ M, die der
+        /// Where-Bedingung entsprechen
+        /// </summary>
+        /// <param name="whereCondition">WhereBedingung als string
+        /// z.B. "NetPrice > @netPrice and Active = @active and Description like @desc</param>
+        /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
+        /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
+        /// <returns></returns>
+        public long Count(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
         {
             return this.Count(whereCondition, parameterValues);
         }

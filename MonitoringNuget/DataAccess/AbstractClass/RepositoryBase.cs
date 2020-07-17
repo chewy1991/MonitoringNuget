@@ -22,6 +22,11 @@ namespace MonitoringNuget.DataAccess.AbstractClass
             throw new NotImplementedException();
         }
 
+        public long Count(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
+        {
+            throw new NotImplementedException();
+        }
+
         public long Count()
         {
             using (var conn = new SqlConnection(ConnectionString))
@@ -48,9 +53,14 @@ namespace MonitoringNuget.DataAccess.AbstractClass
             }
         }
 
-        public abstract List<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
-        
-        public abstract List<T> GetAll();
+        public abstract IQueryable<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
+
+        public IQueryable<T> GetAll(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
+        {
+            throw new NotImplementedException();
+        }
+
+        public abstract IQueryable<T> GetAll();
         
         public abstract T GetSingle<P>(P pkValue);
 

@@ -7,7 +7,7 @@ using MonitoringNuget.Models.ModelInterface;
 
 namespace MonitoringNuget.Models
 {
-    class Location:IModel
+    public class Location:IModel
     {
         public int Id { get; set; }
         public string LocationName { get; set; }

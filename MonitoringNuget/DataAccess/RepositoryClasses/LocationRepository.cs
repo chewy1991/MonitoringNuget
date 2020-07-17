@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using System.Windows;
 using MonitoringNuget.DataAccess.AbstractClass;
 using MonitoringNuget.Models;
@@ -47,7 +48,7 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
         ///     bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}
         /// </param>
         /// <returns></returns>
-        public override List<Location> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
+        public override IQueryable<Location> GetAll(string whereCondition, Dictionary<string, object> parameterValues)
         {
             var locationlist = new List<Location>();
             using (var conn = new SqlConnection(ConnectionString))
@@ -78,12 +79,12 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
                 }
             }
 
-            return locationlist;
+            return locationlist.AsQueryable();
         }
 
         /// <summary>Gibt eine Liste aller in der DB vorhandenen Model-Objekte vom Typ M zurück</summary>
         /// <returns></returns>
-        public override List<Location> GetAll()
+        public override IQueryable<Location> GetAll()
         {
             var locationlist = new List<Location>();
             using (var conn = new SqlConnection(ConnectionString))
@@ -110,7 +111,7 @@ namespace MonitoringNuget.DataAccess.RepositoryClasses
                 }
             }
 
-            return locationlist;
+            return locationlist.AsQueryable();
         }
 
         /// <summary>

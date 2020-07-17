@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.SqlClient;
-using System.Runtime.Remoting.Contexts;
+using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DuplicateCheckerLib;
+using MonitoringNuget.DataAccess.LinqToSQL;
 using MonitoringNuget.DataAccess.RepositoryClasses;
 using MonitoringNuget.DataAccess.StoredProcedures;
 using MonitoringNuget.EntityClasses;
-using MonitoringNuget.Models;
+using MonitoringNuget.LinqDTO;
 using MonitoringNuget.MonitoringControl.Commands;
 using MonitoringNuget.Strategy;
 
@@ -17,19 +17,19 @@ namespace MonitoringNuget.ViewModel
 {
     public class MonitoringViewModel : DependencyObject
     {
-        private readonly ContextStrategy<Logging> loggingrepo = new ContextStrategy<Logging>(new LoggingRepository(),new AdoProcedures());
+        private ContextStrategy<VLogentriesDTO> loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new AdoProcedures());
 
         #region Dependency Properties
 
         // Monitoring Part
-        public static readonly DependencyProperty SelectedIndexProperty =
-            DependencyProperty.Register("SelectedIndex"
-                                      , typeof(int)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(-1));
+        public static readonly DependencyProperty SelectedIndexProperty = DependencyProperty.Register("SelectedIndex"
+                                                                                                    , typeof(int)
+                                                                                                    , typeof(MonitoringViewModel)
+                                                                                                    , new UIPropertyMetadata(-1));
 
-        public static readonly DependencyProperty LogentriesProperty =
-            DependencyProperty.Register("Logentries", typeof(List<Logging>), typeof(MonitoringViewModel));
+        public static readonly DependencyProperty LogentriesProperty = DependencyProperty.Register("Logentries"
+                                                                                                 , typeof(List<VLogentriesDTO>)
+                                                                                                 , typeof(MonitoringViewModel));
 
         // Logmessage hinzufügen
         public static readonly DependencyProperty MessageProperty = DependencyProperty.Register("Message"
@@ -37,47 +37,66 @@ namespace MonitoringNuget.ViewModel
                                                                                               , typeof(MonitoringViewModel)
                                                                                               , new UIPropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty SeverityProperty =
-            DependencyProperty.Register("Severity"
-                                      , typeof(DataTable)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(FillSeverity()));
+        public static readonly DependencyProperty SeverityProperty = DependencyProperty.Register("Severity"
+                                                                                               , typeof(DataTable)
+                                                                                               , typeof(MonitoringViewModel)
+                                                                                               , new UIPropertyMetadata(FillSeverity()));
 
-        public static readonly DependencyProperty SelectedIndexSeverityProperty =
-            DependencyProperty.Register("SelectedIndexSeverity"
-                                      , typeof(int)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(-1));
+        public static readonly DependencyProperty SelectedIndexSeverityProperty = DependencyProperty.Register("SelectedIndexSeverity"
+                                                                                                            , typeof(int)
+                                                                                                            , typeof(MonitoringViewModel)
+                                                                                                            , new UIPropertyMetadata(-1));
 
         public static readonly DependencyProperty PodNameProperty = DependencyProperty.Register("PodName"
                                                                                               , typeof(string)
                                                                                               , typeof(MonitoringViewModel)
                                                                                               , new UIPropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty HostNameProperty =
-            DependencyProperty.Register("HostName"
-                                      , typeof(string)
-                                      , typeof(MonitoringViewModel)
-                                      , new UIPropertyMetadata(string.Empty));
+        public static readonly DependencyProperty HostNameProperty = DependencyProperty.Register("HostName"
+                                                                                               , typeof(string)
+                                                                                               , typeof(MonitoringViewModel)
+                                                                                               , new UIPropertyMetadata(string.Empty));
 
-        public static readonly DependencyProperty DuplicateListProperty =
-            DependencyProperty.Register("DuplicateList", typeof(List<LogentriesEntity>), typeof(MonitoringViewModel));
+        public static readonly DependencyProperty DuplicateListProperty = DependencyProperty.Register("DuplicateList"
+                                                                                                    , typeof(List<LogentriesEntity>)
+                                                                                                    , typeof(MonitoringViewModel));
 
+        public static readonly DependencyProperty IsAdoProperty = DependencyProperty.Register("IsAdo"
+                                                                                                , typeof(bool)
+                                                                                                , typeof(MonitoringViewModel)
+                                                                                                , new PropertyMetadata(true));
+
+        public static readonly DependencyProperty IsLinqProperty = DependencyProperty.Register("IsLinq"
+                                                                                                 , typeof(bool)
+                                                                                                 , typeof(MonitoringViewModel)
+                                                                                                 , new PropertyMetadata(false));
 
         #endregion
 
         #region Binding Properties
 
         // Monitoring 
+        public bool IsAdo
+        {
+            get => (bool) GetValue(IsAdoProperty);
+            set => SetValue(IsAdoProperty, value);
+        }
+
+        public bool IsLinq
+        {
+            get => (bool) GetValue(IsLinqProperty);
+            set => SetValue(IsLinqProperty, value);
+        }
+
         public int SelectedIndex
         {
             get => (int) GetValue(SelectedIndexProperty);
             set => SetValue(SelectedIndexProperty, value);
         }
 
-        public List<Logging> Logentries
+        public List<VLogentriesDTO> Logentries
         {
-            get => (List<Logging>) GetValue(LogentriesProperty);
+            get => (List<VLogentriesDTO>) GetValue(LogentriesProperty);
             set => SetValue(LogentriesProperty, value);
         }
 
@@ -150,19 +169,17 @@ namespace MonitoringNuget.ViewModel
                     ?? ( _addDataCommand = new CommandHandler(() =>
                                                               {
                                                                   AddMessage();
-                                                                  Message = string.Empty;
-                                                                  PodName = string.Empty;
-                                                                  HostName = string.Empty;
+                                                                  Message               = string.Empty;
+                                                                  PodName               = string.Empty;
+                                                                  HostName              = string.Empty;
                                                                   SelectedIndexSeverity = -1;
                                                               }
                                                             , () => AddCanExecute) );
             }
         }
 
-        public bool AddCanExecute => !string.IsNullOrEmpty(Message) 
-                                  && !string.IsNullOrEmpty(PodName) 
-                                  && !string.IsNullOrEmpty(HostName) 
-                                  && SelectedIndexSeverity >= 0;
+        public bool AddCanExecute
+            => !string.IsNullOrEmpty(Message) && !string.IsNullOrEmpty(PodName) && !string.IsNullOrEmpty(HostName) && SelectedIndexSeverity >= 0;
 
         private ICommand _findDuplicates;
 
@@ -170,8 +187,17 @@ namespace MonitoringNuget.ViewModel
         {
             get { return _findDuplicates ?? ( _findDuplicates = new CommandHandler(() => { GetDuplicates(); }, () => FindDuplicatesCanExecute) ); }
         }
-        
+
         public bool FindDuplicatesCanExecute => true;
+
+        private ICommand _chooseRepoCommand;
+
+        public ICommand ChooseRepoCommand
+        {
+            get { return _chooseRepoCommand ?? ( _chooseRepoCommand = new CommandHandler(() => { ChooseRepo(); }, () => ChooseRepoCanExecute) ); }
+        }
+
+        public bool ChooseRepoCanExecute => true;
 
         #endregion
 
@@ -179,11 +205,8 @@ namespace MonitoringNuget.ViewModel
 
         private void GetLogentries()
         {
-            try { Logentries = loggingrepo.GetAll(); }
-            catch (Exception e)
-            {
-                MessageBox.Show(e.Message);
-            }
+            try { Logentries = loggingrepo.GetAll().ToList(); }
+            catch (Exception e) { MessageBox.Show(e.Message); }
         }
 
         /// <summary>
@@ -192,7 +215,19 @@ namespace MonitoringNuget.ViewModel
         private void LogClear()
         {
             loggingrepo.LogClear(Logentries[SelectedIndex].Id);
-            Logentries = loggingrepo.GetAll();
+            Logentries = loggingrepo.GetAll().ToList();
+        }
+        
+        private void ChooseRepo()
+        {
+            if (IsAdo)
+            {
+                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LoggingRepository(), new AdoProcedures());
+            }
+            else
+            {
+                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new AdoProcedures());
+            }
         }
 
         /// <summary>
@@ -222,7 +257,7 @@ namespace MonitoringNuget.ViewModel
             foreach (var key in severityDict.Keys)
             {
                 var row = severityTable.NewRow();
-                row["Id"] = key;
+                row["Id"]       = key;
                 row["Severity"] = severityDict[key];
                 severityTable.Rows.Add(row);
             }
@@ -235,13 +270,13 @@ namespace MonitoringNuget.ViewModel
         /// </summary>
         private void GetDuplicates()
         {
-            var loglist = loggingrepo.GetAll();
+            var loglist = loggingrepo.GetAll().ToList();
             var dupliChecker = new DuplicateChecker();
             var logentryList = new List<LogentriesEntity>();
 
             foreach (var log in loglist)
             {
-                var entity = new LogentriesEntity {Id = log.Id, Severity = log.severity, Logmessage = log.message};
+                var entity = new LogentriesEntity {Id = log.Id, Severity = log.Severity, Logmessage = log.Message};
 
                 logentryList.Add(entity);
             }

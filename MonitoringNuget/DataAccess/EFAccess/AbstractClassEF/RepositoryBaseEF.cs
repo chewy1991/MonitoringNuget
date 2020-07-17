@@ -50,13 +50,27 @@ namespace MonitoringNuget.DataAccess.EFAccess.AbstractClassEF
         /// <param name="parameterValues">Parameter-Werte für die Wherebedingung
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
-        public abstract List<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
+        public abstract IQueryable<T> GetAll(string whereCondition, Dictionary<string, object> parameterValues);
+
+        /// <summary>
+        /// Gibt eine Liste von Model-Objekten vom Typ M zurück,
+        /// die gemäss der WhereBedingung geladen wurden. Die Werte der
+        /// Where-Bedingung können als separat übergeben werden,
+        /// damit diese für PreparedStatements verwendet werden können.
+        /// (Verhinderung von SQL-Injection)        /// </summary>
+        /// <param name="whereCondition"></param>
+        /// <param name="parameterValues"></param>
+        /// <returns></returns>
+        public IQueryable<T> GetAll(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <summary>
         /// Gibt eine Liste aller in der DB vorhandenen Model-Objekte vom Typ M zurück
         /// </summary>
         /// <returns></returns>
-        public abstract List<T> GetAll();
+        public abstract IQueryable<T> GetAll();
 
         /// <summary>
         /// Zählt in der Datenbank die Anzahl Model-Objekte vom Typ M, die der
@@ -68,6 +82,18 @@ namespace MonitoringNuget.DataAccess.EFAccess.AbstractClassEF
         /// bspw: {{"netPrice", 10.5}, {"active", true}, {"desc", "Wolle%"}}</param>
         /// <returns></returns>
         public long Count(string whereCondition, Dictionary<string, object> parameterValues)
+        {
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Zählt in der Datenbank die Anzahl Model-Objekte vom Typ M, die der
+        /// Where-Bedingung entsprechen
+        /// </summary>
+        /// <param name="whereCondition"></param>
+        /// <param name="parameterValues"></param>
+        /// <returns></returns>
+        public long Count(Func<T, bool> whereCondition, Dictionary<string, object> parameterValues)
         {
             throw new NotImplementedException();
         }
