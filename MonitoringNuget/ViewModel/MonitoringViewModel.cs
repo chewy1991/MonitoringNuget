@@ -240,6 +240,7 @@ namespace MonitoringNuget.ViewModel
                                  , PodName
                                  , severityId
                                  , HostName);
+            Logentries = loggingrepo.GetAll().ToList();
         }
 
         private static DataTable FillSeverity()
