@@ -76,6 +76,7 @@
     <Compile Include="DataAccess\RepositoryClasses\LoggingRepository.cs" />
     <Compile Include="DataAccess\StoredProcedures\AdoProcedures.cs" />
     <Compile Include="DataAccess\StoredProcedures\Interface\IStoredProcedures.cs" />
+    <Compile Include="DataAccess\StoredProcedures\LinqStoredProcedure.cs" />
     <Compile Include="EntityClasses\LogentriesEntity.cs" />
     <Compile Include="EntityFramework\Abrechnung.cs">
       <DependentUpon>TestatDBEF.tt</DependentUpon>

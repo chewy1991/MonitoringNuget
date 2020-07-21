@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data.Linq;
 using System.Data.Linq.Mapping;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using MonitoringNuget.LinqDTO;
@@ -54,6 +55,28 @@ namespace MonitoringNuget.LinqDBContext
         public System.Data.Linq.Table<LocationDTO> locations
         {
             get { return this.GetTable<LocationDTO>(); }
+        }
+
+        [FunctionAttribute(Name = "dbo.LogClear")]
+        public int LogClear(int? id)
+        {
+            IExecuteResult objResult = this.ExecuteMethodCall(this, ((MethodInfo)MethodInfo.GetCurrentMethod()), id);
+            return (int) objResult.ReturnValue;
+        }
+
+        [FunctionAttribute(Name = "dbo.LogMessageAdd")]
+        public int LogMessageAdd([ParameterAttribute(DbType = "NVarChar(45)")] string logmessage
+                               , [ParameterAttribute(Name= "PodName", DbType= "NVarChar(45)")] string podName
+                               , [ParameterAttribute(Name = "Severity", DbType = "Int")] int? severity
+                               , [ParameterAttribute(DbType = "NVarChar(45)")] string hostname)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this
+                                                        , ( (MethodInfo) ( MethodInfo.GetCurrentMethod() ) )
+                                                        , logmessage
+                                                        , podName
+                                                        , severity
+                                                        , hostname);
+            return ( (int) ( result.ReturnValue ) );
         }
     }
 }

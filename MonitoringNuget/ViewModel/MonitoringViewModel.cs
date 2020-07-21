@@ -226,7 +226,7 @@ namespace MonitoringNuget.ViewModel
             }
             else
             {
-                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new AdoProcedures());
+                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new LinqStoredProcedure());
             }
         }
 
