@@ -1076,6 +1076,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Type="Int32" Name="Id" Nullable="true" />
           <Property Type="String" Name="Locationname" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="Locationparent" Nullable="true" />
+          <Property Type="String" Name="PodName" Nullable="true" MaxLength="45" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -1283,6 +1284,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Locationname" ColumnName="Locationname" />
                 <ScalarProperty Name="Locationparent" ColumnName="Locationparent" />
+                <ScalarProperty Name="PodName" ColumnName="PodName" />
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>

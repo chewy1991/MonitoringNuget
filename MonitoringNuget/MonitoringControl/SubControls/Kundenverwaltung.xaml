@@ -4,7 +4,7 @@
              xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
-             xmlns:cet ="clr-namespace:MonitoringNuget.CTEClass"
+             xmlns:cet = "clr-namespace:MonitoringNuget.CTEClass"
              xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
@@ -75,8 +75,8 @@
                Grid.Row = "11"
                HorizontalAlignment = "Right" />
         <TextBox Grid.Row = "11"
-                 Grid.Column = "1" 
-                 Text="{Binding Source={StaticResource vm}, Path=SearchText}"/>
+                 Grid.Column = "1"
+                 Text = "{Binding Source={StaticResource vm}, Path=SearchText}" />
 
         <Button Grid.Row = "10"
                 Grid.Column = "2"
@@ -87,14 +87,27 @@
                 Content = "Suche Kunde"
                 Command = "{Binding Source={StaticResource vm}, Path=SearchClientCommand}" />
 
-        <TreeView Grid.Row="1" Grid.RowSpan="15" Grid.Column="3" ItemsSource="{Binding Source={StaticResource vm}, Path=LocationHierarchy}" >
+
+        <Label Grid.Column = "3"
+               Content = "Hierarchische Lokation"
+               HorizontalAlignment = "Center"
+               FontSize = "12" />
+        <TreeView Grid.Row = "1"
+                  Grid.RowSpan = "15"
+                  Grid.Column = "3"
+                  ItemsSource = "{Binding Source={StaticResource vm}, Path=LocationHierarchy}">
             <TreeView.ItemTemplate>
-                <HierarchicalDataTemplate ItemsSource="{Binding LocationChilds}" DataType="{x:Type cet:LocationHist}">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Name}"></TextBlock>
+                <HierarchicalDataTemplate ItemsSource = "{Binding LocationChilds}"
+                                          DataType = "{x:Type cet:LocationHist}">
+                    <StackPanel Orientation = "Horizontal">
+                        <TextBlock Text = "{Binding Name}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        <Button Grid.Row = "16"
+                Grid.Column = "3"
+                Content = "Refresh Hierarchie"
+                Command = "{Binding Source={StaticResource vm}, Path=RefreshHierarchieCommand}" />
     </Grid>
 </UserControl>

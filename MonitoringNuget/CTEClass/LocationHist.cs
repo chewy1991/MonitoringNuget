@@ -17,6 +17,7 @@ namespace MonitoringNuget.CTEClass
 
         public ObservableCollection<LocationHist> LocationChilds { get; set; }
         public string Name { get; set; }
+        public string PodName { get; set; }
         public int? Id { get; set; }
 
         public void Add(List<LoadHierarchy_Result> query)

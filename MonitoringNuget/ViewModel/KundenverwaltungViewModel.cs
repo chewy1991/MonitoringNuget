@@ -142,6 +142,23 @@ namespace MonitoringNuget.ViewModel
 
         public bool SearchCLientCanExecute => !string.IsNullOrEmpty(SearchText);
 
+        private ICommand _refreshHierarchieCommand;
+
+        public ICommand RefreshHierarchieCommand
+        {
+            get
+            {
+                return _refreshHierarchieCommand
+                    ?? ( _refreshHierarchieCommand = new CommandHandler(() =>
+                                                                        {
+                                                                            LocationHierarchy = LoadHierarchyList();
+                                                                        }
+                                                                      , () => RefreshHierarchieCommandCanExecute) );
+            }
+        }
+
+        public bool RefreshHierarchieCommandCanExecute => true;
+
         private static ObservableCollection<LocationHist> LoadHierarchyList()
         {
             var nodelist = new ObservableCollection<LocationHist>();
@@ -149,15 +166,22 @@ namespace MonitoringNuget.ViewModel
 
             foreach (var node in query)
             {
+                var locroot = new LocationHist()
+                          {
+                              Name = node.PodName
+                            , Id = node.Id
+                          };
                 var loc = new LocationHist()
                           {
                               Name = node.Locationname
-                            , Id = node.Id 
+                            , Id = node.Id
                           };
                 var childNodes = kundenRepo.LoadHierarchy();
 
                 loc.Add(childNodes.ToList());
-                nodelist.Add(loc);
+
+                locroot.LocationChilds.Add(loc);
+                nodelist.Add(locroot);
             }
 
             return nodelist;

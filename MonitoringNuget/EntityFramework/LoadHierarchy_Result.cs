@@ -16,5 +16,6 @@ namespace MonitoringNuget.EntityFramework
         public Nullable<int> Id { get; set; }
         public string Locationname { get; set; }
         public Nullable<int> Locationparent { get; set; }
+        public string PodName { get; set; }
     }
 }
