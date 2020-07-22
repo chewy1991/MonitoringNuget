@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="TestatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="TestatModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Abrechnung">
           <Key>
             <PropertyRef Name="Id" />
@@ -406,6 +406,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Function Name="LoadHierarch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="LogClear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
@@ -536,7 +537,8 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <End Role="Referenzen" EntitySet="Referenzen" />
           </AssociationSet>
         </EntityContainer>
-      </Schema></edmx:StorageModels>
+      </Schema>
+    </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="TestatModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -1055,8 +1057,9 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <End Role="Networkinterface" EntitySet="Networkinterface" />
             <End Role="Ports" EntitySet="Ports" />
           </AssociationSet>
+          <FunctionImport Name="LoadHierarch" ReturnType="Collection(TestatModel.LoadHierarch_Result)" />
           <FunctionImport Name="LogClear">
-          <Parameter Name="Id" Mode="In" Type="Int32" />
+            <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="LogMessageAdd">
             <Parameter Name="logmessage" Mode="In" Type="String" />
@@ -1065,10 +1068,15 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <Parameter Name="hostname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="PodBill">
-          <Parameter Name="PodId" Mode="In" Type="Int32" />
+            <Parameter Name="PodId" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="PodBillEvent" />
         </EntityContainer>
+        <ComplexType Name="LoadHierarch_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Locationname" Nullable="true" MaxLength="100" />
+          <Property Type="Int32" Name="Locationparent" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -1269,6 +1277,15 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="LoadHierarch" FunctionName="TestatModel.Store.LoadHierarch">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="TestatModel.LoadHierarch_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Locationname" ColumnName="Locationname" />
+                <ScalarProperty Name="Locationparent" ColumnName="Locationparent" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="LogClear" FunctionName="TestatModel.Store.LogClear" />
           <FunctionImportMapping FunctionImportName="LogMessageAdd" FunctionName="TestatModel.Store.LogMessageAdd" />
           <FunctionImportMapping FunctionImportName="PodBill" FunctionName="TestatModel.Store.PodBill" />

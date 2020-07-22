@@ -13,7 +13,8 @@ namespace MonitoringNuget.EntityFramework
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     using System.Data.Entity.Core.Objects;
-
+    using System.Linq;
+    
     public partial class TestatEntities : DbContext
     {
         public TestatEntities()
@@ -43,6 +44,11 @@ namespace MonitoringNuget.EntityFramework
         public virtual DbSet<v_logentries> v_logentries { get; set; }
         public virtual DbSet<v_UsagePerLocation> v_UsagePerLocation { get; set; }
         public virtual DbSet<v_UsagePerPod> v_UsagePerPod { get; set; }
+    
+        public virtual ObjectResult<LoadHierarch_Result> LoadHierarch()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LoadHierarch_Result>("LoadHierarch");
+        }
     
         public virtual int LogClear(Nullable<int> id)
         {

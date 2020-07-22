@@ -99,6 +99,9 @@
     <Compile Include="EntityFramework\Kunde.cs">
       <DependentUpon>TestatDBEF.tt</DependentUpon>
     </Compile>
+    <Compile Include="EntityFramework\LoadHierarch_Result.cs">
+      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    </Compile>
     <Compile Include="EntityFramework\Locations.cs">
       <DependentUpon>TestatDBEF.tt</DependentUpon>
     </Compile>
@@ -192,11 +195,11 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.Config" />
     <EntityDeploy Include="EntityFramework\TestatDBEF.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>TestatDBEF.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="App.Config" />
     <None Include="EntityFramework\TestatDBEF.edmx.diagram">
       <DependentUpon>TestatDBEF.edmx</DependentUpon>
     </None>
