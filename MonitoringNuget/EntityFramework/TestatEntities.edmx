@@ -406,7 +406,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Function Name="LoadHierarch" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="LoadHierarchy" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="LogClear" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="Id" Type="int" Mode="In" />
         </Function>
@@ -1057,7 +1057,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             <End Role="Networkinterface" EntitySet="Networkinterface" />
             <End Role="Ports" EntitySet="Ports" />
           </AssociationSet>
-          <FunctionImport Name="LoadHierarch" ReturnType="Collection(TestatModel.LoadHierarch_Result)" />
+          <FunctionImport Name="LoadHierarchy" ReturnType="Collection(TestatModel.LoadHierarchy_Result)" />
           <FunctionImport Name="LogClear">
             <Parameter Name="Id" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -1072,7 +1072,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           </FunctionImport>
           <FunctionImport Name="PodBillEvent" />
         </EntityContainer>
-        <ComplexType Name="LoadHierarch_Result">
+        <ComplexType Name="LoadHierarchy_Result">
           <Property Type="Int32" Name="Id" Nullable="true" />
           <Property Type="String" Name="Locationname" Nullable="true" MaxLength="100" />
           <Property Type="Int32" Name="Locationparent" Nullable="true" />
@@ -1277,9 +1277,9 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <FunctionImportMapping FunctionImportName="LoadHierarch" FunctionName="TestatModel.Store.LoadHierarch">
+          <FunctionImportMapping FunctionImportName="LoadHierarchy" FunctionName="TestatModel.Store.LoadHierarchy">
             <ResultMapping>
-              <ComplexTypeMapping TypeName="TestatModel.LoadHierarch_Result">
+              <ComplexTypeMapping TypeName="TestatModel.LoadHierarchy_Result">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Locationname" ColumnName="Locationname" />
                 <ScalarProperty Name="Locationparent" ColumnName="Locationparent" />

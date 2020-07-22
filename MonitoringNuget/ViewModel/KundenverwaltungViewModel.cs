@@ -1,22 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using MonitoringNuget.CTEClass;
 using MonitoringNuget.DataAccess.EFAccess;
+using MonitoringNuget.DataAccess.StoredProcedures;
 using MonitoringNuget.EntityClasses;
 using MonitoringNuget.EntityFramework;
 using MonitoringNuget.MonitoringControl.Commands;
 using MonitoringNuget.Strategy;
+using TreeView = System.Windows.Controls.TreeView;
 
 namespace MonitoringNuget.ViewModel
 {
     public class KundenverwaltungViewModel : DependencyObject
     {
-        public static ContextStrategy<Kunde> kundenRepo = new ContextStrategy<Kunde>(new KundenRepository());
+        public static ContextStrategy<Kunde> kundenRepo = new ContextStrategy<Kunde>(new KundenRepository(), new EFProcedure());
 
         public static readonly DependencyProperty KundenlistProperty = DependencyProperty.Register("Kundenlist"
                                                                                                     , typeof(List<Kunde>)
@@ -33,6 +39,17 @@ namespace MonitoringNuget.ViewModel
                                                                                                  , typeof(string)
                                                                                                  , typeof(KundenverwaltungViewModel)
                                                                                                  , new UIPropertyMetadata(string.Empty));
+
+        public static readonly DependencyProperty LocationHierarchyProperty = DependencyProperty.Register("LocationHierarchy"
+                                                                                                        , typeof(ObservableCollection<LocationHist>)
+                                                                                                        , typeof(KundenverwaltungViewModel)
+                                                                                                        , new UIPropertyMetadata(LoadHierarchyList()));
+
+        public ObservableCollection<LocationHist> LocationHierarchy
+        {
+            get => (ObservableCollection<LocationHist>) GetValue(LocationHierarchyProperty);
+            set => SetValue(LocationHierarchyProperty, value);
+        }
 
         public string SearchText
         {
@@ -124,5 +141,26 @@ namespace MonitoringNuget.ViewModel
         }
 
         public bool SearchCLientCanExecute => !string.IsNullOrEmpty(SearchText);
+
+        private static ObservableCollection<LocationHist> LoadHierarchyList()
+        {
+            var nodelist = new ObservableCollection<LocationHist>();
+            var query = kundenRepo.LoadHierarchy().Where((x) => x.Locationparent == null);
+
+            foreach (var node in query)
+            {
+                var loc = new LocationHist()
+                          {
+                              Name = node.Locationname
+                            , Id = node.Id 
+                          };
+                var childNodes = kundenRepo.LoadHierarchy();
+
+                loc.Add(childNodes.ToList());
+                nodelist.Add(loc);
+            }
+
+            return nodelist;
+        }
     }
 }

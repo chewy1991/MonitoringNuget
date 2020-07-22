@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MonitoringNuget.EntityFramework;
 
 namespace MonitoringNuget.DataAccess.StoredProcedures.Interface
 {
@@ -11,5 +12,7 @@ namespace MonitoringNuget.DataAccess.StoredProcedures.Interface
         bool LogClear(int logId);
 
         bool AddMessage(string message, string podname, int severity, string hostname);
+
+        IQueryable<LoadHierarchy_Result> LoadHierarchy();
     }
 }

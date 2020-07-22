@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GenericRepository;
 using MonitoringNuget.DataAccess.StoredProcedures.Interface;
+using MonitoringNuget.EntityFramework;
 
 namespace MonitoringNuget.Strategy
 {
@@ -152,6 +153,11 @@ namespace MonitoringNuget.Strategy
                 return this.storedprocstrategy.AddMessage(message, podname, severity, hostname);
             else
                 return false;
+        }
+
+        public IQueryable<LoadHierarchy_Result> LoadHierarchy()
+        {
+            return this.storedprocstrategy.LoadHierarchy();
         }
 
         /// <summary>

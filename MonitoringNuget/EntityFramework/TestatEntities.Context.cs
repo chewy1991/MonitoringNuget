@@ -45,9 +45,9 @@ namespace MonitoringNuget.EntityFramework
         public virtual DbSet<v_UsagePerLocation> v_UsagePerLocation { get; set; }
         public virtual DbSet<v_UsagePerPod> v_UsagePerPod { get; set; }
     
-        public virtual ObjectResult<LoadHierarch_Result> LoadHierarch()
+        public virtual ObjectResult<LoadHierarchy_Result> LoadHierarchy()
         {
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LoadHierarch_Result>("LoadHierarch");
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<LoadHierarchy_Result>("LoadHierarchy");
         }
     
         public virtual int LogClear(Nullable<int> id)

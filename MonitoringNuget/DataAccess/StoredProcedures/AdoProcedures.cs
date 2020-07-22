@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using MonitoringNuget.DataAccess.AbstractClass;
 using MonitoringNuget.DataAccess.RepositoryClasses;
 using MonitoringNuget.DataAccess.StoredProcedures.Interface;
+using MonitoringNuget.EntityFramework;
 using MonitoringNuget.LinqDTO;
 using MonitoringNuget.Models;
 
@@ -66,6 +67,11 @@ namespace MonitoringNuget.DataAccess.StoredProcedures
                 MessageBox.Show(e.Message);
                 return false;
             }
+        }
+
+        public IQueryable<LoadHierarchy_Result> LoadHierarchy()
+        {
+            throw new NotImplementedException();
         }
     }
 }

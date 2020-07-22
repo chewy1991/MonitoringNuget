@@ -8,16 +8,11 @@ using MonitoringNuget.EntityFramework;
 
 namespace MonitoringNuget.DataAccess.StoredProcedures
 {
-    public class LinqStoredProcedure : IStoredProcedures
+    public class EFProcedure : IStoredProcedures
     {
         public bool LogClear(int logId)
         {
-            using (var DbContext = new LinqDBContext.LinqDBContext())
-            {
-                var i = DbContext.LogClear(logId);
-            }
-
-            return true;
+            throw new NotImplementedException();
         }
 
         public bool AddMessage(
@@ -26,17 +21,14 @@ namespace MonitoringNuget.DataAccess.StoredProcedures
           , int severity
           , string hostname)
         {
-            using (var DbContext = new LinqDBContext.LinqDBContext())
-            {
-                var i = DbContext.LogMessageAdd(message, podname, severity, hostname);
-            }
-
-            return true;
+            throw new NotImplementedException();
         }
 
         public IQueryable<LoadHierarchy_Result> LoadHierarchy()
         {
-            throw new NotImplementedException();
+            var context = new TestatEntities();
+
+            return context.LoadHierarchy().AsQueryable();
         }
     }
 }

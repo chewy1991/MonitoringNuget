@@ -11,7 +11,7 @@ namespace MonitoringNuget.EntityFramework
 {
     using System;
     
-    public partial class LoadHierarch_Result
+    public partial class LoadHierarchy_Result
     {
         public Nullable<int> Id { get; set; }
         public string Locationname { get; set; }

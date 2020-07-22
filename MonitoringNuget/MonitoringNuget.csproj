@@ -65,6 +65,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CTEClass\LocationHist.cs" />
     <Compile Include="DataAccess\AbstractClassLinq\RepositoryBaseLinq.cs" />
     <Compile Include="DataAccess\AbstractClass\RepositoryBase.cs" />
     <Compile Include="DataAccess\EFAccess\AbstractClassEF\RepositoryBaseEF.cs" />
@@ -75,77 +76,78 @@
     <Compile Include="DataAccess\RepositoryClasses\LocationRepository.cs" />
     <Compile Include="DataAccess\RepositoryClasses\LoggingRepository.cs" />
     <Compile Include="DataAccess\StoredProcedures\AdoProcedures.cs" />
+    <Compile Include="DataAccess\StoredProcedures\EFProcedure.cs" />
     <Compile Include="DataAccess\StoredProcedures\Interface\IStoredProcedures.cs" />
     <Compile Include="DataAccess\StoredProcedures\LinqStoredProcedure.cs" />
     <Compile Include="EntityClasses\LogentriesEntity.cs" />
     <Compile Include="EntityFramework\Abrechnung.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Abrechnungsposition.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Adresse.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Device.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\DeviceCategory.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Kontaktperson.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Kunde.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\LoadHierarch_Result.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+    <Compile Include="EntityFramework\LoadHierarchy_Result.cs">
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Locations.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Logmessage.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Networkinterface.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Point_Of_Delivery.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Ports.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Referenzen.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Severity.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\TestatDBEF.Context.cs">
+    <Compile Include="EntityFramework\TestatEntities.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TestatDBEF.Context.tt</DependentUpon>
+      <DependentUpon>TestatEntities.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\TestatDBEF.cs">
+    <Compile Include="EntityFramework\TestatEntities.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
-    <Compile Include="EntityFramework\TestatDBEF.Designer.cs">
+    <Compile Include="EntityFramework\TestatEntities.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+      <DependentUpon>TestatEntities.edmx</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\v_logentries.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\v_UsagePerLocation.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\v_UsagePerPod.cs">
-      <DependentUpon>TestatDBEF.tt</DependentUpon>
+      <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="LinqDBContext\LinqDBContext.cs" />
     <Compile Include="LinqDTO\LocationDTO.cs" />
@@ -196,12 +198,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
-    <EntityDeploy Include="EntityFramework\TestatDBEF.edmx">
+    <EntityDeploy Include="EntityFramework\TestatEntities.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>TestatDBEF.Designer.cs</LastGenOutput>
+      <LastGenOutput>TestatEntities.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <None Include="EntityFramework\TestatDBEF.edmx.diagram">
-      <DependentUpon>TestatDBEF.edmx</DependentUpon>
+    <None Include="EntityFramework\TestatEntities.edmx.diagram">
+      <DependentUpon>TestatEntities.edmx</DependentUpon>
     </None>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -215,15 +217,15 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="EntityFramework\TestatDBEF.Context.tt">
+    <Content Include="EntityFramework\TestatEntities.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TestatDBEF.edmx</DependentUpon>
-      <LastGenOutput>TestatDBEF.Context.cs</LastGenOutput>
+      <DependentUpon>TestatEntities.edmx</DependentUpon>
+      <LastGenOutput>TestatEntities.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="EntityFramework\TestatDBEF.tt">
+    <Content Include="EntityFramework\TestatEntities.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>TestatDBEF.edmx</DependentUpon>
-      <LastGenOutput>TestatDBEF.cs</LastGenOutput>
+      <DependentUpon>TestatEntities.edmx</DependentUpon>
+      <LastGenOutput>TestatEntities.cs</LastGenOutput>
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

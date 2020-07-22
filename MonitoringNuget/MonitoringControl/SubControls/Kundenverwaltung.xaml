@@ -4,15 +4,17 @@
              xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
+             xmlns:cet ="clr-namespace:MonitoringNuget.CTEClass"
              xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
-             d:DesignWidth = "800">
+             d:DesignWidth = "1200">
     <UserControl.Resources>
         <viewModel:KundenverwaltungViewModel x:Key = "vm" />
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
+            <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
             <ColumnDefinition />
@@ -85,5 +87,14 @@
                 Content = "Suche Kunde"
                 Command = "{Binding Source={StaticResource vm}, Path=SearchClientCommand}" />
 
+        <TreeView Grid.Row="1" Grid.RowSpan="15" Grid.Column="3" ItemsSource="{Binding Source={StaticResource vm}, Path=LocationHierarchy}" >
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding LocationChilds}" DataType="{x:Type cet:LocationHist}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}"></TextBlock>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
     </Grid>
 </UserControl>
