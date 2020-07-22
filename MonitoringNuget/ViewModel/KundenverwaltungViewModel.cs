@@ -161,26 +161,26 @@ namespace MonitoringNuget.ViewModel
 
         private static ObservableCollection<LocationHist> LoadHierarchyList()
         {
+            var lstPodname = kundenRepo.LoadHierarchy().Select(x => x.PodName).Distinct();
+
             var nodelist = new ObservableCollection<LocationHist>();
-            var query = kundenRepo.LoadHierarchy().Where((x) => x.Locationparent == null);
 
-            foreach (var node in query)
+            foreach (var pod in lstPodname)
             {
-                var locroot = new LocationHist()
-                          {
-                              Name = node.PodName
-                            , Id = node.Id
-                          };
-                var loc = new LocationHist()
-                          {
-                              Name = node.Locationname
-                            , Id = node.Id
-                          };
-                var childNodes = kundenRepo.LoadHierarchy();
+                var locroot = new LocationHist() {Name = pod};
 
-                loc.Add(childNodes.ToList());
+                var query = kundenRepo.LoadHierarchy().Where((x) => x.Locationparent == null && x.PodName.Equals(pod));
 
-                locroot.LocationChilds.Add(loc);
+                foreach (var node in query)
+                {
+                    var loc = new LocationHist() {Name     = node.Locationname, Id = node.Id};
+                    var childNodes = kundenRepo.LoadHierarchy();
+
+                    loc.Add(childNodes.ToList());
+
+                    locroot.LocationChilds.Add(loc);
+                }
+
                 nodelist.Add(locroot);
             }
 
