@@ -205,6 +205,7 @@ namespace MonitoringNuget.ViewModel
                 {
                     Kundenlist = kundenRepo.GetAll().ToList<Kunde>();
                     SelectedClient = -1;
+                    SearchText = string.Empty;
                 }, () => ShowAllCLientCanExecute ));
             }
         }
@@ -224,6 +225,7 @@ namespace MonitoringNuget.ViewModel
                                                                           searchdict.Add("Bezeichnung",SearchText);
                                                                           Kundenlist     = kundenRepo.GetAll("",searchdict).ToList();
                                                                           SelectedClient = -1;
+                                                                          SearchText = string.Empty;
                                                                       }
                                                                     , () => SearchCLientCanExecute) );
             }
@@ -325,7 +327,8 @@ namespace MonitoringNuget.ViewModel
                 Homepage = client.Homepage.Trim();
             Guthaben = client.Guthaben;
             Betragslimit = client.Betragslimit;
-            Password = EnSkryptPw(client.Password);
+            if(client.Password != null)
+                Password = EnSkryptPw(client.Password);
         }
 
         private void ClearProperties()
