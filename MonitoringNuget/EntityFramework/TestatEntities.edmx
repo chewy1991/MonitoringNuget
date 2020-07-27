@@ -81,7 +81,7 @@
           <Property Name="Telefonnummer" Type="nvarchar" MaxLength="14" />
           <Property Name="EMail" Type="nvarchar" MaxLength="255" />
           <Property Name="Homepage" Type="nchar" MaxLength="255" />
-          <Property Name="Password" Type="varbinary(max)" />
+          <Property Name="Password" Type="varbinary(max)" Nullable="false" />
         </EntityType>
         <EntityType Name="Locations">
           <Key>
@@ -634,7 +634,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Name="Telefonnummer" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
           <Property Name="EMail" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
           <Property Name="Homepage" Type="String" MaxLength="255" FixedLength="true" Unicode="true" />
-          <Property Name="Password" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Password" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Point_Of___podKu__3D5E1FD2" FromRole="Kunde" ToRole="Point_Of_Delivery" />
         </EntityType>
         <EntityType Name="Locations">
