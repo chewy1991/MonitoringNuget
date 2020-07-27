@@ -4,15 +4,15 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="7946d611558a4b828be5a25bd26a60d8" Name="Diagram1">
+      <Diagram DiagramId="29ebd082f2c34cda86d28427847ec9c7" Name="Diagram1">
         <EntityTypeShape EntityType="TestatModel.Abrechnung" Width="1.5" PointX="8.25" PointY="8.375" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Abrechnungsposition" Width="1.5" PointX="10.5" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Adresse" Width="1.5" PointX="0.75" PointY="9.875" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Device" Width="1.5" PointX="3" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="TestatModel.DeviceCategory" Width="1.5" PointX="0.75" PointY="7.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.DeviceCategory" Width="1.5" PointX="0.75" PointY="7" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Kontaktperson" Width="1.5" PointX="8.25" PointY="11.625" IsExpanded="true" />
-        <EntityTypeShape EntityType="TestatModel.Kunde" Width="1.5" PointX="3.75" PointY="1.875" IsExpanded="true" />
-        <EntityTypeShape EntityType="TestatModel.Locations" Width="1.5" PointX="9" PointY="15.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Kunde" Width="1.5" PointX="3.75" PointY="1.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="TestatModel.Locations" Width="1.5" PointX="9" PointY="15.125" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Logmessage" Width="1.5" PointX="5.25" PointY="5.875" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Networkinterface" Width="1.5" PointX="11.25" PointY="12.75" IsExpanded="true" />
         <EntityTypeShape EntityType="TestatModel.Point_Of_Delivery" Width="1.5" PointX="6" PointY="9.625" IsExpanded="true" />

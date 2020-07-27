@@ -27,6 +27,8 @@ namespace MonitoringNuget.EntityFramework
         public decimal Betragslimit { get; set; }
         public string Telefonnummer { get; set; }
         public string EMail { get; set; }
+        public string Homepage { get; set; }
+        public byte[] Password { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Point_Of_Delivery> Point_Of_Delivery { get; set; }

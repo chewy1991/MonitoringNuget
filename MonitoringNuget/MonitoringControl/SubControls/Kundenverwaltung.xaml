@@ -8,7 +8,7 @@
              xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
-             d:DesignWidth = "1200">
+             d:DesignWidth = "2000">
     <UserControl.Resources>
         <viewModel:KundenverwaltungViewModel x:Key = "vm" />
     </UserControl.Resources>
@@ -53,18 +53,25 @@
                        TextAlignment = "Center"
                        DockPanel.Dock = "Top" />
             <DataGrid ItemsSource = "{Binding Source={StaticResource vm}, Path=Kundenlist}"
-                      SelectedIndex = "{Binding Source={StaticResource vm}, Path=SelectedClient}" />
+                      SelectedIndex = "{Binding Source={StaticResource vm}, Path=SelectedClient}"
+                      IsReadOnly = "True" />
         </DockPanel>
         <Rectangle Fill = "Black"
                    Grid.Row = "9"
                    Grid.ColumnSpan = "3" />
 
-        <Button Content = "Kunde hinzufügen / bearbeiten"
+        <Button Content = "Kundenauswahl zur Bearbeitung"
                 ToolTip = "Updatet Kundentabelle gemäss den Änderungen in der Kundenliste"
-                Command = "{Binding Source={StaticResource vm},Path=AddClientCommand}"
+                Command = "{Binding Source={StaticResource vm},Path=ChooseClientCommand}"
                 Height = "25"
                 Grid.Row = "10" />
 
+        <Button Content = "Kunde hinzufügen/bearbeiten"
+                ToolTip = "Updatet Kundentabelle gemäss den Änderungen in den Textboxen"
+                Command = "{Binding Source={StaticResource vm},Path=AddClientCommand}"
+                Height = "25"
+                Grid.Row = "16" />
+       
         <Button Content = "Kunde löschen"
                 Command = "{Binding Source={StaticResource vm},Path=DelClientCommand}"
                 Height = "25"
@@ -86,6 +93,68 @@
                 Grid.Column = "2"
                 Content = "Suche Kunde"
                 Command = "{Binding Source={StaticResource vm}, Path=SearchClientCommand}" />
+
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "13">
+            <Label Content = "Kontonr:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Kontonummer}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "14">
+            <Label Content = "Bezeichnung:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Bezeichnung}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "15">
+            <Label Content = "Guthaben:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Guthaben}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "13"
+                    Grid.Column = "1">
+            <Label Content = "Betragslimit:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Betragslimit}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "14"
+                    Grid.Column = "1">
+            <Label Content = "Telefonnummer:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Telefonnummer}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "15"
+                    Grid.Column = "1">
+            <Label Content = "EMail:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=EMail}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "13"
+                    Grid.Column = "2">
+            <Label Content = "Homepage:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Homepage}" />
+        </StackPanel>
+        <StackPanel Orientation = "Horizontal"
+                    Grid.Row = "14"
+                    Grid.Column = "2">
+            <Label Content = "Passwort:"
+                   Width = "130" />
+            <TextBox Width = "300"
+                     Text = "{Binding Source={StaticResource vm}, Path=Password}" />
+        </StackPanel>
 
 
         <Label Grid.Column = "3"

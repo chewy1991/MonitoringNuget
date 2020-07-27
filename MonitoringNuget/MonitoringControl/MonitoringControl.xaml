@@ -7,7 +7,7 @@
              xmlns:uc = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
-             d:DesignWidth = "1600">
+             d:DesignWidth = "2400">
     <UserControl.Resources>
         <viewModel:MonitoringViewModel x:Key = "Monitoringvm" />
     </UserControl.Resources>
@@ -17,7 +17,7 @@
             <ColumnDefinition Width = "4" />
             <ColumnDefinition MaxWidth = "398" />
             <ColumnDefinition Width = "4" />
-            <ColumnDefinition Width = "800" />
+            <ColumnDefinition  />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height = "30" />
