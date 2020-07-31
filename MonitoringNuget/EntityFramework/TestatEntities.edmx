@@ -51,6 +51,9 @@
           <Property Name="AnzahlPorts" Type="int" Nullable="false" />
           <Property Name="AdressId" Type="int" Nullable="false" />
           <Property Name="NetworkinterfaceId" Type="int" Nullable="false" />
+          <Property Name="CreationTime" Type="datetime" Nullable="false" />
+          <Property Name="PodId" Type="int" />
+          <Property Name="EndOfLifeTime" Type="datetime" />
         </EntityType>
         <EntityType Name="DeviceCategory">
           <Key>
@@ -120,6 +123,7 @@
           <Property Name="Bezeichnung" Type="nvarchar" MaxLength="45" Nullable="false" />
           <Property Name="podKunde" Type="int" Nullable="false" />
           <Property Name="podAdresse" Type="int" Nullable="false" />
+          <Property Name="CreationTime" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="Ports">
           <Key>
@@ -148,6 +152,38 @@
           <Property Name="Id" Type="int" Nullable="false" />
           <Property Name="Severity" Type="nvarchar" MaxLength="45" Nullable="false" />
         </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Testat.dbo.Jahresvergleich' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="Jahresvergleich">
+          <Key>
+            <PropertyRef Name="Kategorie" />
+          </Key>
+          <Property Name="Kategorie" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="YOY" Type="varchar" MaxLength="32" />
+          <Property Name="Q3 2020" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="Q2 2020" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="Q1 2020" Type="decimal" Precision="38" Scale="2" />
+          <Property Name="Q4 2019" Type="decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'Testat.dbo.JahresVergleichOne' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="JahresVergleichOne">
+          <Key>
+            <PropertyRef Name="Kategorie" />
+          </Key>
+          <Property Name="Kategorie" Type="nvarchar" MaxLength="40" Nullable="false" />
+          <Property Name="YOY" Type="varchar" MaxLength="32" />
+          <Property Name="Bezeichnung" Type="varchar" MaxLength="26" />
+          <Property Name="NUM" Type="decimal" Precision="10" Scale="2" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6013: The table/view 'Testat.dbo.Quartale' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="Quartale">
+          <Property Name="ID" Type="int" />
+          <Property Name="Quartal" Type="int" />
+          <Property Name="Jahr" Type="int" />
+          <Property Name="Bezeichnung" Type="varchar" MaxLength="26" />
+        </EntityType>-->
         <!--Errors Found During Generation:
 warning 6002: The table/view 'Testat.dbo.v_logentries' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="v_logentries">
@@ -273,6 +309,18 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             </Principal>
             <Dependent Role="Device">
               <PropertyRef Name="NetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__PodId__7A3223E8">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="0..1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="PodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -437,6 +485,24 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <EntitySet Name="Ports" EntityType="Self.Ports" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Referenzen" EntityType="Self.Referenzen" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Severity" EntityType="Self.Severity" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Jahresvergleich" EntityType="Self.Jahresvergleich" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [Jahresvergleich].[Kategorie] AS [Kategorie], 
+    [Jahresvergleich].[YOY] AS [YOY], 
+    [Jahresvergleich].[Q3 2020] AS [Q3 2020], 
+    [Jahresvergleich].[Q2 2020] AS [Q2 2020], 
+    [Jahresvergleich].[Q1 2020] AS [Q1 2020], 
+    [Jahresvergleich].[Q4 2019] AS [Q4 2019]
+    FROM [dbo].[Jahresvergleich] AS [Jahresvergleich]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="JahresVergleichOne" EntityType="Self.JahresVergleichOne" store:Type="Views" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [JahresVergleichOne].[Kategorie] AS [Kategorie], 
+    [JahresVergleichOne].[YOY] AS [YOY], 
+    [JahresVergleichOne].[Bezeichnung] AS [Bezeichnung], 
+    [JahresVergleichOne].[NUM] AS [NUM]
+    FROM [dbo].[JahresVergleichOne] AS [JahresVergleichOne]</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="v_logentries" EntityType="Self.v_logentries" store:Type="Views" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [v_logentries].[Id] AS [Id], 
@@ -492,6 +558,10 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           </AssociationSet>
           <AssociationSet Name="FK__Device__Networki__4E88ABD4" Association="Self.FK__Device__Networki__4E88ABD4">
             <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__PodId__7A3223E8" Association="Self.FK__Device__PodId__7A3223E8">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
             <End Role="Device" EntitySet="Device" />
           </AssociationSet>
           <AssociationSet Name="FK__Kontaktpe__PodId__47DBAE45" Association="Self.FK__Kontaktpe__PodId__47DBAE45">
@@ -596,9 +666,13 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Name="AnzahlPorts" Type="Int32" Nullable="false" />
           <Property Name="AdressId" Type="Int32" Nullable="false" />
           <Property Name="NetworkinterfaceId" Type="Int32" Nullable="false" />
+          <Property Name="CreationTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="PodId" Type="Int32" />
+          <Property Name="EndOfLifeTime" Type="DateTime" Precision="3" />
           <NavigationProperty Name="Adresse" Relationship="Self.FK__Device__AdressId__4D94879B" FromRole="Device" ToRole="Adresse" />
           <NavigationProperty Name="DeviceCategory1" Relationship="Self.FK__Device__Deviceca__4F7CD00D" FromRole="Device" ToRole="DeviceCategory" />
           <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Device__Networki__4E88ABD4" FromRole="Device" ToRole="Networkinterface" />
+          <NavigationProperty Name="Point_Of_Delivery" Relationship="Self.FK__Device__PodId__7A3223E8" FromRole="Device" ToRole="Point_Of_Delivery" />
           <NavigationProperty Name="Logmessage" Relationship="Self.FK__Logmessag__Devic__339FAB6E" FromRole="Device" ToRole="Logmessage" />
           <NavigationProperty Name="Ports" Relationship="Self.FK__Ports__DeviceId__5441852A" FromRole="Device" ToRole="Ports" />
           <NavigationProperty Name="Referenzen" Relationship="Self.FK__Referenze__Devic__5BE2A6F2" FromRole="Device" ToRole="Referenzen" />
@@ -683,9 +757,11 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Name="Bezeichnung" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="podKunde" Type="Int32" Nullable="false" />
           <Property Name="podAdresse" Type="Int32" Nullable="false" />
+          <Property Name="CreationTime" Type="DateTime" Nullable="false" Precision="3" />
           <NavigationProperty Name="Abrechnung" Relationship="Self.FK__Abrechnun__PodAb__60A75C0F" FromRole="Point_Of_Delivery" ToRole="Abrechnung" />
           <NavigationProperty Name="Abrechnungsposition" Relationship="Self.FK__Abrechnun__PodId__66603565" FromRole="Point_Of_Delivery" ToRole="Abrechnungsposition" />
           <NavigationProperty Name="Adresse" Relationship="Self.FK__Point_Of___podAd__3E52440B" FromRole="Point_Of_Delivery" ToRole="Adresse" />
+          <NavigationProperty Name="Device" Relationship="Self.FK__Device__PodId__7A3223E8" FromRole="Point_Of_Delivery" ToRole="Device" />
           <NavigationProperty Name="Kontaktperson" Relationship="Self.FK__Kontaktpe__PodId__47DBAE45" FromRole="Point_Of_Delivery" ToRole="Kontaktperson" />
           <NavigationProperty Name="Kunde" Relationship="Self.FK__Point_Of___podKu__3D5E1FD2" FromRole="Point_Of_Delivery" ToRole="Kunde" />
           <NavigationProperty Name="Networkinterface" Relationship="Self.FK__Networkin__PodId__4316F928" FromRole="Point_Of_Delivery" ToRole="Networkinterface" />
@@ -720,6 +796,26 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Severity1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" Nullable="false" />
           <NavigationProperty Name="Logmessage" Relationship="Self.FK__Logmessag__Sever__3493CFA7" FromRole="Severity" ToRole="Logmessage" />
+        </EntityType>
+        <EntityType Name="Jahresvergleich">
+          <Key>
+            <PropertyRef Name="Kategorie" />
+          </Key>
+          <Property Name="Kategorie" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="YOY" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Q3_2020" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="Q2_2020" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="Q1_2020" Type="Decimal" Precision="38" Scale="2" />
+          <Property Name="Q4_2019" Type="Decimal" Precision="38" Scale="2" />
+        </EntityType>
+        <EntityType Name="JahresVergleichOne">
+          <Key>
+            <PropertyRef Name="Kategorie" />
+          </Key>
+          <Property Name="Kategorie" Type="String" MaxLength="40" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="YOY" Type="String" MaxLength="32" FixedLength="false" Unicode="false" />
+          <Property Name="Bezeichnung" Type="String" MaxLength="26" FixedLength="false" Unicode="false" />
+          <Property Name="NUM" Type="Decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="v_logentries">
           <Key>
@@ -852,6 +948,18 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
             </Principal>
             <Dependent Role="Device">
               <PropertyRef Name="NetworkinterfaceId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Device__PodId__7A3223E8">
+          <End Role="Point_Of_Delivery" Type="Self.Point_Of_Delivery" Multiplicity="0..1" />
+          <End Role="Device" Type="Self.Device" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Point_Of_Delivery">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Device">
+              <PropertyRef Name="PodId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -990,6 +1098,8 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           <EntitySet Name="Ports" EntityType="Self.Ports" />
           <EntitySet Name="Referenzen" EntityType="Self.Referenzen" />
           <EntitySet Name="Severity" EntityType="Self.Severity" />
+          <EntitySet Name="Jahresvergleich" EntityType="Self.Jahresvergleich" />
+          <EntitySet Name="JahresVergleichOne" EntityType="Self.JahresVergleichOne" />
           <EntitySet Name="v_logentries" EntityType="Self.v_logentries" />
           <EntitySet Name="v_UsagePerLocation" EntityType="Self.v_UsagePerLocation" />
           <EntitySet Name="v_UsagePerPod" EntityType="Self.v_UsagePerPod" />
@@ -1019,6 +1129,10 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
           </AssociationSet>
           <AssociationSet Name="FK__Device__Networki__4E88ABD4" Association="Self.FK__Device__Networki__4E88ABD4">
             <End Role="Networkinterface" EntitySet="Networkinterface" />
+            <End Role="Device" EntitySet="Device" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Device__PodId__7A3223E8" Association="Self.FK__Device__PodId__7A3223E8">
+            <End Role="Point_Of_Delivery" EntitySet="Point_Of_Delivery" />
             <End Role="Device" EntitySet="Device" />
           </AssociationSet>
           <AssociationSet Name="FK__Logmessag__Devic__339FAB6E" Association="Self.FK__Logmessag__Devic__339FAB6E">
@@ -1136,6 +1250,9 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
                 <ScalarProperty Name="AnzahlPorts" ColumnName="AnzahlPorts" />
                 <ScalarProperty Name="AdressId" ColumnName="AdressId" />
                 <ScalarProperty Name="NetworkinterfaceId" ColumnName="NetworkinterfaceId" />
+                <ScalarProperty Name="CreationTime" ColumnName="CreationTime" />
+                <ScalarProperty Name="PodId" ColumnName="PodId" />
+                <ScalarProperty Name="EndOfLifeTime" ColumnName="EndOfLifeTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1212,6 +1329,7 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
                 <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
                 <ScalarProperty Name="podKunde" ColumnName="podKunde" />
                 <ScalarProperty Name="podAdresse" ColumnName="podAdresse" />
+                <ScalarProperty Name="CreationTime" ColumnName="CreationTime" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1242,6 +1360,28 @@ warning 6002: The table/view 'Testat.dbo.v_UsagePerPod' does not have a primary 
               <MappingFragment StoreEntitySet="Severity">
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Severity1" ColumnName="Severity" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Jahresvergleich">
+            <EntityTypeMapping TypeName="TestatModel.Jahresvergleich">
+              <MappingFragment StoreEntitySet="Jahresvergleich">
+                <ScalarProperty Name="Kategorie" ColumnName="Kategorie" />
+                <ScalarProperty Name="YOY" ColumnName="YOY" />
+                <ScalarProperty Name="Q3_2020" ColumnName="Q3 2020" />
+                <ScalarProperty Name="Q2_2020" ColumnName="Q2 2020" />
+                <ScalarProperty Name="Q1_2020" ColumnName="Q1 2020" />
+                <ScalarProperty Name="Q4_2019" ColumnName="Q4 2019" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JahresVergleichOne">
+            <EntityTypeMapping TypeName="TestatModel.JahresVergleichOne">
+              <MappingFragment StoreEntitySet="JahresVergleichOne">
+                <ScalarProperty Name="Kategorie" ColumnName="Kategorie" />
+                <ScalarProperty Name="YOY" ColumnName="YOY" />
+                <ScalarProperty Name="Bezeichnung" ColumnName="Bezeichnung" />
+                <ScalarProperty Name="NUM" ColumnName="NUM" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -19,6 +19,7 @@ namespace MonitoringNuget.EntityFramework
         {
             this.Abrechnung = new HashSet<Abrechnung>();
             this.Abrechnungsposition = new HashSet<Abrechnungsposition>();
+            this.Device = new HashSet<Device>();
             this.Kontaktperson = new HashSet<Kontaktperson>();
             this.Networkinterface = new HashSet<Networkinterface>();
         }
@@ -27,12 +28,15 @@ namespace MonitoringNuget.EntityFramework
         public string Bezeichnung { get; set; }
         public int podKunde { get; set; }
         public int podAdresse { get; set; }
+        public System.DateTime CreationTime { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Abrechnung> Abrechnung { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Abrechnungsposition> Abrechnungsposition { get; set; }
         public virtual Adresse Adresse { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Device> Device { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Kontaktperson> Kontaktperson { get; set; }
         public virtual Kunde Kunde { get; set; }

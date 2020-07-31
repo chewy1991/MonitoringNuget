@@ -29,10 +29,14 @@ namespace MonitoringNuget.EntityFramework
         public int AnzahlPorts { get; set; }
         public int AdressId { get; set; }
         public int NetworkinterfaceId { get; set; }
+        public System.DateTime CreationTime { get; set; }
+        public Nullable<int> PodId { get; set; }
+        public Nullable<System.DateTime> EndOfLifeTime { get; set; }
     
         public virtual Adresse Adresse { get; set; }
         public virtual DeviceCategory DeviceCategory1 { get; set; }
         public virtual Networkinterface Networkinterface { get; set; }
+        public virtual Point_Of_Delivery Point_Of_Delivery { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Logmessage> Logmessage { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

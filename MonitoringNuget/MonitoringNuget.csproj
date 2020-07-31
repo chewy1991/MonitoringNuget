@@ -69,6 +69,7 @@
     <Compile Include="DataAccess\AbstractClassLinq\RepositoryBaseLinq.cs" />
     <Compile Include="DataAccess\AbstractClass\RepositoryBase.cs" />
     <Compile Include="DataAccess\EFAccess\AbstractClassEF\RepositoryBaseEF.cs" />
+    <Compile Include="DataAccess\EFAccess\JahresvergleichRepo.cs" />
     <Compile Include="DataAccess\EFAccess\KundenRepository.cs" />
     <Compile Include="DataAccess\Interface\IRepositoryBase.cs" />
     <Compile Include="DataAccess\LinqToSQL\LocationsRepositoryLinq.cs" />
@@ -93,6 +94,12 @@
       <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\DeviceCategory.cs">
+      <DependentUpon>TestatEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\Jahresvergleich.cs">
+      <DependentUpon>TestatEntities.tt</DependentUpon>
+    </Compile>
+    <Compile Include="EntityFramework\JahresVergleichOne.cs">
       <DependentUpon>TestatEntities.tt</DependentUpon>
     </Compile>
     <Compile Include="EntityFramework\Kontaktperson.cs">
@@ -161,6 +168,9 @@
     <Compile Include="MonitoringControl\SubControls\DuplicatesControl.xaml.cs">
       <DependentUpon>DuplicatesControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MonitoringControl\SubControls\Jahresvergleich.xaml.cs">
+      <DependentUpon>Jahresvergleich.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MonitoringControl\SubControls\Kundenverwaltung.xaml.cs">
       <DependentUpon>Kundenverwaltung.xaml</DependentUpon>
     </Compile>
@@ -176,11 +186,16 @@
     </Compile>
     <Compile Include="RegexValidation\RegexValidation.cs" />
     <Compile Include="Strategy\ContextStrategy.cs" />
+    <Compile Include="ViewModel\JahresvergleichViewModel.cs" />
     <Compile Include="ViewModel\KundenverwaltungViewModel.cs" />
     <Compile Include="ViewModel\MonitoringViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="MonitoringControl\MonitoringControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MonitoringControl\SubControls\Jahresvergleich.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

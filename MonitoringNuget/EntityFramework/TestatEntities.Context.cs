@@ -41,6 +41,8 @@ namespace MonitoringNuget.EntityFramework
         public virtual DbSet<Ports> Ports { get; set; }
         public virtual DbSet<Referenzen> Referenzen { get; set; }
         public virtual DbSet<Severity> Severity { get; set; }
+        public virtual DbSet<Jahresvergleich> Jahresvergleich { get; set; }
+        public virtual DbSet<JahresVergleichOne> JahresVergleichOne { get; set; }
         public virtual DbSet<v_logentries> v_logentries { get; set; }
         public virtual DbSet<v_UsagePerLocation> v_UsagePerLocation { get; set; }
         public virtual DbSet<v_UsagePerPod> v_UsagePerPod { get; set; }

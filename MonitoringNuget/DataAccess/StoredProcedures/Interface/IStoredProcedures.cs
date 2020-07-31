@@ -14,5 +14,6 @@ namespace MonitoringNuget.DataAccess.StoredProcedures.Interface
         bool AddMessage(string message, string podname, int severity, string hostname);
 
         IQueryable<LoadHierarchy_Result> LoadHierarchy();
+
     }
 }

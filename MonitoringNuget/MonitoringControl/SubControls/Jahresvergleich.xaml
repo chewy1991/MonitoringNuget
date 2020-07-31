@@ -1,0 +1,29 @@
+﻿<UserControl x:Class = "MonitoringNuget.MonitoringControl.SubControls.Jahresvergleich"
+             xmlns = "http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x = "http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc = "http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
+             xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
+             mc:Ignorable = "d"
+             d:DesignHeight = "450"
+             d:DesignWidth = "800">
+    <UserControl.Resources>
+        <viewModel:JahresvergleichViewModel x:Key = "vm" />
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height = "25" />
+        </Grid.RowDefinitions>
+
+        <DataGrid Grid.Row = "0"
+                  ItemsSource = "{Binding Source={StaticResource vm}, Path = Jahresvergleich}" />
+        <Button Grid.Row = "1"
+                Command = "{Binding Source={StaticResource vm}, Path=ReloadCommand}"
+                Content = "Reload"
+                Height = "25" />
+
+
+    </Grid>
+</UserControl>

@@ -6,7 +6,7 @@
              xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
              xmlns:uc = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              mc:Ignorable = "d"
-             d:DesignHeight = "450"
+             d:DesignHeight = "2000"
              d:DesignWidth = "2400">
     <UserControl.Resources>
         <viewModel:MonitoringViewModel x:Key = "Monitoringvm" />
@@ -17,7 +17,7 @@
             <ColumnDefinition Width = "4" />
             <ColumnDefinition MaxWidth = "398" />
             <ColumnDefinition Width = "4" />
-            <ColumnDefinition  />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height = "30" />
@@ -25,6 +25,7 @@
             <RowDefinition MaxHeight = "200" />
             <RowDefinition Height = "140" />
             <RowDefinition Height = "25" />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Rectangle Fill = "Black"
                    Grid.Column = "1"
@@ -98,6 +99,8 @@
         <uc:Kundenverwaltung Grid.Column = "4"
                              Grid.RowSpan = "5"
                              Margin = "5" />
+        <uc:Jahresvergleich Grid.Row = "5"
+                            Grid.Column = "4" />
 
     </Grid>
 </UserControl>
