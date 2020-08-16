@@ -102,5 +102,8 @@
         <uc:Jahresvergleich Grid.Row = "5"
                             Grid.Column = "4" />
 
+        <uc:PluginLoader Grid.Column="0"
+                         Grid.Row ="5"></uc:PluginLoader>
+
     </Grid>
 </UserControl>

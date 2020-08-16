@@ -5,6 +5,7 @@ using MonitoringNuget.Models.ModelInterface;
 namespace MonitoringNuget.LinqDTO
 {
     [Table(Name = "dbo.v_logentries")]
+    [Serializable]
     public class VLogentriesDTO : IModel
     {
         [Column(Name = "Id", DbType = "Int NOT NULL")]
