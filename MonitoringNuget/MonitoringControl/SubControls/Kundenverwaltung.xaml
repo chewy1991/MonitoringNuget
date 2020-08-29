@@ -5,13 +5,9 @@
              xmlns:d = "http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local = "clr-namespace:MonitoringNuget.MonitoringControl.SubControls"
              xmlns:cet = "clr-namespace:MonitoringNuget.CTEClass"
-             xmlns:viewModel = "clr-namespace:MonitoringNuget.ViewModel"
              mc:Ignorable = "d"
              d:DesignHeight = "450"
              d:DesignWidth = "2000">
-    <UserControl.Resources>
-        <viewModel:KundenverwaltungViewModel x:Key = "vm" />
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
@@ -52,8 +48,8 @@
                        Background = "Green"
                        TextAlignment = "Center"
                        DockPanel.Dock = "Top" />
-            <DataGrid ItemsSource = "{Binding Source={StaticResource vm}, Path=Kundenlist}"
-                      SelectedIndex = "{Binding Source={StaticResource vm}, Path=SelectedClient}"
+            <DataGrid ItemsSource = "{Binding Kundenlist}"
+                      SelectedIndex = "{Binding SelectedClient}"
                       IsReadOnly = "True" />
         </DockPanel>
         <Rectangle Fill = "Black"
@@ -62,18 +58,18 @@
 
         <Button Content = "Kundenauswahl zur Bearbeitung"
                 ToolTip = "Updatet Kundentabelle gemäss den Änderungen in der Kundenliste"
-                Command = "{Binding Source={StaticResource vm},Path=ChooseClientCommand}"
+                Command = "{Binding ChooseClientCommand}"
                 Height = "25"
                 Grid.Row = "10" />
 
         <Button Content = "Kunde hinzufügen/bearbeiten"
                 ToolTip = "Updatet Kundentabelle gemäss den Änderungen in den Textboxen"
-                Command = "{Binding Source={StaticResource vm},Path=AddClientCommand}"
+                Command = "{Binding AddClientCommand}"
                 Height = "25"
                 Grid.Row = "16" />
        
         <Button Content = "Kunde löschen"
-                Command = "{Binding Source={StaticResource vm},Path=DelClientCommand}"
+                Command = "{Binding DelClientCommand}"
                 Height = "25"
                 Grid.Row = "10"
                 Grid.Column = "1" />
@@ -83,37 +79,37 @@
                HorizontalAlignment = "Right" />
         <TextBox Grid.Row = "11"
                  Grid.Column = "1"
-                 Text = "{Binding Source={StaticResource vm}, Path=SearchText}" />
+                 Text = "{Binding SearchText}" />
 
         <Button Grid.Row = "10"
                 Grid.Column = "2"
                 Content = "Alle Kunden Anzeigen"
-                Command = "{Binding Source={StaticResource vm}, Path=ShowAllClientCommand}" />
+                Command = "{Binding ShowAllClientCommand}" />
         <Button Grid.Row = "11"
                 Grid.Column = "2"
                 Content = "Suche Kunde"
-                Command = "{Binding Source={StaticResource vm}, Path=SearchClientCommand}" />
+                Command = "{Binding SearchClientCommand}" />
 
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "13">
             <Label Content = "Kontonr:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Kontonummer}" />
+                     Text = "{Binding Kontonummer}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "14">
             <Label Content = "Bezeichnung:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Bezeichnung}" />
+                     Text = "{Binding Bezeichnung}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "15">
             <Label Content = "Guthaben:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Guthaben}" />
+                     Text = "{Binding Guthaben}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "13"
@@ -121,7 +117,7 @@
             <Label Content = "Betragslimit:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Betragslimit}" />
+                     Text = "{Binding Betragslimit}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "14"
@@ -129,7 +125,7 @@
             <Label Content = "Telefonnummer:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Telefonnummer}" />
+                     Text = "{Binding Telefonnummer}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "15"
@@ -137,7 +133,7 @@
             <Label Content = "EMail:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=EMail}" />
+                     Text = "{Binding EMail}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "13"
@@ -145,7 +141,7 @@
             <Label Content = "Homepage:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Homepage}" />
+                     Text = "{Binding Homepage}" />
         </StackPanel>
         <StackPanel Orientation = "Horizontal"
                     Grid.Row = "14"
@@ -153,7 +149,7 @@
             <Label Content = "Passwort:"
                    Width = "130" />
             <TextBox Width = "300"
-                     Text = "{Binding Source={StaticResource vm}, Path=Password}" />
+                     Text = "{Binding Password}" />
         </StackPanel>
 
 
@@ -164,7 +160,7 @@
         <TreeView Grid.Row = "1"
                   Grid.RowSpan = "15"
                   Grid.Column = "3"
-                  ItemsSource = "{Binding Source={StaticResource vm}, Path=LocationHierarchy}">
+                  ItemsSource = "{Binding LocationHierarchy}">
             <TreeView.ItemTemplate>
                 <HierarchicalDataTemplate ItemsSource = "{Binding LocationChilds}"
                                           DataType = "{x:Type cet:LocationHist}">
@@ -177,6 +173,6 @@
         <Button Grid.Row = "16"
                 Grid.Column = "3"
                 Content = "Refresh Hierarchie"
-                Command = "{Binding Source={StaticResource vm}, Path=RefreshHierarchieCommand}" />
+                Command = "{Binding RefreshHierarchieCommand}" />
     </Grid>
 </UserControl>

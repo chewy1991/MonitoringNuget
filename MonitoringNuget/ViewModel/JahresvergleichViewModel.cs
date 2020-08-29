@@ -5,22 +5,32 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using GenericRepository;
 using MonitoringNuget.DataAccess.EFAccess;
 using MonitoringNuget.DataAccess.StoredProcedures;
+using MonitoringNuget.DataAccess.StoredProcedures.Interface;
 using MonitoringNuget.EntityFramework;
+using MonitoringNuget.IoCContainer;
 using MonitoringNuget.MonitoringControl.Commands;
 using MonitoringNuget.Strategy;
+using MonitoringNuget.ViewModel.Interface;
 
 namespace MonitoringNuget.ViewModel
 {
-    public class JahresvergleichViewModel : DependencyObject
+    public class JahresvergleichViewModel : DependencyObject, IViewModel
     {
-        public static ContextStrategy<Jahresvergleich> kundenRepo = new ContextStrategy<Jahresvergleich>(new JahresvergleichRepo(), new EFProcedure());
+        public ContextStrategy<Jahresvergleich> JahresVergleichRepo;
+        private IoCContainer<ContextStrategy<Jahresvergleich>> IoCContainer = new IoCContainer<ContextStrategy<Jahresvergleich>>();
 
         public static readonly DependencyProperty JahresvergleichProperty = DependencyProperty.Register("Jahresvergleich"
                                                                                                       , typeof(List<Jahresvergleich>)
-                                                                                                      , typeof(JahresvergleichViewModel)
-                                                                                                      , new UIPropertyMetadata(kundenRepo.GetAll().ToList()));
+                                                                                                      , typeof(JahresvergleichViewModel));
+
+        public JahresvergleichViewModel()
+        {
+            this.JahresVergleichRepo = IoCContainer.ResolveContextStrategy<JahresvergleichRepo, EFProcedure>();
+            this.Jahresvergleich = JahresVergleichRepo.GetAll().ToList();
+        }
 
         public List<Jahresvergleich> Jahresvergleich
         {
@@ -37,7 +47,7 @@ namespace MonitoringNuget.ViewModel
                 return _reloadCommand
                     ?? ( _reloadCommand = new CommandHandler(() =>
                                                              {
-                                                                 Jahresvergleich = kundenRepo.GetAll().ToList();
+                                                                 Jahresvergleich = JahresVergleichRepo.GetAll().ToList();
                                                              }
                                                            , () => ReloadCommandCanExecute) );
             }

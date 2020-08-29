@@ -9,26 +9,30 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
+using GenericRepository;
 using MonitoringNuget.CTEClass;
 using MonitoringNuget.DataAccess.EFAccess;
 using MonitoringNuget.DataAccess.StoredProcedures;
+using MonitoringNuget.DataAccess.StoredProcedures.Interface;
 using MonitoringNuget.EntityClasses;
 using MonitoringNuget.EntityFramework;
+using MonitoringNuget.IoCContainer;
 using MonitoringNuget.MonitoringControl.Commands;
 using MonitoringNuget.Strategy;
 using MonitoringNuget.RegexValidation;
+using MonitoringNuget.ViewModel.Interface;
 using TreeView = System.Windows.Controls.TreeView;
 
 namespace MonitoringNuget.ViewModel
 {
-    public class KundenverwaltungViewModel : DependencyObject
+    public class KundenverwaltungViewModel : DependencyObject, IViewModel
     {
-        public static ContextStrategy<Kunde> kundenRepo = new ContextStrategy<Kunde>(new KundenRepository(), new EFProcedure());
+        private IoCContainer<ContextStrategy<Kunde>> IoCContainer = new IoCContainer<ContextStrategy<Kunde>>();
+        public ContextStrategy<Kunde> kundenRepo;
 
         public static readonly DependencyProperty KundenlistProperty = DependencyProperty.Register("Kundenlist"
                                                                                                     , typeof(List<Kunde>)
-                                                                                                    , typeof(KundenverwaltungViewModel)
-                                                                                                   , new UIPropertyMetadata(kundenRepo.GetAll().ToList()));
+                                                                                                    , typeof(KundenverwaltungViewModel));
 
 
         public static readonly DependencyProperty SelectedClientProperty = DependencyProperty.Register("SelectedClient"
@@ -43,8 +47,7 @@ namespace MonitoringNuget.ViewModel
 
         public static readonly DependencyProperty LocationHierarchyProperty = DependencyProperty.Register("LocationHierarchy"
                                                                                                         , typeof(ObservableCollection<LocationHist>)
-                                                                                                        , typeof(KundenverwaltungViewModel)
-                                                                                                        , new UIPropertyMetadata(LoadHierarchyList()));
+                                                                                                        , typeof(KundenverwaltungViewModel));
 
         public static readonly DependencyProperty KontonummerProperty = DependencyProperty.Register("Kontonummer"
                                                                                                   , typeof(string)
@@ -84,6 +87,13 @@ namespace MonitoringNuget.ViewModel
                                                                                                , typeof(KundenverwaltungViewModel)
                                                                                                , new UIPropertyMetadata(string.Empty));
 
+        public KundenverwaltungViewModel()
+        {
+            this.kundenRepo = IoCContainer.ResolveContextStrategy<KundenRepository, EFProcedure>();
+            this.Kundenlist = kundenRepo.GetAll().ToList();
+            this.LocationHierarchy = LoadHierarchyList();
+        }
+        
         public ObservableCollection<LocationHist> LocationHierarchy
         {
             get => (ObservableCollection<LocationHist>) GetValue(LocationHierarchyProperty);
@@ -264,7 +274,7 @@ namespace MonitoringNuget.ViewModel
 
         public bool ChooseClientCommandCanExecute => SelectedClient >= 0;
 
-        private static ObservableCollection<LocationHist> LoadHierarchyList()
+        private ObservableCollection<LocationHist> LoadHierarchyList()
         {
             var lstPodname = kundenRepo.LoadHierarchy().Select(x => x.PodName).Distinct();
 

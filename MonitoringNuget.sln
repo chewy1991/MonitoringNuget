@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNuget", "Monitori
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringNugetTest", "MonitoringNugetTest\MonitoringNugetTest.csproj", "{1F46AB75-EB7B-4752-9DD3-4192C7EF754A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonitoringWPF", "MonitoringWPF\MonitoringWPF.csproj", "{A328AA53-538D-44CE-9B32-956EBF927578}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{1F46AB75-EB7B-4752-9DD3-4192C7EF754A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F46AB75-EB7B-4752-9DD3-4192C7EF754A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F46AB75-EB7B-4752-9DD3-4192C7EF754A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A328AA53-538D-44CE-9B32-956EBF927578}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A328AA53-538D-44CE-9B32-956EBF927578}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A328AA53-538D-44CE-9B32-956EBF927578}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A328AA53-538D-44CE-9B32-956EBF927578}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

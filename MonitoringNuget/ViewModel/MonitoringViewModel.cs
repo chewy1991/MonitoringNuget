@@ -5,19 +5,24 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Input;
 using DuplicateCheckerLib;
+using GenericRepository;
 using MonitoringNuget.DataAccess.LinqToSQL;
 using MonitoringNuget.DataAccess.RepositoryClasses;
 using MonitoringNuget.DataAccess.StoredProcedures;
+using MonitoringNuget.DataAccess.StoredProcedures.Interface;
 using MonitoringNuget.EntityClasses;
+using MonitoringNuget.IoCContainer;
 using MonitoringNuget.LinqDTO;
 using MonitoringNuget.MonitoringControl.Commands;
 using MonitoringNuget.Strategy;
+using MonitoringNuget.ViewModel.Interface;
 
 namespace MonitoringNuget.ViewModel
 {
-    public class MonitoringViewModel : DependencyObject
+    public class MonitoringViewModel : DependencyObject, IViewModel
     {
-        private ContextStrategy<VLogentriesDTO> loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new AdoProcedures());
+        private ContextStrategy<VLogentriesDTO> loggingrepo;
+        private IoCContainer<ContextStrategy<VLogentriesDTO>> ioCContainer = new IoCContainer<ContextStrategy<VLogentriesDTO>>();
 
         #region Dependency Properties
 
@@ -72,6 +77,11 @@ namespace MonitoringNuget.ViewModel
                                                                                                  , new PropertyMetadata(false));
 
         #endregion
+
+        public MonitoringViewModel()
+        {
+            ChooseRepo();
+        }
 
         #region Binding Properties
 
@@ -220,14 +230,7 @@ namespace MonitoringNuget.ViewModel
         
         private void ChooseRepo()
         {
-            if (IsAdo)
-            {
-                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LoggingRepository(), new AdoProcedures());
-            }
-            else
-            {
-                loggingrepo = new ContextStrategy<VLogentriesDTO>(new LogentriesRepositoryLinq(), new LinqStoredProcedure());
-            }
+            loggingrepo = IsAdo ? ioCContainer.ResolveContextStrategy<LoggingRepository, AdoProcedures>() : ioCContainer.ResolveContextStrategy<LogentriesRepositoryLinq, LinqStoredProcedure>();
         }
 
         /// <summary>

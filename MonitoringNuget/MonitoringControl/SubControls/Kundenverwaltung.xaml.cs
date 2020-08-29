@@ -12,6 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Autofac;
+using MonitoringNuget.DataAccess.EFAccess;
+using MonitoringNuget.DataAccess.StoredProcedures;
+using MonitoringNuget.IoCContainer;
+using MonitoringNuget.ViewModel;
+using MonitoringNuget.ViewModel.Interface;
 
 namespace MonitoringNuget.MonitoringControl.SubControls
 {
@@ -20,9 +26,17 @@ namespace MonitoringNuget.MonitoringControl.SubControls
     /// </summary>
     public partial class Kundenverwaltung : UserControl
     {
+        private IViewModel viewModel;
+
         public Kundenverwaltung()
         {
             InitializeComponent();
+
+            var IoCContainer = new IoCContainer<KundenverwaltungViewModel>();
+
+            viewModel = IoCContainer.ResolveViewModel();
+
+            this.DataContext = viewModel;
         }
     }
 }
